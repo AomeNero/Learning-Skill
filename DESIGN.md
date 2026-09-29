@@ -405,6 +405,7 @@ If Copernicus / Tiempos Headline is unavailable, **Cormorant Garamond** at weigh
 ### Grid & Container
 - **Max content width:** ~1200px centered.
 - **Docs three-column layout:** outer shell `88rem` (1408px) = left sidebar `18rem` (288px) + center content column `816px` + right TOC `15rem` (240px) + `64px` side padding; sidebar and TOC sticky, content column `min-width: 0` to keep long code lines from breaking the grid. The shell must grow with the center column — a narrower frame silently squeezes the content below its target width.
+- **Docs single-column layout:** without sidebar and TOC, the content column is `960px`, centered on the canvas.
 - **Editorial body:** Single 12-column grid; hero often uses 6/6 split (h1 left, illustration right).
 - **Feature card grids:** 3-up at desktop, 2-up at tablet, 1-up at mobile.
 - **Connector tile grids:** 4-up or 6-up at desktop, 2-up at tablet, 1-up at mobile.
