@@ -17,7 +17,7 @@
 
 | 原扩展 | Claude Code 方案 |
 |---|---|
-| quiz（判分答题） | 内置 `AskUserQuestion` 模拟，协议写在 teach skill 里 |
+| quiz（判分答题） | 内置 `AskUserQuestion` 模拟，协议写在 learning skill 里 |
 | ask-user-question（偏好提问） | 直接用内置 `AskUserQuestion` |
 | md-log（会话镜像） | 约定式日志：课程同步写入 `log/<主题>.md` |
 | visual-tools（图渲染） | 子代理用 `Bash` 跑 mermaid-cli / rsvg-convert + `Read` 看图 |
@@ -39,6 +39,5 @@ git clone <本仓库> .claude
 
 ## 说明
 
-- 没有子代理也能跑：主会话直接教学，只是少了事实核实（researcher）和自动配图（两个 maker）
-- 课程日志写入 `log/<主题>.md`，配图存放在 `viz/`；用 Obsidian 或 VS Code 预览阅读，LaTeX 与 Mermaid 可直接渲染
-- teach skill 按原作者的个人学习风格写成；请按你自己的方式修改它
+- 没有子代理也能跑：主会话直接教学，事实核实降级为自带搜索（researcher 缺席时），只是少了自动配图（两个 maker）
+- 课程日志写入 `log/<主题>.md`，配图存放在 `viz/`；用 Obsidian 阅读（LaTeX 与 Mermaid 开箱渲染），或装了对应扩展的 VS Code 预览
