@@ -101,10 +101,10 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 L2 工作区选址：当前目录是空目录或专用学习目录时，就地作为**学习工作区**；处在非空的一般目录（尤其是代码仓库）时，先与学习者确认工作区目录——默认建议独立目录，不经确认不在别人的项目里倾倒教学文件。学习的状态由工作区目录中的若干文件承载，跨会话累积；文件间交叉引用用 Obsidian wikilink（如 `[[MISSION.md]]`）：
 
-- `MISSION.md`：记录学习者**为什么**对这个主题感兴趣的文档。一切教学都要以它为锚。格式见 [MISSION-FORMAT.md](./MISSION-FORMAT.md)。使命会随成长变化——修订前先与学习者确认，并写一条学习记录捕捉变化。
-- `RESOURCES.md`：可信资源与社区清单，为教学提供情境知识支撑。格式见 [RESOURCES-FORMAT.md](./RESOURCES-FORMAT.md)。
-- `./learning-records/*.md`：学习记录——大致相当于软件开发中的架构决策记录（ADR），捕捉不显而易见的经验与关键洞见，驱动后续会话。文件名 `0001-<dash-case-name>.md`，编号每次递增。格式见 [LEARNING-RECORD-FORMAT.md](./LEARNING-RECORD-FORMAT.md)。
-- `GLOSSARY.md`：规范术语表。一旦建立，之后所有讲解、提问与课程都必须遵守它的术语。格式见 [GLOSSARY-FORMAT.md](./GLOSSARY-FORMAT.md)。
+- `MISSION.md`：记录学习者**为什么**对这个主题感兴趣的文档。一切教学都要以它为锚。格式见 [MISSION-FORMAT.md](./references/MISSION-FORMAT.md)。使命会随成长变化——修订前先与学习者确认，并写一条学习记录捕捉变化。
+- `RESOURCES.md`：可信资源与社区清单，为教学提供情境知识支撑。格式见 [RESOURCES-FORMAT.md](./references/RESOURCES-FORMAT.md)。
+- `./learning-records/*.md`：学习记录——大致相当于软件开发中的架构决策记录（ADR），捕捉不显而易见的经验与关键洞见，驱动后续会话。文件名 `0001-<dash-case-name>.md`，编号每次递增。格式见 [LEARNING-RECORD-FORMAT.md](./references/LEARNING-RECORD-FORMAT.md)。
+- `GLOSSARY.md`：规范术语表。一旦建立，之后所有讲解、提问与课程都必须遵守它的术语。格式见 [GLOSSARY-FORMAT.md](./references/GLOSSARY-FORMAT.md)。
 - `./reference/*.md`：参考文档——各阶段沉淀的压缩精华，便于快速查阅（Markdown，Obsidian 友好）。
 - `./lessons/*.html`：课程——自包含 HTML 复习单元，按 TEMPLATE.html 设计系统制作（见"产物三层"）。
 - `log/<主题slug>.md`：课程日志——会话过程镜像（见"产物三层"）。
@@ -121,7 +121,7 @@ L2 工作区选址：当前目录是空目录或专用学习目录时，就地�
 
 ### 会话结束
 
-- 满足条件时写一条学习记录（见 [LEARNING-RECORD-FORMAT.md](./LEARNING-RECORD-FORMAT.md) 的"什么时候写"）。
+- 满足条件时写一条学习记录（见 [LEARNING-RECORD-FORMAT.md](./references/LEARNING-RECORD-FORMAT.md) 的"什么时候写"）。
 - 有新术语立住就更新 `GLOSSARY.md`；修订过的定义要同步全工作区，不留过期条目。
 - 核实与调研中遇到的高质量可信源沉淀进 `RESOURCES.md`（见下）。
 - 学习者偏好与工作笔记记入 `NOTES.md`。
@@ -266,7 +266,7 @@ L2 工作区选址：当前目录是空目录或专用学习目录时，就地�
 
 课程是你产出的主要东西之一：知识和技能抵达学习者的**可复习单元**。每门课程是一个自包含 HTML 文件，存到 `./lessons/`，命名为 `0001-<dash-case-name>.html`，编号扫描 `./lessons/` 现有最大编号加一（与 learning-records 同法）。
 
-- **按本技能目录的 [TEMPLATE.html](./TEMPLATE.html) 设计系统制作**——奶油画布、衬线标题、深墨代码窗、珊瑚点睛，完整令牌以该文件为准（它随技能走，任何语境都可达）。TEMPLATE.html 也缺失时，以这四个视觉词为种子在工作区自建精简设计系统，不阻塞课程产出。自包含单文件：系统字体栈、无外部依赖、无 JS，双击即读。
+- **按本技能目录的 [TEMPLATE.html](./assets/TEMPLATE.html) 设计系统制作**——奶油画布、衬线标题、深墨代码窗、珊瑚点睛，完整令牌以该文件为准（它随技能走，任何语境都可达）。TEMPLATE.html 也缺失时，以这四个视觉词为种子在工作区自建精简设计系统，不阻塞课程产出。自包含单文件：系统字体栈、无外部依赖、无 JS，双击即读。
 - 课程要短，能很快完成。学习者的工作记忆很小，必须待在它的范围内。但每门课程都应给一个可以继续搭建的具体收获。它必须直接服务于使命，且落在最近发展区内。
 - 排版干净、可读——学习者日后会回来复习。通过 HTML 锚点互链其他课程与参考文档。
 - 每门课程推荐一个首选的一手资源去阅读或观看——应是 RESOURCES.md 里质量最高、最可信的那个。
