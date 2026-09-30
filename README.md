@@ -11,7 +11,7 @@
 - `skills/learning/` — 教学哲学与流程：探查（判分定位水平边界）→ 规划（依赖图 + 检查点）→ 教学（逐节点：动机 → 确立 → 连接 → 判分检查）
 - `skills/visualize/` — 当图确实比字更清楚时，为课程添加一张正确、极简的配图
 - `agents/researcher.md` — 网络调研员：事实核实、主题摸底
-- `agents/svg-maker.md` / `agents/mermaid-maker.md` — 配图制作者：渲染后必亲眼看图，保证图不说假话
+- `agents/diagram-maker.md` — 配图制作者：渲染后必亲眼看图，保证图不说假话
 
 原版的四个 pi 扩展（quiz / ask-user-question / md-log / visual-tools）按 Claude Code 的内置能力重做：
 
@@ -35,7 +35,7 @@ git clone <本仓库> .claude
 ## 依赖
 
 - [Claude Code](https://claude.com/claude-code)
-- 配图渲染（可选）：Node.js + `@mermaid-js/mermaid-cli`（Mermaid 图，需本机 Chrome）、`rsvg-convert` 或 ImageMagick（SVG 图）。没装也能用：渲染不可用时降级为在课程日志里贴 Mermaid/SVG 源码（Obsidian 原生渲染 mermaid 代码块）。
+- 配图渲染（可选）：Node.js + `@mermaid-js/mermaid-cli`（Mermaid 图，需本机 Chrome/Edge，puppeteer 找不到浏览器时设 `PUPPETEER_EXECUTABLE_PATH` 指向系统浏览器）、`rsvg-convert` 或 ImageMagick 7（SVG 图，仅类 Unix）。没装也能用：渲染不可用时 maker 返回 `NONE`（附源文件路径），降级为在课程日志里贴 Mermaid/SVG 源码（Obsidian 原生渲染 mermaid 代码块）。
 
 ## 说明
 

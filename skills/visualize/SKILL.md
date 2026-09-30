@@ -18,14 +18,14 @@ description: "为课程添加一张正确、极简的配图——图示或几何
 
 散文或单个方程已经能承载时**不要**配图。一张只是复述旁边那句话的装饰性图，只添噪声、多一个出错机会。拿不准时，不配——缺一张图比错一张图便宜。
 
-## 选择 maker
+## 选择图型
 
-两个 maker，定义在 `.claude/agents/`（本仓库克隆为 `.claude` 后即就位）：
+maker 是单个子代理 `diagram-maker`，定义在 `.claude/agents/`（本仓库克隆为 `.claude` 后即就位）。brief 里指定图型：
 
-- **`mermaid-maker`**——结构/关系类：依赖图、流程图、时序/状态/ER/类图、树、思维导图、时间线。默认选择，直接契合依赖图教学法。
-- **`svg-maker`**——Mermaid 排不出来的空间/几何图：精确坐标、几何图形、数轴、向量、函数图像、自定义形状。
+- **mermaid**——结构/关系类：依赖图、流程图、时序/状态/ER/类图、树、思维导图、时间线。默认选择，直接契合依赖图教学法。
+- **svg**——Mermaid 排不出来的空间/几何图：精确坐标、几何图形、数轴、向量、函数图像、自定义形状。
 
-经验法则：*节点和边 / 关系*用 mermaid-maker；*位置和形状 / 几何*用 svg-maker。
+经验法则：*节点和边 / 关系*用 mermaid；*位置和形状 / 几何*用 svg。brief 未指定时 maker 按此自判。
 
 ## 给 maker 的 brief 要好：一个想法，最少元素
 
@@ -40,24 +40,24 @@ description: "为课程添加一张正确、极简的配图——图示或几何
 
 ## 调用
 
-用 Agent 工具派发 maker（`subagent_type` 用 agent 名）：
+用 Agent 工具派发（`subagent_type="diagram-maker"`）。brief 必含三样：图型、极简具体的创意、**工作区 viz/ 目录的绝对路径**——maker 的 cwd 未必是工作区，不给绝对路径它就会把图写错地方：
 
 ```
-Agent(subagent_type="mermaid-maker", description="课程配图", prompt="<你的极简、具体的 brief>")
-```
-```
-Agent(subagent_type="svg-maker", description="课程配图", prompt="<你的极简、具体的 brief>")
+Agent(subagent_type="diagram-maker", description="课程配图",
+      prompt="<图型>；<极简、具体的 brief>；工作区 viz/ 目录：<绝对路径>")
 ```
 
-maker 自己完成一切：写源文件、用 Bash 调本机渲染链出 PNG、**亲眼查看 PNG 并迭代到正确干净**、以唯一文件名存入项目的 `viz/` 目录，然后返回：
+maker 自己完成一切：写源文件、渲染、**亲眼查看 PNG 并迭代到正确干净**、以唯一文件名存入指定 viz/ 目录，然后返回：
 
 ```
 RESULT:
 filename: viz-<slug>-<timestamp>.png
-path: <项目根>/viz/viz-<slug>-<timestamp>.png
+path: <viz/viz-<slug>-<timestamp>.png 的绝对路径>
 ```
 
-如果它返回 `RESULT: NONE`，说明它做不出正确的图——简化或重新构思，或者判定这张图不值得。**绝不**自己动手画或伪造图；正确性依赖 maker 的渲染-查看循环。
+**先验证 path 指向的文件真的存在，再嵌入**；块缺失或不可解析一律按 `NONE` 处理。
+
+返回 `NONE` 时看 `src:` 行：有源文件就把 Mermaid/SVG 源码直接贴进课程日志（Obsidian 原生渲染 mermaid 代码块）；没有就简化或重新构思，或判定这张图不值得。**绝不**自己动手画或伪造图；正确性依赖 maker 的渲染-查看循环。
 
 ## 嵌入课程
 
@@ -67,7 +67,7 @@ path: <项目根>/viz/viz-<slug>-<timestamp>.png
 ![一句话说明](../viz/viz-<slug>-<timestamp>.png)
 ```
 
-就这样。先用一句话引出这张图，然后让图自己承载想法——不要在散文里把每个元素复述一遍。密集的图需要控制宽度时用 HTML：`<img src="../viz/<文件>.png" width="500">`（Obsidian 等支持内联 HTML 的渲染器有效）。
+就这样。先用一句话引出这张图，然后让图自己承载想法——不要在散文里把每个元素复述一遍。密集的图需要控制宽度时用 HTML：`<img src="../viz/<文件>.png" width="500">`（Obsidian 等支持内联 HTML 的渲染器有效）。英文标签的配图（中文字体缺失的降级）要在教学回复里向学习者点明一句。
 
 ## 为什么这是可靠的
 
@@ -75,4 +75,4 @@ path: <项目根>/viz/viz-<slug>-<timestamp>.png
 - PNG 嵌入意味着 maker 验证过的像素与学习者看到的像素完全一致——没有重渲染漂移。
 - 唯一文件名让嵌入解析无歧义。
 
-> maker 经 Bash 使用本机渲染链：Mermaid 走 `@mermaid-js/mermaid-cli`（需 Node 与 Chrome）；SVG 走 `rsvg-convert`（缺省时退回 ImageMagick）。你自己不渲染任何东西——只负责 brief 和嵌入返回的文件名。渲染链不可用时，maker 会返回 `NONE` 并说明，此时在课程日志中贴 Mermaid/SVG 源码即可（Obsidian 原生渲染 mermaid 代码块）。
+> maker 经 Bash 使用本机渲染链：Mermaid 走 `@mermaid-js/mermaid-cli`（需 Node 与 Chrome/Edge；puppeteer 找不到浏览器时 maker 会用 `PUPPETEER_EXECUTABLE_PATH` 指向系统浏览器补救一次）；SVG 走 `rsvg-convert`（缺省时退回 ImageMagick 7 的 `magick`，仅类 Unix）。你自己不渲染任何东西——只负责 brief 和嵌入返回的文件。渲染链不可用时 maker 返回 `NONE`（附源文件路径，若有），此时在课程日志中贴 Mermaid/SVG 源码即可（Obsidian 原生渲染 mermaid 代码块）。
