@@ -1,0 +1,9 @@
+{
+  "name": "learning-skill",
+  "version": "0.1.0",
+  "description": "系统性 AI 学习系统：探查→规划→教学，判分出题定位水平边界，跨会话学习工作区，配图与调研子代理。理解 > 记忆。",
+  "author": {
+    "name": "AomeNero",
+    "url": "https://github.com/AomeNero"
+  }
+}

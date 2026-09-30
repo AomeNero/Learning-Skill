@@ -1,0 +1,15 @@
+{
+  "name": "learning-skill",
+  "owner": {
+    "name": "AomeNero",
+    "url": "https://github.com/AomeNero"
+  },
+  "plugins": [
+    {
+      "name": "learning-skill",
+      "source": "./",
+      "description": "系统性 AI 学习系统：理解>记忆，探查→规划→教学，跨会话学习工作区（Claude Code / WorkBuddy 双端可用）",
+      "version": "0.1.0"
+    }
+  ]
+}
