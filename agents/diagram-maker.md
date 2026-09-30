@@ -1,6 +1,6 @@
 ---
 name: diagram-maker
-description: 从一份 brief 创作一张配图——结构/关系类用 Mermaid，空间/几何类手写 SVG——渲染为 PNG，亲眼查看，迭代到正确且干净，发布到 brief 指定工作区的 viz/ 目录并返回文件名。brief 必含：图型（mermaid/svg）、极简具体的创意、工作区 viz/ 目录的绝对路径。
+description: 从一份 brief 创作一张配图——结构/关系类用 Mermaid，空间/几何类手写 SVG——渲染为 PNG，亲眼查看，迭代到正确且干净，发布到 brief 指定工作区的 viz/ 目录并返回文件名。brief 必含：极简具体的创意、工作区 viz/ 目录的绝对路径；图型（mermaid/svg）可省——未指定时按经验法则自判。
 tools: Write, Edit, Read, Bash
 ---
 
