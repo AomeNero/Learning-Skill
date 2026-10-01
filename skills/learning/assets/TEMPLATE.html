@@ -9,6 +9,7 @@
    课程模板（一门课程 = 一个小节）· 按 DESIGN.md（Claude 设计系统）
    奶油画布 + 衬线大标题 + 珊瑚点睛 + 深墨代码面
    三栏：左 = 全部计划小节导航 · 中 = 本节正文 · 右 = 本节大纲（页内锚点）
+   课程末尾：小节考核区——题面在 HTML，学习者在对话里作答，答案判分后补入
    系统字体栈，无外部资源，无 JS；展示数学用 MathML（浏览器原生）
    ============================================================ */
 :root{
@@ -273,6 +274,46 @@ math[display="block"]{
 .feature .t{ font-size: 18px; font-weight: 500; color: var(--ink); margin: 0 0 8px; }
 .feature .d{ font-size: 15px; color: var(--body); margin: 0; line-height: 1.55; }
 
+/* ---------- 小节考核（quiz）：课程末尾的自测区 ----------
+   题面与选项在此呈现（A/B/C/D，"不知道"固定为末项）；
+   答案与解析不预写——学习者回对话作答、判分后补入题目下 */
+.quiz{
+  background: var(--surface-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg) var(--sp-xl);
+  margin: 64px 0 0;
+}
+.quiz .quiz-title{
+  font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--muted-soft);
+  margin: 0 0 10px;
+}
+.quiz .quiz-note{ font-size: 13px; line-height: 1.6; color: var(--muted); margin: 0 0 var(--sp-lg); }
+.quiz .quiz-item{ margin: 0 0 var(--sp-lg); }
+.quiz .quiz-item:last-child{ margin-bottom: 0; }
+.quiz .q{ font-size: 15px; font-weight: 500; color: var(--ink); margin: 0 0 10px; }
+.quiz .opts{ margin: 0; padding: 0; list-style: none; }
+.quiz .opts li{
+  display: flex; gap: 10px; align-items: baseline;
+  font-size: 14px; line-height: 1.5; color: var(--body); margin-bottom: 6px;
+}
+.quiz .opt-key{
+  flex-shrink: 0;
+  font-family: var(--font-mono); font-size: 12px; color: var(--muted);
+  width: 18px; height: 18px; line-height: 16px; text-align: center;
+  border: 1px solid var(--hairline); border-radius: 4px;
+  background: var(--canvas);
+}
+/* 判分后补入的答案与解析 */
+.quiz .answer{
+  border-top: 1px dashed var(--hairline);
+  margin-top: 10px; padding-top: 10px;
+  font-size: 13px; line-height: 1.6; color: var(--muted);
+}
+.quiz .answer .verdict-ok{ color: var(--ink); font-weight: 500; }
+.quiz .answer .verdict-bad{ color: var(--primary); font-weight: 500; }
+
 /* ---------- 右栏：本节大纲（页内锚点目录，点击快速定位） ---------- */
 .toc{
   display: none;
@@ -419,6 +460,50 @@ Reply from 93.184.216.34: bytes=32 time=11ms TTL=56</code></pre>
           <span class="callout-tag">随时问</span>
           <p>任何不清楚的地方，随时回来问你的 agent 老师——它记得你这门课学到哪里。</p>
         </div>
+
+        <section class="quiz" id="小节考核">
+          <div class="quiz-title">小节考核</div>
+          <p class="quiz-note">学完本节后，回到对话里作答（如 <code>1.A 2.B 3.不知道 4.C</code>，用自己的话答也可以）。答错的题会被记录，并在下次学习中优先重教。</p>
+          <div class="quiz-item">
+            <p class="q">1. 所有计算机之间的通信，都是通过______完成的。</p>
+            <ul class="opts">
+              <li><span class="opt-key">A</span>建立专用的端到端线路</li>
+              <li><span class="opt-key">B</span>发送数据包</li>
+              <li><span class="opt-key">C</span>由中心服务器代为转发全部内容</li>
+              <li><span class="opt-key">D</span>不知道</li>
+            </ul>
+          </div>
+          <div class="quiz-item">
+            <p class="q">2. 数据包在网络沿途的每个设备那里，被拆看的是______。</p>
+            <ul class="opts">
+              <li><span class="opt-key">A</span>载荷</li>
+              <li><span class="opt-key">B</span>头部</li>
+              <li><span class="opt-key">C</span>头部与载荷都拆看</li>
+              <li><span class="opt-key">D</span>不知道</li>
+            </ul>
+          </div>
+          <div class="quiz-item">
+            <p class="q">3. 把 L 比特的数据包推上 R 比特/秒的链路，它占用线路的时间是______。</p>
+            <ul class="opts">
+              <li><span class="opt-key">A</span>R/L</li>
+              <li><span class="opt-key">B</span>L×R</li>
+              <li><span class="opt-key">C</span>L/R</li>
+              <li><span class="opt-key">D</span>不知道</li>
+            </ul>
+          </div>
+          <div class="quiz-item">
+            <p class="q">4. 共享线路上"切片要小"的定量理由是______。</p>
+            <ul class="opts">
+              <li><span class="opt-key">A</span>包越长占线越久，共享者排队越久</li>
+              <li><span class="opt-key">B</span>小包在交换机里更不容易损坏</li>
+              <li><span class="opt-key">C</span>小包能自动选择更快的路线</li>
+              <li><span class="opt-key">D</span>不知道</li>
+            </ul>
+          </div>
+          <!-- 判分后在此追加答案与解析，形如：
+          <div class="answer"><span class="verdict-ok">✓ B</span> —— 全称陈述：原子单元是数据包。</div>
+          -->
+        </section>
       </article>
 
     </div>
@@ -432,6 +517,7 @@ Reply from 93.184.216.34: bytes=32 time=11ms TTL=56</code></pre>
     <a href="#解剖一个数据包">解剖一个数据包</a>
     <a href="#一个包占线多久">一个包占线多久</a>
     <a href="#接下来">接下来</a>
+    <a href="#小节考核">小节考核</a>
   </nav>
 
 </div>
