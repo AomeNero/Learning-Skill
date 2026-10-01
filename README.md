@@ -23,8 +23,7 @@
 所有教学状态落在**学习工作区**（一组约定文件，随会话累积，文件名一律小写英文）。状态管理类文件集中收在 `docs/` 子目录，教学产物留在工作区根：
 
 - `docs/` —— 状态管理文件：`mission.md`（你为什么学这个主题；每次教学以它为锚）、`resources.md`（可信资源清单）、`answer.md`（错题档案，驱动下次会话优先重教未清错题）
-- `log/<主题>.md` —— 课程日志，实时镜像讲解正文与每小节末的考核记录（题面、你的回答、缺口），标注当前进度
-- `lessons/` —— HTML 复习单元（一节一课，含末尾考核题）与课程配图
+- `lessons/` —— HTML 复习单元（一节一课，讲解正文、配图、末尾考核与判定全在里面）——**课程目录即进度**：有课 = 已讲，考核区有答案 = 已考
 
 下次会话开场零提问，直接从上次的前沿续接；`docs/answer.md` 里未清的错题所涉知识点会融入教学流优先重教，重教后出一道确认题钉住、答对划销——既是间隔复习，也检验知识是否真的锁住了。
 
@@ -43,13 +42,13 @@
 **会话中：**
 
 - `为什么非得是这样？我自己怎么可能发现这个？` —— 触发发现式讲解：每一步都先给你动机，让知识感觉是被你自己发现的
-- `这部分画张图` —— 触发配图链：派 maker 产出经过渲染验证的 PNG，嵌入课程日志
+- `这部分画张图` —— 触发配图链：派 maker 产出经过渲染验证的 PNG，嵌进本节课程 HTML
 - `这里我没懂，换种讲法` —— 当前小节换个讲法重讲；小节末的考核会检验是否真的落地
 - `我上次错的那道题再讲讲` —— 定向触发错题重教：从 answer.md 调出对应知识点，重教后出确认题划销
 
 **跨会话：**
 
-- `继续上次的` / `我们学到哪了` —— 从课程日志标注的前沿续接，开场零提问；answer.md 的未清错题融入教学流优先重教
+- `继续上次的` / `我们学到哪了` —— 从 lessons/ 课程自证的进度续接（有课=已讲，考核区有答案=已考），开场零提问；answer.md 的未清错题融入教学流优先重教
 - `考考我上次学的傅里叶变换` —— 定向复习，检验存储强度
 - `我想换个主题，改学线性代数` —— 使命修订：新主题开新工作区，旧工作区原样保留，学习记录收束变更
 
@@ -99,15 +98,15 @@ New-Item -ItemType Directory -Force .workbuddy/skills | Out-Null
 Copy-Item -Recurse Learning-Skill/skills/* .workbuddy/skills/
 ```
 
-注：`agents/` 下的两个子代理（researcher、diagram-maker）是 Claude Code 专属机制，WorkBuddy 下自动降级——事实核实改用内置搜索，配图由主线程直接产出源码贴进日志（见下方"说明"）。
+注：`agents/` 下的两个子代理（researcher、diagram-maker）是 Claude Code 专属机制，WorkBuddy 下自动降级——事实核实改用内置搜索，配图由主线程直接手写 SVG 内联进课程 HTML（见下方"说明"）。
 
 ## 依赖（可选）
 
-- 配图渲染：Node.js + `@mermaid-js/mermaid-cli`（Mermaid 图，需本机 Chrome/Edge，puppeteer 找不到浏览器时设 `PUPPETEER_EXECUTABLE_PATH` 指向系统浏览器）、`rsvg-convert` 或 ImageMagick 7（SVG 图，仅类 Unix）。不装也能用：渲染不可用时配图降级为在课程日志里贴 Mermaid/SVG 源码（Obsidian 原生渲染 mermaid 代码块）
-- 课程日志建议用 [Obsidian](https://obsidian.md) 阅读（LaTeX 与 Mermaid 开箱渲染）；VS Code 预览需装对应扩展
+- 配图渲染：Node.js + `@mermaid-js/mermaid-cli`（Mermaid 图，需本机 Chrome/Edge，puppeteer 找不到浏览器时设 `PUPPETEER_EXECUTABLE_PATH` 指向系统浏览器）、`rsvg-convert` 或 ImageMagick 7（SVG 图，仅类 Unix）。不装也能用：渲染不可用时配图降级为内联 SVG 进课程 HTML（mermaid 源码在课程 HTML 中不渲染，改走 SVG 或省略）
+- 课程是自包含 HTML，双击浏览器即读；`docs/` 下的 Markdown 文件建议用 [Obsidian](https://obsidian.md) 阅读（LaTeX 开箱渲染）
 
 ## 说明
 
-- 没有子代理也能跑：主会话直接教学——事实核实降级为自带搜索，配图降级为主线程直接产出 Mermaid/SVG 源码贴进日志（两者都会向学习者声明"未经子代理验证"）
+- 没有子代理也能跑：主会话直接教学——事实核实降级为自带搜索，配图降级为主线程手写 SVG 内联进课程（两者都会向学习者声明"未经子代理验证"）
 - 涉及数学的内容一律 LaTeX 记号；判分题选项避免复杂记号，保证终端里当场可读
 - 教学语言与工作区文件语言始终跟随你使用的语言

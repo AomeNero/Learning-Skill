@@ -1,9 +1,9 @@
 # Template.html 布局分析
 
-> 文件：`assets/TEMPLATE.html`（单文件）
+> 文件：`assets/template.html`（单文件）
 > 课程模型：**一门课程 = 一个小节**——每个 HTML 文件承载且仅承载一个小节，编号即小节顺序
 > 设计语言：DESIGN.md（Claude 设计系统）——奶油画布 + 衬线标题 + 珊瑚点睛 + 深墨代码面
-> 依赖：**零**——系统字体栈、无 JS、无外部资源；展示数学用 MathML（浏览器原生渲染）
+> 依赖：**KaTeX 内嵌**——`assets/katex/` 的样式（含全部 base64 字体）与脚本在制作课程时内联进文件；无外部网络资源，离线双击即读
 
 ---
 
@@ -70,7 +70,7 @@
 - `flex:1 + min-width:0`（防长代码行撑破三栏的纪律项）
 - 页头：eyebrow（课程主题 · 第 N 节）+ 衬线 h1 48px + 18px lead 动机段
 - 提示块 `.callout`：奶油卡 + hairline 边框 + pill 标签（本节挂靠 / 一手资源 / 随时问）
-- **展示数学 MathML**：行内 `<math>` 直接嵌正文；`math[display="block"]` 用 `display:table + margin auto` 纯 CSS 居中（浏览器原生渲染，零依赖）
+- **展示数学 KaTeX（内嵌）**：正文写 LaTeX（行内 `$x$`、独立 `$$…$$`），文档末尾内嵌的 katex.min.js + auto-render.min.js 在 DOMContentLoaded 时扫描渲染；`katex.embed.css` 含 20 个 base64 woff2 字体（约 360KB），`assets/katex/` 随技能走，制作课程时按模板占位标注两处内联
 - **代码窗 `.code-window`**（签名组件）：深墨卡 12px 圆角 → 窗口圆点 chrome + mono 文件名 → 内层 `#1f1e1b` 代码块 → `$` 提示符灰 / 参数琥珀 / URL 青
 - 组件库另有：页签 `.tab-strip` · 特性卡 `.feature-grid` · 平台卡 `.card-grid` · 图片占位 `.ph-img` · 珊瑚徽章 `.badge-coral`——样式齐备，课程按需取用
 
@@ -101,4 +101,4 @@
 4. **双 sticky**：侧栏与目录各自 `top: var(--header-h)` + 独立 `overflow-y`
 5. **珊瑚配额**：当前节编号/徽章/链接三种用途封顶，别的地方用奶油色阶
 6. **深墨节奏**：代码窗与页脚两个深色块收尾，与奶油画布形成页面呼吸（DESIGN.md 的 pacing 机制）
-7. **无 JS 交互替代**：页签压平为静态分节；锚点偏移用 `scroll-margin-top`；移动端直接隐藏次级导航；展示数学走 MathML 原生渲染
+7. **交互极简**：唯一的 JS 是内嵌 KaTeX 的数学渲染；页签压平为静态分节；锚点偏移用 `scroll-margin-top`；移动端直接隐藏次级导航

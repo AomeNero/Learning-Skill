@@ -10,7 +10,7 @@
    奶油画布 + 衬线大标题 + 珊瑚点睛 + 深墨代码面
    三栏：左 = 全部计划小节导航 · 中 = 本节正文 · 右 = 本节大纲（页内锚点）
    课程末尾：小节考核区——题面在 HTML，学习者在对话里作答，答案判分后补入
-   系统字体栈，无外部资源，无 JS；展示数学用 MathML（浏览器原生）
+   系统字体栈；数学由内嵌 KaTeX 渲染（CSS + base64 字体 + JS 制作时全部内联，无外部依赖，离线双击即读）
    ============================================================ */
 :root{
   /* —— 色彩令牌（DESIGN.md colors）—— */
@@ -169,13 +169,10 @@ article code{
 .text-link{ color: var(--primary); }
 .text-link:hover{ text-decoration: underline; }
 
-/* ---------- 展示数学（MathML，浏览器原生渲染，零依赖） ---------- */
-math{ font-size: 1.02em; }
-math[display="block"]{
-  display: table;             /* table + margin auto = 纯 CSS 居中 */
-  margin: var(--sp-lg) auto;
-  font-size: 1.15em;
-}
+/* ---------- 展示数学（KaTeX 内嵌渲染，脚本与内联说明见文档末尾） ---------- */
+.katex{ font-size: 1.08em; }
+.katex-display{ margin: var(--sp-lg) 0; }
+.katex-display > .katex{ font-size: 1.15em; }
 
 /* ---------- 提示块：奶油卡片 + hairline（珊瑚只留给 CTA） ---------- */
 .callout{
@@ -238,6 +235,16 @@ math[display="block"]{
 .code-window .c-prompt{ color: var(--on-dark-soft); user-select: none; }
 .code-window .c-flag{ color: var(--accent-amber); }
 .code-window .c-str{ color: var(--accent-teal); }
+
+/* ---------- 课程配图（figure.fig）：maker 产出的 PNG，与课程同目录 ---------- */
+figure.fig{ margin: 0 0 var(--sp-lg); }
+figure.fig img{
+  display: block; max-width: 100%;
+  border: 1px solid var(--hairline); border-radius: var(--r-lg);
+}
+figure.fig figcaption{
+  font-size: 13px; color: var(--muted); margin-top: 8px; text-align: center;
+}
 
 /* ---------- 图片占位符 ---------- */
 .ph-img{
@@ -354,6 +361,10 @@ h2[id], h3[id], h4[id]{ scroll-margin-top: calc(var(--header-h) + 16px); }
 @media (max-width: 767.98px){
   .page-header h1{ font-size: 32px; letter-spacing: -0.5px; }
 }
+
+/* ====== KaTeX 样式与 base64 内嵌字体 ======
+   制作课程时：把 assets/katex/katex.embed.css 的完整内容粘贴内联到此处。
+   正文数学一律写 LaTeX——行内 $x$、独立成行 $$…$$——由文档末尾的内嵌脚本自动渲染。 */
 </style>
 </head>
 <body>
@@ -439,16 +450,9 @@ Reply from 93.184.216.34: bytes=32 time=11ms TTL=56</code></pre>
         </div>
 
         <h2 id="一个包占线多久">一个包占线多久</h2>
-        <p>切片的大小不是随便定的，它受一条简单的公式约束。把长度为 <math><mi>L</mi></math> 比特的数据包推上带宽为 <math><mi>R</mi></math> 比特/秒的链路，从第一个比特上线到最后一个比特下线，它占用线路的时间是：</p>
-        <math display="block">
-          <msub><mi>t</mi><mtext>trans</mtext></msub>
-          <mo>=</mo>
-          <mfrac>
-            <mi>L</mi>
-            <mi>R</mi>
-          </mfrac>
-        </math>
-        <p>代入数值感受一下：1500 字节（12000 比特）的包在 100 Mbps 的链路上，<math><msub><mi>t</mi><mtext>trans</mtext></msub><mo>&asymp;</mo><mn>0.00012</mn><mspace width="0.222em"></mspace><mi mathvariant="normal">s</mi></math>——万分之一秒量级。包越长，占线越久，别人排队越久：这就是"切片要小"的定量理由。</p>
+        <p>切片的大小不是随便定的，它受一条简单的公式约束。把长度为 $L$ 比特的数据包推上带宽为 $R$ 比特/秒的链路，从第一个比特上线到最后一个比特下线，它占用线路的时间是：</p>
+        $$t_{\text{trans}} = \dfrac{L}{R}$$
+        <p>代入数值感受一下：1500 字节（12000 比特）的包在 100 Mbps 的链路上，$t_{\text{trans}} \approx 0.00012\ \mathrm{s}$——万分之一秒量级。包越长，占线越久，别人排队越久：这就是"切片要小"的定量理由。</p>
 
         <h2 id="接下来">接下来</h2>
         <ul>
@@ -485,9 +489,9 @@ Reply from 93.184.216.34: bytes=32 time=11ms TTL=56</code></pre>
           <div class="quiz-item">
             <p class="q">3. 把 L 比特的数据包推上 R 比特/秒的链路，它占用线路的时间是______。</p>
             <ul class="opts">
-              <li><span class="opt-key">A</span>R/L</li>
-              <li><span class="opt-key">B</span>L×R</li>
-              <li><span class="opt-key">C</span>L/R</li>
+              <li><span class="opt-key">A</span>$R/L$</li>
+              <li><span class="opt-key">B</span>$L \times R$</li>
+              <li><span class="opt-key">C</span>$L/R$</li>
               <li><span class="opt-key">D</span>不知道</li>
             </ul>
           </div>
@@ -526,6 +530,27 @@ Reply from 93.184.216.34: bytes=32 time=11ms TTL=56</code></pre>
 <footer class="site-footer">
   © 2026 <a class="footer-link" href="https://github.com/AomeNero" target="_blank" rel="noopener">AomeNero</a>
 </footer>
+
+<!-- ============ KaTeX（内嵌，自包含离线） ============
+     制作课程时，按序完成两处内联（替换占位注释）：
+     ① 样式：<style> 末尾的标注处，内联 assets/katex/katex.embed.css（含全部 base64 字体）
+     ② 脚本：下面前两个 script 标签内，依次内联 assets/katex/katex.min.js 与
+        assets/katex/auto-render.min.js 的内容。第三个 script 是渲染调用，原样保留。 -->
+<script>/* ① 内联 katex.min.js 于此 */</script>
+<script>/* ② 内联 auto-render.min.js 于此 */</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+      throwOnError: false
+    });
+  });
+</script>
 
 </body>
 </html>
