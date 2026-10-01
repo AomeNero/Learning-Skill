@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Learning Docs</title>
+<title>数据包：通信的原子单元 · 互联网如何工作</title>
 <style>
 /* ============================================================
-   单文件文档页模板 · 按 DESIGN.md（Claude 设计系统）重写
+   课程模板（一门课程 = 一个小节）· 按 DESIGN.md（Claude 设计系统）
    奶油画布 + 衬线大标题 + 珊瑚点睛 + 深墨代码面
-   系统字体栈，无外部资源，无 JS
+   三栏：左 = 全部计划小节导航 · 中 = 本节正文 · 右 = 挂靠+要点提要
+   系统字体栈，无外部资源，无 JS；展示数学用 MathML（浏览器原生）
    ============================================================ */
 :root{
   /* —— 色彩令牌（DESIGN.md colors）—— */
@@ -40,9 +41,9 @@
   /* —— 布局尺寸 —— */
   --header-h: 64px;            /* top-nav 规范高度 */
   --sidebar-w: 18rem;
-  --toc-w: 15rem;
+  --digest-w: 15rem;
   --content-max: 816px;
-  --shell-max: 88rem;          /* 1408px：288 侧栏 + 816 中列 + 240 目录 + 64 内边距，中列才能撑满 816 */
+  --shell-max: 88rem;          /* 1408px：288 侧栏 + 816 中列 + 240 提要 + 64 内边距，中列才能撑满 816 */
 
   /* —— 字体栈（系统字体，无下载）—— */
   --font-serif: "Tiempos Headline", Garamond, Georgia, "Source Han Serif SC",
@@ -62,7 +63,7 @@ body{
 }
 a{ color: inherit; text-decoration: none; }
 
-/* ---------- 顶部导航（top-nav：奶油 64px） ---------- */
+/* ---------- 顶部导航（top-nav：奶油 64px，仅品牌词标） ---------- */
 .site-header{
   position: sticky; top: 0; z-index: 30;
   height: var(--header-h); background: var(--canvas);
@@ -79,12 +80,10 @@ a{ color: inherit; text-decoration: none; }
   color: var(--ink); letter-spacing: -0.3px; white-space: nowrap;
 }
 .wordmark svg{ display: block; }
-.site-nav{ display: flex; gap: var(--sp-lg); font-size: 14px; font-weight: 500; color: var(--muted); }
-.site-nav a:hover{ color: var(--ink); }
 
-/* ---------- 三栏骨架 ---------- */
+/* ---------- 三栏骨架（flex-wrap：窄屏时提要换行到顶部） ---------- */
 .layout{
-  display: flex; max-width: var(--shell-max);
+  display: flex; flex-wrap: wrap; max-width: var(--shell-max);
   margin: 0 auto; align-items: flex-start;
 }
 .sidebar{
@@ -95,25 +94,45 @@ a{ color: inherit; text-decoration: none; }
   padding: var(--sp-lg) var(--sp-md) var(--sp-xxl);
   border-right: 1px solid var(--hairline);
 }
-.sidebar .group-title{
-  font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--muted-soft);
-  margin: var(--sp-lg) 0 8px; padding-left: 12px;
-}
-.sidebar .group-title:first-child{ margin-top: 0; }
-.sidebar a{
-  display: block; padding: 7px 12px; margin: 1px 0;
-  font-size: 14px; font-weight: 500; color: var(--muted);
-  border-radius: var(--r-md);
-}
-.sidebar a:hover{ color: var(--ink); background: var(--surface-soft); }
-.sidebar a.active{ color: var(--ink); background: var(--surface-card); }
-
 .content{ flex: 1; min-width: 0; padding: var(--sp-xl) var(--sp-lg) 96px; }
 .content-inner{ max-width: var(--content-max); margin: 0 auto; }
 
-/* ---------- 页头：衬线 display ---------- */
+/* ---------- 左栏：全部计划小节导航（三态） ----------
+   已发布 = 可点击相对链接 · 当前小节 = .active 静态高亮
+   未发布 = .planned 置灰占位 · 导航是制作时点的快照，不回填旧文件 */
+.sidebar .group-title{
+  font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--muted-soft);
+  margin: 0 0 8px; padding-left: 12px;
+}
+.sidebar .course-name{
+  font-family: var(--font-serif); font-size: 17px; color: var(--ink);
+  padding: 0 12px var(--sp-md); margin-bottom: var(--sp-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.section-nav{ margin: 0; padding: 0; list-style: none; }
+.section-nav li{ margin: 1px 0; }
+.section-nav a, .section-nav .planned{
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 7px 12px; border-radius: var(--r-md);
+  font-size: 14px; font-weight: 500;
+}
+.section-nav .idx{
+  flex-shrink: 0;
+  font-family: var(--font-mono); font-size: 12px; color: var(--muted-soft);
+}
+.section-nav a{ color: var(--muted); }
+.section-nav a:hover{ color: var(--ink); background: var(--surface-soft); }
+.section-nav a.active{ color: var(--ink); background: var(--surface-card); }
+.section-nav a.active .idx{ color: var(--primary); }
+.section-nav .planned{ color: var(--muted-soft); cursor: default; }
+
+/* ---------- 页头：eyebrow + 衬线 display ---------- */
 .page-header{ margin: var(--sp-md) 0 var(--sp-xxl); }
+.page-header .eyebrow{
+  font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
+  color: var(--muted-soft); margin: 0 0 10px;
+}
 .page-header h1{
   font-family: var(--font-serif); font-weight: 400;
   font-size: 48px; line-height: 1.1; letter-spacing: -1px;
@@ -149,6 +168,14 @@ article code{
 .text-link{ color: var(--primary); }
 .text-link:hover{ text-decoration: underline; }
 
+/* ---------- 展示数学（MathML，浏览器原生渲染，零依赖） ---------- */
+math{ font-size: 1.02em; }
+math[display="block"]{
+  display: table;             /* table + margin auto = 纯 CSS 居中 */
+  margin: var(--sp-lg) auto;
+  font-size: 1.15em;
+}
+
 /* ---------- 提示块：奶油卡片 + hairline（珊瑚只留给 CTA） ---------- */
 .callout{
   background: var(--surface-card); border: 1px solid var(--hairline);
@@ -170,6 +197,11 @@ article code{
   font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
   border-radius: 9999px; padding: 3px 10px;
 }
+
+/* ============================================================
+   以下为组件库样式（tab-strip / code-window / ph-img / 卡片网格）
+   本模板示例正文未全部用到，课程制作时按需取用
+   ============================================================ */
 
 /* ---------- 页签（category-tab） ---------- */
 .tab-strip{ display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 var(--sp-lg); }
@@ -241,27 +273,48 @@ article code{
 .feature .t{ font-size: 18px; font-weight: 500; color: var(--ink); margin: 0 0 8px; }
 .feature .d{ font-size: 15px; color: var(--body); margin: 0; line-height: 1.55; }
 
-/* ---------- 右侧目录 ---------- */
-.toc{
-  display: none;
-  width: var(--toc-w); flex-shrink: 0;
-  position: sticky; top: var(--header-h);
-  max-height: calc(100vh - var(--header-h)); overflow-y: auto;
-  padding: var(--sp-xl) var(--sp-md) var(--sp-xxl) 0;
-  font-size: 13px;
+/* ---------- 右栏提要（digest）：挂靠 + 要点 ----------
+   双形态：≥1280 为 sticky 侧栏；更窄时 order:-1 降级为正文
+   顶部奶油卡片（flex-wrap 换行实现，纯 CSS），内容永不丢 */
+.digest{
+  order: -1;
+  flex: 0 0 calc(100% - 2 * var(--sp-lg));
+  margin: var(--sp-lg) var(--sp-lg) 0;
+  display: grid; gap: var(--sp-lg);
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  background: var(--surface-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg) var(--sp-xl);
 }
-.toc .toc-title{
+.digest-title{
   font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
   text-transform: uppercase; color: var(--muted-soft);
-  margin: 0 0 10px 14px;
+  margin: 0 0 10px;
 }
-.toc a{
-  display: block; padding: 5px 14px; color: var(--muted);
-  border-left: 1px solid var(--hairline);
+.digest ul{ margin: 0; padding: 0; list-style: none; }
+
+/* 挂靠列表：◇ 已发布课程（可点） · ◆ 根真理/无条件真理（不可点） */
+.anchor-list li{ font-size: 13px; line-height: 1.5; margin-bottom: 8px; }
+.anchor-list li:last-child{ margin-bottom: 0; }
+.anchor-list a, .anchor-list .truth{ color: var(--muted); }
+.anchor-list a:hover{ color: var(--ink); }
+.anchor-list a::before, .anchor-list .truth::before{
+  content: "◇"; font-size: 9px; vertical-align: 2px;
+  margin-right: 6px; color: var(--muted-soft);
 }
-.toc a.lvl2{ margin-left: 14px; }
-.toc a:hover{ color: var(--ink); }
-.toc a.on{ color: var(--ink); border-left: 2px solid var(--primary); padding-left: 13px; }
+.anchor-list .truth::before{ content: "◆"; }
+
+/* 要点列表：圆点短句 */
+.point-list li{
+  position: relative; padding-left: 14px;
+  font-size: 13px; line-height: 1.5; color: var(--body); margin-bottom: 8px;
+}
+.point-list li:last-child{ margin-bottom: 0; }
+.point-list li::before{
+  content: ""; position: absolute; left: 0; top: 0.6em;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--muted-soft);
+}
 
 /* ---------- 页脚：深墨面，仅版权 ---------- */
 .site-footer{
@@ -276,10 +329,19 @@ article code{
 h2[id], h3[id], h4[id]{ scroll-margin-top: calc(var(--header-h) + 16px); }
 @media (min-width: 1024px){ .sidebar{ display: block; } }
 @media (min-width: 1280px){
-  .toc{ display: block; }
+  .digest{
+    order: 0;
+    flex: 0 0 var(--digest-w);
+    display: block;
+    position: sticky; top: var(--header-h);
+    max-height: calc(100vh - var(--header-h)); overflow-y: auto;
+    margin: 0;
+    padding: var(--sp-xl) var(--sp-md) var(--sp-xxl) 0;
+    background: none; border: none; border-radius: 0;
+  }
+  .digest .digest-block + .digest-block{ margin-top: var(--sp-xl); }
   .content{ padding-left: var(--sp-xl); padding-right: var(--sp-xl); }
 }
-@media (max-width: 1023.98px){ .site-nav{ display: none; } }
 @media (max-width: 767.98px){
   .page-header h1{ font-size: 32px; letter-spacing: -0.5px; }
 }
@@ -287,7 +349,7 @@ h2[id], h3[id], h4[id]{ scroll-margin-top: calc(var(--header-h) + 16px); }
 </head>
 <body>
 
-<!-- 顶部导航：仅品牌与主导航，右侧集群已按要求移除 -->
+<!-- 顶部导航：仅品牌词标 -->
 <header class="site-header">
   <div class="inner">
     <a class="wordmark" href="#">
@@ -296,136 +358,121 @@ h2[id], h3[id], h4[id]{ scroll-margin-top: calc(var(--header-h) + 16px); }
         <path d="M10 1v18M1 10h18M3.6 3.6l12.8 12.8M16.4 3.6L3.6 16.4"
               stroke="#141413" stroke-width="2" stroke-linecap="round"/>
       </svg>
-      Learning Docs
+      Learning
     </a>
-    <nav class="site-nav">
-      <a href="#">文档</a><a href="#">示例</a><a href="#">API</a>
-    </nav>
   </div>
 </header>
 
 <div class="layout">
 
+  <!-- 左栏：全部计划小节导航（制作时点快照） -->
   <aside class="sidebar">
-    <div class="group-title">快速开始</div>
-    <a class="active" href="#" aria-current="page">概述</a>
-    <a href="#">快速入门</a>
-    <a href="#">常见工作流</a>
-    <div class="group-title">核心概念</div>
-    <a href="#">Claude Code 是什么</a>
-    <a href="#">安全与权限</a>
-    <div class="group-title">使用 Claude Code</div>
-    <a href="#">CLI 用法</a>
-    <a href="#">记忆与 CLAUDE.md</a>
+    <div class="group-title">课程主题</div>
+    <div class="course-name">互联网如何工作</div>
+    <ol class="section-nav">
+      <li>
+        <a href="0001-a-journey-of-a-message.html"><span class="idx">0001</span><span class="t">从一条消息的旅程开始</span></a>
+      </li>
+      <li>
+        <a class="active" aria-current="page"><span class="idx">0002</span><span class="t">数据包：通信的原子单元</span></a>
+      </li>
+      <li>
+        <span class="planned"><span class="idx">0003</span><span class="t">尽力而为：IP 的哲学</span></span>
+      </li>
+      <li>
+        <span class="planned"><span class="idx">0004</span><span class="t">TCP：在不可靠之上造可靠</span></span>
+      </li>
+      <li>
+        <span class="planned"><span class="idx">0005</span><span class="t">域名与 DNS：互联网的电话簿</span></span>
+      </li>
+    </ol>
   </aside>
 
+  <!-- 中栏：本小节正文 -->
   <main class="content">
     <div class="content-inner">
 
       <header class="page-header">
-        <h1>概述</h1>
-        <p class="lead">Claude Code 是一个代理编码工具，可以读取你的代码库、编辑文件、运行命令，并与你的开发工具集成。可在终端、IDE、桌面应用和浏览器中使用。</p>
+        <p class="eyebrow">互联网如何工作 · 第 2 节</p>
+        <h1>数据包：通信的原子单元</h1>
+        <p class="lead">上一节我们看到，一条消息的旅程是被切成无数碎片各自上路的。这一节回答：碎片本身长什么样？为什么偏偏是这种形状？</p>
       </header>
 
       <article>
         <div class="callout">
-          <span class="callout-tag">提示</span>
-          <p>默认配置需要访问线上端点才能完成安装、登录和正常使用。开始前请先确认网络连通性，企业代理与第三方提供商配置参见<a class="text-link" href="#">网络配置</a>。</p>
+          <span class="callout-tag">本节挂靠</span>
+          <p>上一节（<a class="text-link" href="0001-a-journey-of-a-message.html">0001 · 从一条消息的旅程开始</a>）确立了一条无条件真理：共享线路上没有专用通道，一切传输都是排队分时。本节从它出发，推出通信世界的原子单元。</p>
         </div>
 
-        <h2 id="开始使用">开始使用</h2>
-        <p>Claude Code 在多个平台上运行。原页面此处为 JS 标签页，模板中压平为静态页签 + 分节：</p>
+        <h2 id="为什么必须切片">为什么必须切片</h2>
+        <p>假设你在一根共享线路上发送一部 2 GB 的电影，而线路上另一头的人只想发一个"好"字。如果整条消息必须一次性连续传完，那个"好"就要等上几分钟——仅仅因为你不巧先到。没有人能接受这样的网络。</p>
+        <p>解法几乎是被迫的：把每条消息切成小块，让小块轮流上线。块要足够小，任何一块都只占线一瞬；又要自带地址，否则走到岔路口就不知道该往哪去。这个"带地址的小块"就是<strong>数据包</strong>——它的发现并不神秘：只要你在共享线路上追求公平，你就必然走到它面前。</p>
 
-        <div class="tab-strip" aria-hidden="true">
-          <span class="on">Terminal</span><span>VS Code</span><span>Desktop app</span><span>Web</span><span>JetBrains</span>
-        </div>
+        <h3 id="一条值得锁定的全称陈述">一条值得锁定的全称陈述</h3>
+        <p>所有计算机之间的通信，都是通过<strong>发送数据包</strong>完成的。</p>
+        <p>没有例外：网页、视频、游戏、你正在读的这行字——全部如此。这是典型的原子单元式陈述，值得作为地基即刻锁定：本课程后面三节讲的一切，都站在它上面。</p>
 
-        <h3 id="terminal">Terminal</h3>
-        <p>功能完整的 CLI。打开终端，运行适用于你系统的安装命令：</p>
-
-        <h4>macOS、Linux、WSL <span class="badge-coral">推荐</span></h4>
-        <div class="code-window">
-          <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="filename">terminal</span></div>
-          <pre><code><span class="c-prompt">$</span> curl <span class="c-flag">-fsSL</span> <span class="c-str">https://claude.ai/install.sh</span> <span class="c-flag">|</span> bash</code></pre>
-        </div>
-
-        <h4>Windows PowerShell</h4>
-        <div class="code-window">
-          <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="filename">powershell</span></div>
-          <pre><code><span class="c-prompt">PS&gt;</span> irm <span class="c-str">https://claude.ai/install.ps1</span> <span class="c-flag">|</span> iex</code></pre>
-        </div>
-
-        <p>安装完成后打开新终端运行 <code>claude --version</code> 验证，然后在任意项目中启动：</p>
-        <div class="code-window">
-          <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="filename">terminal</span></div>
-          <pre><code><span class="c-prompt">$</span> cd your-project
-<span class="c-prompt">$</span> claude</code></pre>
-        </div>
-
-        <h3 id="vs-code">VS Code</h3>
-        <p>扩展在编辑器中直接提供内联差异、@-提及、计划审查和对话历史。在扩展视图中搜索安装即可。</p>
-        <!-- 图片占位符：原页面此处为产品截图 -->
-        <div class="ph-img">图片占位符 · 16:9 产品截图</div>
-
-        <h3 id="desktop">Desktop app</h3>
-        <p>桌面应用占位段落：图形界面包装 CLI 能力，适合多会话并行。</p>
-
-        <h2 id="你可以做什么">你可以做什么</h2>
-        <div class="feature-grid">
-          <div class="feature">
-            <p class="t">构建功能</p>
-            <p class="d">描述需求，跨多个文件实现。</p>
-          </div>
-          <div class="feature">
-            <p class="t">修复错误</p>
-            <p class="d">定位根因并给出修正。</p>
-          </div>
-          <div class="feature">
-            <p class="t">自动化任务</p>
-            <p class="d">把重复工作变成脚本化流程。</p>
-          </div>
-        </div>
-
-        <h2 id="在任何地方使用">在任何地方使用 Claude Code</h2>
-        <div class="card-grid">
-          <a class="tile" href="#">
-            <p class="t">终端</p>
-            <p class="d">CLI 工具，直接在 shell 中运行</p>
-          </a>
-          <a class="tile" href="#">
-            <p class="t">VS Code / JetBrains</p>
-            <p class="d">IDE 扩展，内联差异与对话</p>
-          </a>
-          <a class="tile" href="#">
-            <p class="t">桌面应用</p>
-            <p class="d">图形界面，多会话并行</p>
-          </a>
-          <a class="tile" href="#">
-            <p class="t">Web</p>
-            <p class="d">浏览器中使用，云端沙箱执行</p>
-          </a>
-        </div>
-
-        <h2 id="后续步骤">后续步骤</h2>
+        <h2 id="解剖一个数据包">解剖一个数据包</h2>
+        <p>每个数据包只有两个部分：</p>
         <ul>
-          <li><a class="text-link" href="#">快速入门（15 分钟）→</a></li>
-          <li><a class="text-link" href="#">常见工作流 →</a></li>
+          <li><strong>头部</strong>——寄件单：源地址、目的地址、序号、指令……网络沿途的每个设备只读它。</li>
+          <li><strong>载荷</strong>——货物：原始消息的一片切片，沿途没有人拆看它。</li>
         </ul>
+        <p>用 <code>ping</code> 亲眼看一次载荷的大小——注意每次发出并回收的，正是 32 字节的一小片：</p>
+        <div class="code-window">
+          <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="filename">terminal</span></div>
+          <pre><code><span class="c-prompt">$</span> ping <span class="c-str">example.com</span>
+
+Pinging example.com [93.184.216.34] with 32 bytes of data:
+Reply from 93.184.216.34: bytes=32 time=11ms TTL=56</code></pre>
+        </div>
+
+        <h2 id="一个包占线多久">一个包占线多久</h2>
+        <p>切片的大小不是随便定的，它受一条简单的公式约束。把长度为 <math><mi>L</mi></math> 比特的数据包推上带宽为 <math><mi>R</mi></math> 比特/秒的链路，从第一个比特上线到最后一个比特下线，它占用线路的时间是：</p>
+        <math display="block">
+          <msub><mi>t</mi><mtext>trans</mtext></msub>
+          <mo>=</mo>
+          <mfrac>
+            <mi>L</mi>
+            <mi>R</mi>
+          </mfrac>
+        </math>
+        <p>代入数值感受一下：1500 字节（12000 比特）的包在 100 Mbps 的链路上，<math><msub><mi>t</mi><mtext>trans</mtext></msub><mo>&asymp;</mo><mn>0.00012</mn><mspace width="0.222em"></mspace><mi mathvariant="normal">s</mi></math>——万分之一秒量级。包越长，占线越久，别人排队越久：这就是"切片要小"的定量理由。</p>
+
+        <h2 id="接下来">接下来</h2>
+        <ul>
+          <li>下一节 <strong>0003 · 尽力而为：IP 的哲学</strong>——网络只承诺把每个包尽力送达，不保证不丢、不乱序；可靠是之后 TCP 亲手造出来的。</li>
+          <li>本节首选一手资源：Stanford CS144 讲义 <a class="text-link" href="#">Packet Switching</a> 章——RESOURCES.md 中质量最高的对应条目。</li>
+        </ul>
+
+        <div class="callout">
+          <span class="callout-tag">随时问</span>
+          <p>任何不清楚的地方，随时回来问你的 agent 老师——它记得你这门课学到哪里。</p>
+        </div>
       </article>
 
     </div>
   </main>
 
-  <nav class="toc" aria-label="在此页面">
-    <div class="toc-title">在此页面</div>
-    <a class="on" href="#开始使用">开始使用</a>
-    <a class="lvl2" href="#terminal">Terminal</a>
-    <a class="lvl2" href="#vs-code">VS Code</a>
-    <a class="lvl2" href="#desktop">Desktop app</a>
-    <a href="#你可以做什么">你可以做什么</a>
-    <a href="#在任何地方使用">在任何地方使用 Claude Code</a>
-    <a href="#后续步骤">后续步骤</a>
-  </nav>
+  <!-- 右栏：本节提要（挂靠 + 要点） -->
+  <aside class="digest" aria-label="本节提要">
+    <section class="digest-block">
+      <div class="digest-title">挂靠</div>
+      <ul class="anchor-list">
+        <li><a href="0001-a-journey-of-a-message.html">0001 · 从一条消息的旅程开始</a></li>
+        <li><span class="truth">无条件真理：共享线路上没有专用通道，一切传输都是排队分时</span></li>
+      </ul>
+    </section>
+    <section class="digest-block">
+      <div class="digest-title">本节要点</div>
+      <ul class="point-list">
+        <li>所有计算机通信都经由发送数据包完成——原子单元式全称陈述</li>
+        <li>数据包 = 头部（地址与指令）+ 载荷（内容切片），缺一不可</li>
+        <li>占线时间 <math><msub><mi>t</mi><mtext>trans</mtext></msub><mo>=</mo><mi>L</mi><mo>/</mo><mi>R</mi></math>：包越长或带宽越窄，占线越久</li>
+        <li>切片由发送端做、重组由接收端做——网络中段无人拆看整体</li>
+      </ul>
+    </section>
+  </aside>
 
 </div>
 
