@@ -40,19 +40,19 @@ maker 是单个子代理 `diagram-maker`，定义在 `.claude/agents/`（本仓�
 
 ## 调用
 
-用 Agent 工具派发（`subagent_type="diagram-maker"`）。brief 必含三样：图型、极简具体的创意、**工作区 viz/ 目录的绝对路径**——maker 的 cwd 未必是工作区，不给绝对路径它就会把图写错地方：
+用 Agent 工具派发（`subagent_type="diagram-maker"`）。brief 必含三样：图型、极简具体的创意、**工作区 lessons/ 目录的绝对路径**——maker 的 cwd 未必是工作区，不给绝对路径它就会把图写错地方：
 
 ```
 Agent(subagent_type="diagram-maker", description="课程配图",
-      prompt="<图型>；<极简、具体的 brief>；工作区 viz/ 目录：<绝对路径>")
+      prompt="<图型>；<极简、具体的 brief>；工作区 lessons/ 目录：<绝对路径>")
 ```
 
-maker 自己完成一切：写源文件、渲染、**亲眼查看 PNG 并迭代到正确干净**、以唯一文件名存入指定 viz/ 目录，然后返回：
+maker 自己完成一切：写源文件、渲染、**亲眼查看 PNG 并迭代到正确干净**、以唯一文件名存入指定 lessons/ 目录，然后返回：
 
 ```
 RESULT:
-filename: viz-<slug>-<timestamp>.png
-path: <viz/viz-<slug>-<timestamp>.png 的绝对路径>
+filename: <slug>-<timestamp>.png
+path: <lessons/<slug>-<timestamp>.png 的绝对路径>
 ```
 
 **先验证 path 指向的文件真的存在，再嵌入**；块缺失或不可解析一律按 `NONE` 处理。
@@ -63,13 +63,13 @@ maker 派发本身不可用时（环境不支持子代理、agent 未安装或�
 
 ## 嵌入课程
 
-把嵌入直接写进教学回复（并同步进课程日志），用 maker 返回的文件名、标准 markdown 相对路径（日志在 `log/`，图在 `viz/`）：
+把嵌入直接写进教学回复（并同步进课程日志），用 maker 返回的文件名、标准 markdown 相对路径（日志在 `log/`，图在 `lessons/`）：
 
 ```
-![一句话说明](../viz/viz-<slug>-<timestamp>.png)
+![一句话说明](../lessons/<slug>-<timestamp>.png)
 ```
 
-就这样。先用一句话引出这张图，然后让图自己承载想法——不要在散文里把每个元素复述一遍。密集的图需要控制宽度时用 HTML：`<img src="../viz/<文件>.png" width="500">`（Obsidian 等支持内联 HTML 的渲染器有效）。英文标签的配图（中文字体缺失的降级）要在教学回复里向学习者点明一句。
+就这样。先用一句话引出这张图，然后让图自己承载想法——不要在散文里把每个元素复述一遍。密集的图需要控制宽度时用 HTML：`<img src="../lessons/<文件>.png" width="500">`（Obsidian 等支持内联 HTML 的渲染器有效）。英文标签的配图（中文字体缺失的降级）要在教学回复里向学习者点明一句。
 
 ## 为什么这是可靠的
 
