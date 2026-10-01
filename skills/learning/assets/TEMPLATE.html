@@ -8,7 +8,7 @@
 /* ============================================================
    课程模板（一门课程 = 一个小节）· 按 DESIGN.md（Claude 设计系统）
    奶油画布 + 衬线大标题 + 珊瑚点睛 + 深墨代码面
-   三栏：左 = 全部计划小节导航 · 中 = 本节正文 · 右 = 挂靠+要点提要
+   三栏：左 = 全部计划小节导航 · 中 = 本节正文 · 右 = 本节大纲（页内锚点）
    系统字体栈，无外部资源，无 JS；展示数学用 MathML（浏览器原生）
    ============================================================ */
 :root{
@@ -41,9 +41,9 @@
   /* —— 布局尺寸 —— */
   --header-h: 64px;            /* top-nav 规范高度 */
   --sidebar-w: 18rem;
-  --digest-w: 15rem;
+  --toc-w: 15rem;
   --content-max: 816px;
-  --shell-max: 88rem;          /* 1408px：288 侧栏 + 816 中列 + 240 提要 + 64 内边距，中列才能撑满 816 */
+  --shell-max: 88rem;          /* 1408px：288 侧栏 + 816 中列 + 240 目录 + 64 内边距，中列才能撑满 816 */
 
   /* —— 字体栈（系统字体，无下载）—— */
   --font-serif: "Tiempos Headline", Garamond, Georgia, "Source Han Serif SC",
@@ -81,9 +81,9 @@ a{ color: inherit; text-decoration: none; }
 }
 .wordmark svg{ display: block; }
 
-/* ---------- 三栏骨架（flex-wrap：窄屏时提要换行到顶部） ---------- */
+/* ---------- 三栏骨架 ---------- */
 .layout{
-  display: flex; flex-wrap: wrap; max-width: var(--shell-max);
+  display: flex; max-width: var(--shell-max);
   margin: 0 auto; align-items: flex-start;
 }
 .sidebar{
@@ -273,48 +273,26 @@ math[display="block"]{
 .feature .t{ font-size: 18px; font-weight: 500; color: var(--ink); margin: 0 0 8px; }
 .feature .d{ font-size: 15px; color: var(--body); margin: 0; line-height: 1.55; }
 
-/* ---------- 右栏提要（digest）：挂靠 + 要点 ----------
-   双形态：≥1280 为 sticky 侧栏；更窄时 order:-1 降级为正文
-   顶部奶油卡片（flex-wrap 换行实现，纯 CSS），内容永不丢 */
-.digest{
-  order: -1;
-  flex: 0 0 calc(100% - 2 * var(--sp-lg));
-  margin: var(--sp-lg) var(--sp-lg) 0;
-  display: grid; gap: var(--sp-lg);
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-  background: var(--surface-card);
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-lg);
-  padding: var(--sp-lg) var(--sp-xl);
+/* ---------- 右栏：本节大纲（页内锚点目录，点击快速定位） ---------- */
+.toc{
+  display: none;
+  width: var(--toc-w); flex-shrink: 0;
+  position: sticky; top: var(--header-h);
+  max-height: calc(100vh - var(--header-h)); overflow-y: auto;
+  padding: var(--sp-xl) var(--sp-md) var(--sp-xxl) 0;
+  font-size: 13px;
 }
-.digest-title{
+.toc .toc-title{
   font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
   text-transform: uppercase; color: var(--muted-soft);
-  margin: 0 0 10px;
+  margin: 0 0 10px 14px;
 }
-.digest ul{ margin: 0; padding: 0; list-style: none; }
-
-/* 挂靠列表：◇ 已发布课程（可点） · ◆ 根真理/无条件真理（不可点） */
-.anchor-list li{ font-size: 13px; line-height: 1.5; margin-bottom: 8px; }
-.anchor-list li:last-child{ margin-bottom: 0; }
-.anchor-list a, .anchor-list .truth{ color: var(--muted); }
-.anchor-list a:hover{ color: var(--ink); }
-.anchor-list a::before, .anchor-list .truth::before{
-  content: "◇"; font-size: 9px; vertical-align: 2px;
-  margin-right: 6px; color: var(--muted-soft);
+.toc a{
+  display: block; padding: 5px 14px; color: var(--muted);
+  border-left: 1px solid var(--hairline);
 }
-.anchor-list .truth::before{ content: "◆"; }
-
-/* 要点列表：圆点短句 */
-.point-list li{
-  position: relative; padding-left: 14px;
-  font-size: 13px; line-height: 1.5; color: var(--body); margin-bottom: 8px;
-}
-.point-list li:last-child{ margin-bottom: 0; }
-.point-list li::before{
-  content: ""; position: absolute; left: 0; top: 0.6em;
-  width: 5px; height: 5px; border-radius: 50%; background: var(--muted-soft);
-}
+.toc a.lvl2{ margin-left: 14px; }
+.toc a:hover{ color: var(--ink); }
 
 /* ---------- 页脚：深墨面，仅版权 ---------- */
 .site-footer{
@@ -329,17 +307,7 @@ math[display="block"]{
 h2[id], h3[id], h4[id]{ scroll-margin-top: calc(var(--header-h) + 16px); }
 @media (min-width: 1024px){ .sidebar{ display: block; } }
 @media (min-width: 1280px){
-  .digest{
-    order: 0;
-    flex: 0 0 var(--digest-w);
-    display: block;
-    position: sticky; top: var(--header-h);
-    max-height: calc(100vh - var(--header-h)); overflow-y: auto;
-    margin: 0;
-    padding: var(--sp-xl) var(--sp-md) var(--sp-xxl) 0;
-    background: none; border: none; border-radius: 0;
-  }
-  .digest .digest-block + .digest-block{ margin-top: var(--sp-xl); }
+  .toc{ display: block; }
   .content{ padding-left: var(--sp-xl); padding-right: var(--sp-xl); }
 }
 @media (max-width: 767.98px){
@@ -358,7 +326,7 @@ h2[id], h3[id], h4[id]{ scroll-margin-top: calc(var(--header-h) + 16px); }
         <path d="M10 1v18M1 10h18M3.6 3.6l12.8 12.8M16.4 3.6L3.6 16.4"
               stroke="#141413" stroke-width="2" stroke-linecap="round"/>
       </svg>
-      Learning
+      Learning Docs
     </a>
   </div>
 </header>
@@ -454,25 +422,15 @@ Reply from 93.184.216.34: bytes=32 time=11ms TTL=56</code></pre>
     </div>
   </main>
 
-  <!-- 右栏：本节提要（挂靠 + 要点） -->
-  <aside class="digest" aria-label="本节提要">
-    <section class="digest-block">
-      <div class="digest-title">挂靠</div>
-      <ul class="anchor-list">
-        <li><a href="0001-a-journey-of-a-message.html">0001 · 从一条消息的旅程开始</a></li>
-        <li><span class="truth">无条件真理：共享线路上没有专用通道，一切传输都是排队分时</span></li>
-      </ul>
-    </section>
-    <section class="digest-block">
-      <div class="digest-title">本节要点</div>
-      <ul class="point-list">
-        <li>所有计算机通信都经由发送数据包完成——原子单元式全称陈述</li>
-        <li>数据包 = 头部（地址与指令）+ 载荷（内容切片），缺一不可</li>
-        <li>占线时间 <math><msub><mi>t</mi><mtext>trans</mtext></msub><mo>=</mo><mi>L</mi><mo>/</mo><mi>R</mi></math>：包越长或带宽越窄，占线越久</li>
-        <li>切片由发送端做、重组由接收端做——网络中段无人拆看整体</li>
-      </ul>
-    </section>
-  </aside>
+  <!-- 右栏：本节大纲（页内锚点快速定位） -->
+  <nav class="toc" aria-label="在此页面">
+    <div class="toc-title">在此页面</div>
+    <a href="#为什么必须切片">为什么必须切片</a>
+    <a class="lvl2" href="#一条值得锁定的全称陈述">一条值得锁定的全称陈述</a>
+    <a href="#解剖一个数据包">解剖一个数据包</a>
+    <a href="#一个包占线多久">一个包占线多久</a>
+    <a href="#接下来">接下来</a>
+  </nav>
 
 </div>
 
