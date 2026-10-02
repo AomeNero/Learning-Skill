@@ -6,7 +6,7 @@
 <title>{课程标题}的检索练习</title>
 <style>
 /* ============================================================
-   考核页模板（与课程 000N-<slug>.html 配对：000N-<slug>-question.html）
+   检索练习页模板（与课程 000N-<slug>.html 配对：000N-<slug>-question.html）
    设计系统同 template.html——奶油画布 + 衬线标题 + 珊瑚 CTA + teal/coral 判定色
    单栏窄居中；题目单选，提交后页内自判分并生成作答报告
    系统字体栈；公式课程经相对路径外链 lessons/src/katex/ 渲染（TeX 源码保留在 HTML）
@@ -245,7 +245,7 @@ a{ color: inherit; text-decoration: none; }
 
 <script>
 /* ============================================================
-   考核数据与判分逻辑（制作考核页时替换 META 与 QUIZ 为真实内容）
+   练习数据与判分逻辑（制作练习页时替换 META 与 QUIZ 为真实内容）
    ans 为正确选项下标（0-3）；"不知道"约定为末项；未选按未作答记录
    报告格式与 lessons/answer.md 的练习记录一致（提交后自动另存追加） */
 var META = {
