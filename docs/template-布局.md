@@ -1,6 +1,6 @@
 # template.html 布局分析
 
-> 文件：`assets/template.html`（课程）+ `assets/question-template.html`（配套考核页，见文末）
+> 文件：`skills/learning/assets/template.html`（课程）+ `question-template.html`（配套练习页，见文末）
 > 课程模型：**一门课程 = 一个小节**——每个 HTML 文件承载且仅承载一个小节，编号即小节顺序；考核不在课程内，由配对 `-question.html` 承担
 > 设计语言：DESIGN.md（Claude 设计系统）——奶油画布 + 衬线标题 + 珊瑚点睛 + 深墨代码面
 > 依赖：**KaTeX 相对外链（公式课程）**——`assets/katex/` 三件复制到工作区 `lessons/src/katex/` 一份共享，课程经 `src/katex/…` 相对路径引入；TeX 源码保留在 HTML，资产缺失时原样显示；无外部网络资源
