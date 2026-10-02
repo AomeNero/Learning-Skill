@@ -21,7 +21,8 @@
 | `skills/learning/assets/katex/` | KaTeX 资产（0.16.22）——embed.css（20 个 base64 字体）+ 渲染脚本；公式课程复制一份到工作区 lessons/src/katex/ 共享 |
 | `docs/template-布局.md` | 模板布局分析——三栏公式、设计令牌、配套资产说明 |
 | `skills/learning/references/*-format.md` | 两份文档格式规范：使命 / 资源 |
-| `skills/visualize/` + `agents/diagram-maker.md` | 配图链：教师出 brief → maker 产出 SVG（mermaid 类渲染验证 / SVG 类源码审查） |
+| `skills/diagram-design/` | 课程配图**首选**——全类型图库（架构/流程/时序/ER 等）产出 SVG |
+| `skills/visualize/` + `agents/diagram-maker.md` | 备用配图链：diagram-design 不可用时，教师出 brief → maker 产出 SVG（mermaid 类渲染验证 / SVG 类源码审查） |
 | `agents/researcher.md` | 网络调研员：课前摸底、事实核实，产出带出处的简报 |
 | `skills/browser-act/` `skills/diagram-design/` `skills/obsidian-markdown/` | 协同技能：浏览器演示、正式图示、Obsidian 格式约定 |
 
@@ -149,7 +150,7 @@ flowchart TD
   ③ 报告落档（📄）：提交后自动弹"另存为"（预填 answer.md，存到练习页同级），
      同名文件确认替换即读旧追加写回（回退：复制报告贴回）——全对也记，作为已练证据；
      教学流不回头，补教留给下次会话
-  ④ 配图（🟢 条件触发）：visualize → diagram-maker → lessons/*.svg
+  ④ 配图（🟢 条件触发）：diagram-design 首选 → visualize/maker 回退 → lessons/*.svg
 ```
 
 **续接会话的错题重教**：未划销错题所涉知识点优先重教（换讲法、补动机）→ 确认题（🔴）钉住 → 答对从 answer.md 划销（保留可见，标记已清除）。
@@ -258,9 +259,9 @@ flowchart TD
 | 能力 | 执行者 | 时机 |
 |------|--------|------|
 | 领域摸底 / 事实核实 | `agents/researcher.md` | 阶段 2 规划前；教学中存疑时 |
-| 课程配图 | `visualize` 技能 → `agents/diagram-maker.md` | 阶段 3 教学中（图确实比字更清楚时） |
+| 课程配图（首选） | `diagram-design` | 阶段 3 教学中（图确实比字更清楚时；产 SVG） |
 | 浏览器操作 / 页面演示 | `browser-act` | 需要演示或交互验证时 |
-| 正式图示 | `diagram-design` | 教学配图之外的正图需求 |
+| 备用配图 | `visualize` 技能 → `agents/diagram-maker.md` | diagram-design 不可用或不契当前风格时 |
 | Obsidian 格式约定 | `obsidian-markdown` | 落盘 Markdown 产物时 |
 
 目标技能不可用时用基础能力内联回退，不因缺技能阻塞教学。

@@ -49,7 +49,7 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 - `docs/resources.md`：可信资源与社区清单。格式见 [resources-format.md](./references/resources-format.md)。
 - `lessons/answer.md`：**练习与错题档案**（与练习页同目录）——每次检索练习一条：`## <课程基名> · <日期> · <对>/<总>`，其下逐条错题（题面 | 我答 | 正确答案 | 缺口说明）；**全对也记**（已练证据）。数据来自练习页的作答报告——**提交后自动弹"另存为"**：文件名预填 answer.md，保存到练习页同级目录；已有同名文件时确认替换，页面做读旧追加写回（历史不丢）（回退复制贴回由教师落档）；页面已判，教师只核实不重判。未划销错题驱动下次重教——重教通过确认题即划销（保留可见，标已清除）。首次练习落档时创建。
 - `lessons/*.html`：课程与练习**配对产出**——`000N-<slug>.html`（正文与配图，按 [template.html](./assets/template.html)）+ `000N-<slug>-question.html`（题面 + 内嵌答案与判分脚本，按 [question-template.html](./assets/question-template.html)）。
-- `lessons/*.svg`：配图与课程同目录，课程以外链 `<img>` 引用（`visualize` 派 maker 产出：mermaid 类 CLI 渲染 SVG、SVG 类手写，均不转 PNG）；`lessons/src/` 是 maker 中间产物（源码与临时预览），含共享的 `katex/`。
+- `lessons/*.svg`：配图与课程同目录，课程以外链 `<img>` 引用（优先 `diagram-design` 产出 SVG；不可用时 `visualize` 派 maker：mermaid 类 CLI 渲染 SVG、SVG 类手写，均不转 PNG）；`lessons/src/` 是 maker 中间产物（源码与临时预览），含共享的 `katex/`。
 
 **会话开始**（语言始终跟随学习者）：
 
@@ -116,8 +116,8 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 |------|------|
 | 浏览器操作、页面演示 | `browser-act` |
 | Obsidian 格式约定 | `obsidian-markdown` |
-| 课程配图（首选） | `visualize`（优先于 `diagram-design`） |
-| 正式图示 | `diagram-design` |
+| 课程配图（首选） | `diagram-design`（优先于 `visualize`——diagram-design 不可用或其风格不契合时回退 visualize→maker） |
+| 备用配图 | `visualize` → `agents/diagram-maker.md` |
 
 阶段 2 的 mermaid 依赖图内联，不另派技能；不用 `illustration`（风格冲突）；目标技能不可用时基础能力内联回退，不阻塞教学。
 
