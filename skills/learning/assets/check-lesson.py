@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""课程与练习页产物自检——每次产出配对文件后运行：
+"""课程与练习总页产物自检——每节产出后运行：
 
-    python check-lesson.py <课程.html> <练习页.html>
+    python check-lesson.py <课程.html> <lessons/question.html>
 
 检查项：
   1  两文件存在且非空
   2  公式外链：含 src/katex/ 引用时，所在目录 src/katex/ 三件资产可达
-  3  占位残留：无 "{课程标题}" 等未替换占位、无内联占位注释
+  3  占位残留：无 "{课程主题}" 等未替换占位、无内联占位注释
   4  课程大纲锚点与正文 id 一一对应
-  5  练习页题目数 ≤4，每题恰好 4 个选项（radio），含"不知道"末项
+  5  练习总页：每节（section.sec）题数 ≤4，每题恰好 4 个选项（radio），
+     含"不知道"末项；SECTIONS 数据与 section 数一致
   6  有公式外链时渲染调用（renderMathInElement）在位
 
 退出码 0 = 通过；1 = 有问题（逐项打印 ✗ 与原因）。
@@ -19,7 +20,7 @@ import re
 import sys
 
 KATEX_FILES = ["katex.embed.css", "katex.min.js", "auto-render.min.js"]
-PLACEHOLDERS = ["{课程标题}", "{课程主题}", "{N}", "内联 katex", "粘贴内联"]
+PLACEHOLDERS = ["{课程主题}", "{课程标题}", "{N}", "内联 katex", "粘贴内联"]
 
 
 def check(course_path, quiz_path):
@@ -72,12 +73,20 @@ def check(course_path, quiz_path):
     else:
         item(False, "课程含大纲（.toc）", "未找到 .toc 导航——课程应以 template.html 为骨架")
 
-    # 5 题数与选项
-    qitems = re.findall(r'<div class="q-item"[^>]*>', quiz)
-    item(len(qitems) <= 4, f"练习页题目数 ≤4（实测 {len(qitems)}）")
-    radios_per_q = [len(re.findall(r'name="q%d"' % i, quiz)) for i in range(len(qitems))]
-    bad_q = [i + 1 for i, n in enumerate(radios_per_q) if n != 4]
-    item(not bad_q, "每题恰好 4 个选项", "异常题号：" + ", ".join(map(str, bad_q)))
+    # 5 练习总页：按节分组校验
+    from collections import Counter
+    secs = re.findall(r'<section class="sec"', quiz)
+    item(len(secs) >= 1, "练习总页含至少一个小节分组（section.sec）")
+    qitems = re.findall(r'<div class="q-item"[^>]*data-s="(\d+)"', quiz)
+    per_sec = Counter(qitems)
+    bad_sec = [f"第{int(s)+1}节:{n}题" for s, n in sorted(per_sec.items(), key=lambda x: int(x[0])) if n > 4]
+    item(not bad_sec, "每节题目数 ≤4", "超限：" + ", ".join(bad_sec))
+    radios = re.findall(r'name="(s\d+q\d+)"', quiz)
+    rc = Counter(radios)
+    bad_r = [k for k, v in rc.items() if v != 4]
+    item(not bad_r, "每题恰好 4 个选项", "异常题：" + ", ".join(sorted(bad_r)))
+    n_sections_data = len(re.findall(r'course: "', quiz))
+    item(n_sections_data == len(secs), f"SECTIONS 数据节数（{n_sections_data}）与页面 section 数（{len(secs)}）一致")
     item("不知道" in quiz, "选项含\"不知道\"末项")
 
     return problems

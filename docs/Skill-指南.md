@@ -6,7 +6,7 @@
 >
 > 交互属性图例：🔴 **判分**（有对错，立即反馈）｜🟡 **对话**（不判分，收集偏好/信息）｜🟢 **无交互**（教师/子代理独立执行）｜📄 **产物**（文件落盘）
 >
-> 当前版本快照：目标访谈 → 规划 → **课程静默批量产出** → **检索练习**（两遍式）；零基础默认、无测绘、无 Socratic；检索练习独立为配对 question.html（页内自判分、报告直写落档）；KaTeX 相对外链；工作区 4 类文件；SKILL.md 158 行（首尾置重要信息版）。
+> 当前版本快照：目标访谈 → 规划 → **课程静默批量产出** → **检索练习**（两遍式）；零基础默认、无测绘、无 Socratic；检索练习独立为配对 question.html（页内自判分、报告直写落档）；KaTeX 相对外链；工作区 4 类文件；SKILL.md 159 行（首尾置重要信息版，含零提问绝对红线）。
 
 ---
 
@@ -16,12 +16,12 @@
 |------|------|
 | `skills/learning/SKILL.md` | 教学系统主体——哲学、流程、quiz 协议、工作区约定、红线清单 |
 | `skills/learning/assets/template.html` | 课程模板——三栏课程页（左=计划小节导航，中=正文，右=本节大纲） |
-| `skills/learning/assets/question-template.html` | 检索练习页模板——凭记忆单选作答、提交自判分，提交后自动弹"另存为"到同级 lessons/answer.md（同名替换即追加；回退复制） |
+| `skills/learning/assets/question-template.html` | 练习总页模板（每主题一个）——所有小节练习按节分组集中；一次提交全部判分，自动弹"另存为"到同级 lessons/answer.md（同名替换即追加；回退复制） |
 | `skills/learning/assets/check-lesson.py` | 产物自检脚本——13 项检查（外链资产、占位残留、锚点一致、题数与选项结构） |
 | `skills/learning/assets/katex/` | KaTeX 资产（0.16.22）——embed.css（20 个 base64 字体）+ 渲染脚本；公式课程复制一份到工作区 lessons/src/katex/ 共享 |
 | `docs/template-布局.md` | 模板布局分析——三栏公式、设计令牌、配套资产说明 |
 | `skills/learning/references/*-format.md` | 两份文档格式规范：使命 / 资源 |
-| `skills/diagram-design/` | 课程配图**首选**——全类型图库（架构/流程/时序/ER 等）产出 SVG |
+| `skills/diagram-design/` | 课程配图**首选**——全类型图库产出 SVG |
 | `skills/visualize/` + `agents/diagram-maker.md` | 备用配图链：diagram-design 不可用时，教师出 brief → maker 产出 SVG（mermaid 类渲染验证 / SVG 类源码审查） |
 | `agents/researcher.md` | 网络调研员：课前摸底、事实核实，产出带出处的简报 |
 | `skills/browser-act/` `skills/diagram-design/` `skills/obsidian-markdown/` | 协同技能：浏览器演示、正式图示、Obsidian 格式约定 |
@@ -81,7 +81,7 @@ flowchart TD
     end
     P -- 否 --> PR["一次性汇报：共 N 节 ✓<br/>宣布练习阶段"] --> PB
     subgraph P3b ["阶段 3b · 检索练习"]
-        PB["学习者依次：阅读课程 🔴<br/>→ 练习页凭记忆作答 → 提交"] --> N["自判分 + 自动另存 lessons/answer.md<br/>📄 只记录不回头"] --> PB2{还有节未练？}
+        PB["学习者打开 question.html 🔴<br/>按节序凭记忆作答 → 一次提交"] --> N["自判分 + 自动另存 lessons/answer.md<br/>📄 只记录不回头"] --> PB2{还有节未练？}
         PB2 -- 是 --> PB
     end
     PB2 -- 否 --> R
@@ -95,7 +95,7 @@ flowchart TD
     style P3 fill:#faf9f5,stroke:#e6dfd8
 ```
 
-**判分的全部位置**：练习阶段的练习页 + 错题重教后的确认题。产出阶段全程对话零输出；跨会话复习不是独立环节，而是 answer.md 驱动的课程重写重教。
+**判分的全部位置**：练习阶段的练习页 + 错题重教后的确认题。产出阶段从开始到一次性汇报绝对零提问零输出；跨会话复习不是独立环节，而是 answer.md 驱动的课程重写重教。
 
 ---
 
@@ -132,7 +132,7 @@ flowchart TD
 
 | 属性 | 内容 |
 |------|------|
-| 交互 | 🟢 **全程对话零输出**——不逐节讲述，教学全在课程正文里 |
+| 交互 | 🟢 **从产出开始到一次性汇报绝对零提问零输出**——不逐节讲述、不征询、不中断；一切对话已在阶段 1/2 完成 |
 | 产物 | 📄 逐节：课程 + question.html 练习页（产出即跑 check-lesson.py 自检）+ 配图 |
 
 **产出循环**（按阶段 2 依赖图逐节；每节课程正文的每个节点三步撰写）：
@@ -145,9 +145,9 @@ flowchart TD
 每 2-3 个节点构成一个小节 →
 
 每节产出（📄）：课程 000N-<slug>.html（教学全在正文）+
-  000N-<slug>-question.html 练习页（≤4 题，答案内嵌判分脚本）
+  并把该节 ≤4 道题追加进 lessons/question.html（答案内嵌 SECTIONS 数据）
   → 产出即自检：assets/check-lesson.py，13 项通过才写下一节
-  → 配图（🟢 条件触发）：diagram-design 首选 → visualize/maker 回退 → lessons/*.svg
+  → 配图（🟢 条件触发）：diagram-design 首选 → visualize/maker 回退 → lessons/src/*.svg
 
 全部完成 → 一次性汇报："全部完成，共 N 节（课程 + 练习页 + 自检全绿）"
 并宣布进入练习阶段
@@ -159,10 +159,10 @@ flowchart TD
 
 | 属性 | 内容 |
 |------|------|
-| 交互 | 🔴 学习者依次：阅读课程 → 练习页凭记忆作答 → 提交；🔴 错题重教后确认题 |
+| 交互 | 🔴 学习者打开 question.html（全部练习集中于此）：按节序阅读各课程后凭记忆作答，一次提交；🔴 错题重教后确认题 |
 | 产物 | 📄 作答报告落 lessons/answer.md（全对也记） |
 
-学习者按节序依次进行（阅读课程 000N → 打开配对练习页凭记忆作答 → 提交，自动弹"另存为"预填 answer.md 存到练习页同级，同名替换即读旧追加写回；回退复制贴回）。教师读 answer.md 核实（不重判）；**产出不回头**——错题由下次会话重教；未提交的练习页即悬空。
+学习者打开 lessons/question.html：按节序阅读各课程后回来凭记忆作答（全部练习集中于此），一次提交判分，自动弹"另存为"预填 answer.md 存到同级，同名替换即读旧追加写回（回退复制贴回）。教师读 answer.md 核实（不重判）；**产出不回头**——错题由下次会话重教；未提交的练习页即悬空。
 
 **续接会话的错题重教**：未划销错题所涉知识点优先重教——**重写对应课程的该节**（换讲法、补动机），学习者重读后出确认题（🔴）钉住 → 答对从 answer.md 划销（保留可见，标记已清除）。
 
@@ -183,7 +183,7 @@ flowchart TD
 | 2 | 使命访谈 | 会话开始 | 🟡 | ≤2-3 轮 | 不跳——动机空缺也要如实建档 |
 | 3 | 学习目标追问 | 阶段 1 | 🟡 | 至具体为止 | 不跳——决定教什么 |
 | 4 | 计划呈现 | 阶段 2 | 🟡 非阻塞 | 1 次 | 展示即过，不等确认 |
-| 5 | 检索练习作答与提交 | 阶段 3b | 🔴 | 依次每节：阅读课程 → 练习页凭记忆作答提交自判分（≤4 题；自动弹"另存为"到同级 lessons/answer.md，同名替换即追加，回退贴回对话） | 未提交 → 悬空，下次补练 |
+| 5 | 检索练习作答与提交 | 阶段 3b | 🔴 | 打开 question.html（全部练习）：按节序阅读课程后凭记忆作答，一次提交全部判分（每节 ≤4 题；自动弹"另存为"到同级 lessons/answer.md，同名替换即追加，回退贴回对话） | 未提交 → 悬空，下次补练 |
 | 6 | 错题确认题 | 阶段 3（重教后） | 🔴 | 每条重教错题 1 题 | 答对才划销 |
 | 7 | 使命修订确认 | 错题驱动/换目标 | 🟡 | 按需 | 修订使命前必须确认 |
 
@@ -201,9 +201,9 @@ flowchart TD
 |------|------|--------------|--------------|------|
 | `docs/mission.md` | Markdown | **会话开始**：使命访谈（≤2-3 轮）后初始化 | 使命修订时（先确认；错题模式可作信号）；换目标时在新工作区重建 | 锚——一切教学决策回溯到它 |
 | `docs/resources.md` | Markdown | **会话开始**：与 mission 一起初始化 | 规划摸底、教学中核实的可信产出随时登记；会话末统一沉淀 | 情境知识支撑——越学越"知道去哪找" |
-| `lessons/000N-*.html` + `000N-*-question.html` | HTML（三栏课程页 + 配对练习页） | **阶段 3**：每讲完一个小节即产出两个配对文件 | **快照不回填**；练习页提交后报告落 answer.md | 复习单元 + 练习载体 |
+| `lessons/000N-*.html` + `question.html` | HTML（三栏课程页 + 练习总页） | **阶段 3a**：每节产出课程并把练习追加进 question.html | **快照不回填**；练习页提交后报告落 answer.md | 复习单元 + 练习载体 |
 | `lessons/answer.md` | Markdown | **阶段 3**：首次练习提交自动弹存时创建（与练习页同级） | 每次检索练习一条记录（全对也记）；重教通过确认题后划销 | 练习与错题档案——已练证据 + 重教驱动 |
-| `lessons/*.svg` | SVG | **阶段 3**：教学配图需要时（派 diagram-maker；不转 PNG，课程外链引用） | — | 课程插图（`lessons/src/` 为中间产物，含共享 katex/） |
+| `lessons/src/*.svg` | SVG | **阶段 3a**：教学配图需要时（优先 diagram-design，回退 maker；不转 PNG） | — | 全部配图的存放处；课程以 `src/<文件名>.svg` 外链引用（src/ 另含共享 katex/ 与中间产物） |
 
 ### 7.2 工作区目录树（成熟期形态）
 
@@ -214,13 +214,11 @@ flowchart TD
 │   └── resources.md             # 可信资源与社区
 └── lessons/
     ├── 0001-a-journey-of-a-message.html   # 一门课程 = 一个小节
-    ├── answer.md                # 练习与错题档案——与练习页同级
-    ├── 0001-a-journey-of-a-message-question.html   # 配对练习页
+    ├── answer.md                # 练习与错题档案——与 question.html 同级
     ├── 0002-packets-the-atom.html
-    ├── 0002-packets-the-atom-question.html
     ├── 0003-ip-best-effort.html
-    ├── <slug>-<timestamp>.svg    # 课程配图（maker 发布成品，外链引用）
-    └── src/                      # maker 源文件与 katex/ 共享资产（中间产物）
+    ├── question.html             # 练习总页——所有小节的检索练习集中于此
+    └── src/                      # 配图 *.svg + katex/ 共享资产 + maker 中间产物
 ```
 
 ### 7.3 各文档详述
@@ -239,7 +237,7 @@ flowchart TD
 
 | 产物 | 形态 | 角色 |
 |------|------|------|
-| `lessons/*.html` | HTML | **复习 + 过程**——课程（正文与配图）+ 配对练习页 |
+| `lessons/*.html` | HTML | **复习 + 过程**——课程（正文与配图）+ question.html 练习总页 |
 
 会话过程不落盘——对话即过程，课程即沉淀；跨会话状态由 `docs/` 三件承载，进度由 `lessons/` 目录自证。
 
@@ -268,7 +266,7 @@ flowchart TD
 | 能力 | 执行者 | 时机 |
 |------|--------|------|
 | 领域摸底 / 事实核实 | `agents/researcher.md` | 阶段 2 规划前；教学中存疑时 |
-| 课程配图（首选） | `diagram-design` | 阶段 3 教学中（图确实比字更清楚时；产 SVG） |
+| 课程配图 | 首选 `diagram-design`，回退 `visualize` → `agents/diagram-maker.md` | 阶段 3a 教学中；**图型按 visualize 六种选型表**（依赖图/思维导图/流程图/时序图/状态机/对比图） |
 | 浏览器操作 / 页面演示 | `browser-act` | 需要演示或交互验证时 |
 | 备用配图 | `visualize` 技能 → `agents/diagram-maker.md` | diagram-design 不可用或不契当前风格时 |
 | Obsidian 格式约定 | `obsidian-markdown` | 落盘 Markdown 产物时 |
@@ -300,7 +298,7 @@ flowchart TD
 | 使命访谈轮数 | ≤2-3 | 会话开始 | 减 → 使命更模糊，教学锚更松 |
 | 小节粒度 | 2-3 节点/小节 | 阶段 3 | 直接决定练习频次与课程产出粒度 |
 | 检索练习题量 | ≤4 题（练习页自判分） | 阶段 3 / quiz 协议 | 改回 AskUserQuestion 弹窗 → 交互更快，但学习者失去"学完再答"的自定节奏 |
-| 课程产出节奏 | 每小节必产出课程+练习页配对文件 | 阶段 3 | 若恢复按价值分流，练习需另找载体（练习依附配对文件） |
+| 课程产出节奏 | 每小节必产出课程并把练习追加进 question.html | 阶段 3a | 若恢复配对式练习文件，question.html 的追加逻辑需回改 |
 | 答错处理 | 只记录不回头，下次重教 | 阶段 3 | 改当场补教 → 纠错更快，但节奏被打断 |
 | 错题记录字段 | 题面\|错答\|正确答案\|小节\|日期 | 工作区清单 | 加字段（如误解类型）→ 分析更强，落盘更重 |
 | 错题划销策略 | 重教 + 确认题答对划销，保留可见 | 阶段 3 | 改物理删除 → 文件干净，丢失错题史信号 |

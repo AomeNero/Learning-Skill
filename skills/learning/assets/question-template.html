@@ -3,14 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{课程标题}的检索练习</title>
+<title>{课程主题}——检索练习</title>
 <style>
 /* ============================================================
-   检索练习页模板（与课程 000N-<slug>.html 配对：000N-<slug>-question.html）
+   检索练习页模板（每主题一个：lessons/question.html）
+   所有已产出小节的检索练习集中在本文件，按小节分组；
+   依次凭记忆作答，最后一次提交全部判分，报告另存 lessons/answer.md
    设计系统同 template.html——奶油画布 + 衬线标题 + 珊瑚 CTA + teal/coral 判定色
-   单栏窄居中；题目单选，提交后页内自判分并生成作答报告
-   系统字体栈；公式课程经相对路径外链 lessons/src/katex/ 渲染（TeX 源码保留在 HTML）
-   注意：正确答案内嵌于下方脚本的 QUIZ 数据中，查看源码可见——自测场景可接受
+   自包含：系统字体栈 + KaTeX 相对外链（与课程共用 lessons/src/katex/），离线双击即读
+   注意：正确答案内嵌于下方脚本的 SECTIONS 数据中，查看源码可见——自测场景可接受
    ============================================================ */
 :root{
   --primary: #cc785c; --primary-active: #a9583e;
@@ -66,6 +67,18 @@ a{ color: inherit; text-decoration: none; }
   color: var(--ink); margin: 0 0 var(--sp-md);
 }
 .page-header .lead{ font-size: 17px; color: var(--body-strong); margin: 0; }
+
+/* ---------- 小节分组 ---------- */
+.sec-title{
+  font-family: var(--font-serif); font-weight: 400;
+  font-size: 24px; color: var(--ink);
+  margin: var(--sp-xl) 0 var(--sp-md);
+  padding-bottom: 8px; border-bottom: 1px solid var(--hairline);
+}
+.sec-title .sec-no{
+  font-family: var(--font-mono); font-size: 14px; color: var(--muted-soft);
+  margin-right: 10px;
+}
 
 /* ---------- 题目 ---------- */
 .q-item{
@@ -148,12 +161,8 @@ a{ color: inherit; text-decoration: none; }
 
 /* ---------- KaTeX 微调 ---------- */
 .katex{ font-size: 1.06em; }
-
 </style>
-<!-- KaTeX 样式（公式课程专用）：本节用到 $...$ / $$...$$ 公式时保留此行，
-     并用 Bash 把技能 assets/katex/ 三件复制到工作区 lessons/src/katex/
-     （cp 即可，勿将资产读入上下文；整个工作区只放这一份，所有课程共用）；
-     无公式的课程删除此行 -->
+<!-- KaTeX 样式（公式练习页专用）：与课程页共用工作区 lessons/src/katex/ 一份资产，外链引入 -->
 <link rel="stylesheet" href="src/katex/katex.embed.css">
 </head>
 <body>
@@ -176,58 +185,61 @@ a{ color: inherit; text-decoration: none; }
 <main class="wrap">
 
   <header class="page-header">
-    <p class="eyebrow">{课程主题} · 第 {N} 节 · 检索练习</p>
-    <h1>{课程标题}的检索练习</h1>
-    <p class="lead">凭记忆作答，不要回看课程——每道题都是一次提取。答错的题会记入错题档案，下次学习优先重教。</p>
+    <p class="eyebrow">{课程主题}</p>
+    <h1>检索练习</h1>
+    <p class="lead">全部小节的练习集中在此——按节序阅读对应课程后凭记忆作答，不要回看。全部答完点一次提交，整份报告另存 lessons/answer.md。</p>
   </header>
 
-  <form id="quiz" onsubmit="return false;">
-    <div class="q-item" data-i="0">
+  <!-- 小节分组：每节一个 section.sec（制作时按产出累积追加） -->
+  <section class="sec">
+    <h2 class="sec-title"><span class="sec-no">0002</span>数据包：通信的原子单元</h2>
+    <div class="q-item" data-s="0" data-i="0">
       <p class="q">1. 所有计算机之间的通信，都是通过______完成的。</p>
       <ul class="opts">
-        <li><label><input type="radio" name="q0" value="0"><span class="opt-key">A</span>建立专用的端到端线路</label></li>
-        <li><label><input type="radio" name="q0" value="1"><span class="opt-key">B</span>发送数据包</label></li>
-        <li><label><input type="radio" name="q0" value="2"><span class="opt-key">C</span>由中心服务器代为转发全部内容</label></li>
-        <li><label><input type="radio" name="q0" value="3"><span class="opt-key">D</span>不知道</label></li>
+        <li><label><input type="radio" name="s0q0" value="0"><span class="opt-key">A</span>建立专用的端到端线路</label></li>
+        <li><label><input type="radio" name="s0q0" value="1"><span class="opt-key">B</span>发送数据包</label></li>
+        <li><label><input type="radio" name="s0q0" value="2"><span class="opt-key">C</span>由中心服务器代为转发全部内容</label></li>
+        <li><label><input type="radio" name="s0q0" value="3"><span class="opt-key">D</span>不知道</label></li>
       </ul>
       <div class="verdict"></div>
     </div>
-
-    <div class="q-item" data-i="1">
+    <div class="q-item" data-s="0" data-i="1">
       <p class="q">2. 数据包在网络沿途的每个设备那里，被拆看的是______。</p>
       <ul class="opts">
-        <li><label><input type="radio" name="q1" value="0"><span class="opt-key">A</span>载荷</label></li>
-        <li><label><input type="radio" name="q1" value="1"><span class="opt-key">B</span>头部</label></li>
-        <li><label><input type="radio" name="q1" value="2"><span class="opt-key">C</span>头部与载荷都拆看</label></li>
-        <li><label><input type="radio" name="q1" value="3"><span class="opt-key">D</span>不知道</label></li>
+        <li><label><input type="radio" name="s0q1" value="0"><span class="opt-key">A</span>载荷</label></li>
+        <li><label><input type="radio" name="s0q1" value="1"><span class="opt-key">B</span>头部</label></li>
+        <li><label><input type="radio" name="s0q1" value="2"><span class="opt-key">C</span>头部与载荷都拆看</label></li>
+        <li><label><input type="radio" name="s0q1" value="3"><span class="opt-key">D</span>不知道</label></li>
       </ul>
       <div class="verdict"></div>
     </div>
+  </section>
 
-    <div class="q-item" data-i="2">
-      <p class="q">3. 把 $L$ 比特的数据包推上 $R$ 比特/秒的链路，它占用线路的时间是______。</p>
+  <section class="sec">
+    <h2 class="sec-title"><span class="sec-no">0003</span>尽力而为：IP 的哲学</h2>
+    <div class="q-item" data-s="1" data-i="0">
+      <p class="q">1. 把 $L$ 比特的数据包推上 $R$ 比特/秒的链路，它占用线路的时间是______。</p>
       <ul class="opts">
-        <li><label><input type="radio" name="q2" value="0"><span class="opt-key">A</span>$R/L$</label></li>
-        <li><label><input type="radio" name="q2" value="1"><span class="opt-key">B</span>$L \times R$</label></li>
-        <li><label><input type="radio" name="q2" value="2"><span class="opt-key">C</span>$L/R$</label></li>
-        <li><label><input type="radio" name="q2" value="3"><span class="opt-key">D</span>不知道</label></li>
+        <li><label><input type="radio" name="s1q0" value="0"><span class="opt-key">A</span>$R/L$</label></li>
+        <li><label><input type="radio" name="s1q0" value="1"><span class="opt-key">B</span>$L \times R$</label></li>
+        <li><label><input type="radio" name="s1q0" value="2"><span class="opt-key">C</span>$L/R$</label></li>
+        <li><label><input type="radio" name="s1q0" value="3"><span class="opt-key">D</span>不知道</label></li>
       </ul>
       <div class="verdict"></div>
     </div>
-
-    <div class="q-item" data-i="3">
-      <p class="q">4. 共享线路上"切片要小"的定量理由是______。</p>
+    <div class="q-item" data-s="1" data-i="1">
+      <p class="q">2. 共享线路上"切片要小"的定量理由是______。</p>
       <ul class="opts">
-        <li><label><input type="radio" name="q3" value="0"><span class="opt-key">A</span>包越长占线越久，共享者排队越久</label></li>
-        <li><label><input type="radio" name="q3" value="1"><span class="opt-key">B</span>小包在交换机里更不容易损坏</label></li>
-        <li><label><input type="radio" name="q3" value="2"><span class="opt-key">C</span>小包能自动选择更快的路线</label></li>
-        <li><label><input type="radio" name="q3" value="3"><span class="opt-key">D</span>不知道</label></li>
+        <li><label><input type="radio" name="s1q1" value="0"><span class="opt-key">A</span>包越长占线越久，共享者排队越久</label></li>
+        <li><label><input type="radio" name="s1q1" value="1"><span class="opt-key">B</span>小包在交换机里更不容易损坏</label></li>
+        <li><label><input type="radio" name="s1q1" value="2"><span class="opt-key">C</span>小包能自动选择更快的路线</label></li>
+        <li><label><input type="radio" name="s1q1" value="3"><span class="opt-key">D</span>不知道</label></li>
       </ul>
       <div class="verdict"></div>
     </div>
+  </section>
 
-    <button type="button" class="submit" id="submit">提交</button>
-  </form>
+  <button type="button" class="submit" id="submit">提交全部</button>
 
   <section id="report" hidden>
     <div class="report-title">作答报告</div>
@@ -238,78 +250,87 @@ a{ color: inherit; text-decoration: none; }
       <button type="button" id="copy">复制报告</button>
     </div>
     <p id="copy-status"></p>
-    <p class="hint">提交后已自动弹出"另存为"——文件名已预填 answer.md，保存到练习页同级的 lessons/ 目录即可；目录里已有 answer.md 时选中它并确认替换，本次记录会自动追加在旧内容之后（历史不丢）。刚才取消了的话点上方按钮重试。浏览器不支持直写时，用复制报告交给 agent 老师。</p>
+    <p class="hint">提交后已自动弹出"另存为"——文件名已预填 answer.md，保存到本文件同级的 lessons/ 目录；已有同名文件确认替换即自动追加（历史不丢）。刚才取消了的话点上方按钮重试。浏览器不支持直写时用复制交给 agent 老师。</p>
   </section>
 
 </main>
 
 <script>
 /* ============================================================
-   练习数据与判分逻辑（制作练习页时替换 META 与 QUIZ 为真实内容）
-   ans 为正确选项下标（0-3）；"不知道"约定为末项；未选按未作答记录
-   报告格式与 lessons/answer.md 的练习记录一致（提交后自动另存追加） */
-var META = {
-  course: "0002-packets-the-atom",   /* 配对课程文件基名（不含 .html） */
-  title:  "数据包：通信的原子单元"
-};
-var QUIZ = [
-  { q: "所有计算机之间的通信，都是通过______完成的。",
-    opts: ["建立专用的端到端线路", "发送数据包", "由中心服务器代为转发全部内容", "不知道"],
-    ans: 1, why: "全称陈述：所有计算机通信的原子单元是数据包。" },
-  { q: "数据包在网络沿途的每个设备那里，被拆看的是______。",
-    opts: ["载荷", "头部", "头部与载荷都拆看", "不知道"],
-    ans: 1, why: "头部是寄件单，沿途设备只读它；载荷沿途无人拆看。" },
-  { q: "把 $L$ 比特的数据包推上 $R$ 比特/秒的链路，它占用线路的时间是______。",
-    opts: ["$R/L$", "$L \\times R$", "$L/R$", "不知道"],
-    ans: 2, why: "$t_{\\text{trans}} = L/R$——包长除以带宽。" },
-  { q: "共享线路上\"切片要小\"的定量理由是______。",
-    opts: ["包越长占线越久，共享者排队越久", "小包在交换机里更不容易损坏", "小包能自动选择更快的路线", "不知道"],
-    ans: 0, why: "占线时间与包长成正比——这是\"切片要小\"的定量根据。" }
+   练习数据与判分逻辑（制作时替换 META 与 SECTIONS 为真实内容）
+   SECTIONS 每节：{ course: 课程文件基名, no: 编号, title: 小节标题,
+                    quiz: [{q, opts[4], ans, why}] }
+   新小节产出时把新节追加进 SECTIONS 与上方对应 section.sec。
+   提交一次判全部；报告按节分块（## course · 日期 · 对/总），
+   与 lessons/answer.md 的练习记录格式一致，另存即追加写入 */
+var META = { topic: "互联网如何工作" };
+var SECTIONS = [
+  { course: "0002-packets-the-atom", no: "0002", title: "数据包：通信的原子单元",
+    quiz: [
+      { q: "所有计算机之间的通信，都是通过______完成的。",
+        opts: ["建立专用的端到端线路", "发送数据包", "由中心服务器代为转发全部内容", "不知道"],
+        ans: 1, why: "全称陈述：所有计算机通信的原子单元是数据包。" },
+      { q: "数据包在网络沿途的每个设备那里，被拆看的是______。",
+        opts: ["载荷", "头部", "头部与载荷都拆看", "不知道"],
+        ans: 1, why: "头部是寄件单，沿途设备只读它；载荷沿途无人拆看。" }
+    ] },
+  { course: "0003-ip-best-effort", no: "0003", title: "尽力而为：IP 的哲学",
+    quiz: [
+      { q: "把 $L$ 比特的数据包推上 $R$ 比特/秒的链路，它占用线路的时间是______。",
+        opts: ["$R/L$", "$L \\times R$", "$L/R$", "不知道"],
+        ans: 2, why: "$t_{\\text{trans}} = L/R$——包长除以带宽。" },
+      { q: "共享线路上\"切片要小\"的定量理由是______。",
+        opts: ["包越长占线越久，共享者排队越久", "小包在交换机里更不容易损坏", "小包能自动选择更快的路线", "不知道"],
+        ans: 0, why: "占线时间与包长成正比——这是\"切片要小\"的定量根据。" }
+    ] }
 ];
 var KATEX_DELIMS = [ {left: "$$", right: "$$", display: true}, {left: "$", right: "$", display: false} ];
 
 function pad(n){ return (n < 10 ? "0" : "") + n; }
 
 document.getElementById("submit").addEventListener("click", function () {
-  var total = QUIZ.length, right = 0, lines = [];
   var d = new Date();
   var stamp = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  var totalAll = 0, rightAll = 0, blocks = [];
 
-  QUIZ.forEach(function (it, i) {
-    var sel = document.querySelector('input[name="q' + i + '"]:checked');
-    var idx = sel ? +sel.value : -1;
-    var ok = idx === it.ans;
-    if (ok) right++;
-    var box = document.querySelector('.q-item[data-i="' + i + '"] .verdict');
-    box.className = "verdict show " + (ok ? "ok" : "bad");
-    box.innerHTML = (ok
-        ? "✓ 正确"
-        : "✗ 正确答案：" + "ABCD"[it.ans] + "．" + it.opts[it.ans])
-      + "<br><span class=\"why\">" + it.why + "</span>";
-    if (typeof renderMathInElement === "function") {
-      renderMathInElement(box, { delimiters: KATEX_DELIMS, throwOnError: false });
-    }
-    if (!ok) {
-      lines.push("- ✗ Q" + (i + 1) + "：" + it.q
-        + " | 我答：" + (idx < 0 ? "未作答" : "ABCD"[idx] + "．" + it.opts[idx])
-        + " | 正确：" + "ABCD"[it.ans] + "．" + it.opts[it.ans]
-        + " | " + it.why);
-    }
+  SECTIONS.forEach(function (sec, si) {
+    var right = 0, lines = [];
+    sec.quiz.forEach(function (it, qi) {
+      var sel = document.querySelector('input[name="s' + si + 'q' + qi + '"]:checked');
+      var idx = sel ? +sel.value : -1;
+      var ok = idx === it.ans;
+      if (ok) right++;
+      var box = document.querySelector('.q-item[data-s="' + si + '"][data-i="' + qi + '"] .verdict');
+      box.className = "verdict show " + (ok ? "ok" : "bad");
+      box.innerHTML = (ok
+          ? "✓ 正确"
+          : "✗ 正确答案：" + "ABCD"[it.ans] + "．" + it.opts[it.ans])
+        + "<br><span class=\"why\">" + it.why + "</span>";
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(box, { delimiters: KATEX_DELIMS, throwOnError: false });
+      }
+      if (!ok) {
+        lines.push("- ✗ Q" + (qi + 1) + "：" + it.q
+          + " | 我答：" + (idx < 0 ? "未作答" : "ABCD"[idx] + "．" + it.opts[idx])
+          + " | 正确：" + "ABCD"[it.ans] + "．" + it.opts[it.ans]
+          + " | " + it.why);
+      }
+    });
+    if (!lines.length) lines.push("- 全部正确，无错题。");
+    blocks.push("## " + sec.course + " · " + stamp + " · " + right + "/" + sec.quiz.length + "\n" + lines.join("\n"));
+    totalAll += sec.quiz.length; rightAll += right;
   });
-  if (!lines.length) lines.push("- 全部正确，无错题。");
 
-  var report = "## " + META.course + " · " + stamp + " · " + right + "/" + total + "\n" + lines.join("\n");
-  document.getElementById("score").textContent = "得分：" + right + " / " + total;
+  var report = blocks.join("\n\n");
+  document.getElementById("score").textContent = "总得分：" + rightAll + " / " + totalAll
+    + "（按节 " + SECTIONS.map(function (s) { return s.no; }).join("、") + " 分块记录）";
   document.getElementById("report-md").textContent = report;
   document.getElementById("report").hidden = false;
   document.getElementById("submit").disabled = true;
   document.getElementById("report").scrollIntoView({ behavior: "smooth" });
-  saveReport(true);   /* 提交即保存：自动弹窗——追加已有 lessons/answer.md 或另存新建 */
+  saveReport(true);   /* 提交即保存：自动弹"另存为"——追加已有 lessons/answer.md 或另存新建 */
 });
 
-/* 保存到 lessons/answer.md（练习页同级）——auto=true 为提交后自动触发：
-   有该文件则选中追加，没有则另存自动新建（文件名预填 answer.md，落点即同级目录）。
-   浏览器安全模型要求保存必须经确认对话框，无法完全静默。 */
 /* 保存 answer.md 到练习页同级目录——auto=true 为提交后自动触发。
    弹"另存为"对话框（文件名预填 answer.md）：选中同级目录保存即新建；
    已有同名文件时选中它并确认"替换"——实际做读旧内容 + 追加写回，历史不丢。
@@ -367,11 +388,10 @@ document.getElementById("copy").addEventListener("click", function () {
       fallback);
   } else fallback();
 });
-
 </script>
 
-<!-- ============ KaTeX 渲染（相对路径外链，公式课程专用） ============
-     与上方 <link> 配套启用；资产缺失时公式以 TeX 源码原样显示（天然退化可读） -->
+<!-- ============ KaTeX（相对路径外链，公式练习页专用） ============
+     与课程页共用工作区 lessons/src/katex/ 一份资产；本页保留外链。 -->
 <script src="src/katex/katex.min.js"></script>
 <script src="src/katex/auto-render.min.js"></script>
 <script>
