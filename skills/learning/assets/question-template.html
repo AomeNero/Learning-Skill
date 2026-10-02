@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>小节考核 · {课程标题}</title>
+<title>{课程标题}的检索练习</title>
 <style>
 /* ============================================================
    考核页模板（与课程 000N-<slug>.html 配对：000N-<slug>-question.html）
@@ -139,6 +139,10 @@ a{ color: inherit; text-decoration: none; }
   font-family: var(--font-sans); font-size: 14px; font-weight: 500;
 }
 .btn-row button:hover{ border-color: var(--muted-soft); }
+.btn-row button.primary{
+  background: var(--primary); color: #fff; border-color: var(--primary);
+}
+.btn-row button.primary:hover{ background: var(--primary-active); }
 #copy-status{ font-size: 13px; color: var(--muted); margin: 10px 0 0; }
 .hint{ font-size: 13px; color: var(--muted); margin: 10px 0 0; }
 
@@ -169,9 +173,9 @@ a{ color: inherit; text-decoration: none; }
 <main class="wrap">
 
   <header class="page-header">
-    <p class="eyebrow">{课程主题} · 第 {N} 节考核</p>
-    <h1>小节考核</h1>
-    <p class="lead">{课程标题}——共 {N} 题，全部作答后提交。答错的题会记入错题档案，下次学习优先重教。</p>
+    <p class="eyebrow">{课程主题} · 第 {N} 节 · 检索练习</p>
+    <h1>{课程标题}的检索练习</h1>
+    <p class="lead">凭记忆作答，不要回看课程——每道题都是一次提取。答错的题会记入错题档案，下次学习优先重教。</p>
   </header>
 
   <form id="quiz" onsubmit="return false;">
@@ -227,11 +231,12 @@ a{ color: inherit; text-decoration: none; }
     <p id="score"></p>
     <pre id="report-md"></pre>
     <div class="btn-row">
+      <button type="button" id="save" class="primary">保存到 docs/answer.md</button>
       <button type="button" id="copy">复制报告</button>
       <button type="button" id="download">下载 answer 片段（.md）</button>
     </div>
     <p id="copy-status"></p>
-    <p class="hint">把报告贴回对话（或把下载的文件发给 agent 老师），考核与错题将记入 docs/answer.md。</p>
+    <p class="hint">首选"保存到 docs/answer.md"：在弹出的文件选择器中选中工作区的 docs/answer.md，浏览器自动追加本次记录（首次无此文件则另存新建）。完成后回对话说一声即可。浏览器不支持直写时，用复制或下载交给 agent 老师。</p>
   </section>
 
 </main>
@@ -297,6 +302,49 @@ document.getElementById("submit").addEventListener("click", function () {
   document.getElementById("report").hidden = false;
   document.getElementById("submit").disabled = true;
   document.getElementById("report").scrollIntoView({ behavior: "smooth" });
+});
+
+document.getElementById("save").addEventListener("click", function () {
+  /* 首选 File System Access API 直写：选已有 docs/answer.md 自动追加；
+     文件不存在或取消打开则另存新建；API 不可用回退为下载 */
+  var txt = document.getElementById("report-md").textContent;
+  var status = document.getElementById("copy-status");
+  if (!window.showOpenFilePicker && !window.showSaveFilePicker) {
+    document.getElementById("download").click();
+    status.textContent = "此浏览器不支持直写文件，已转为下载——把文件交给 agent 老师";
+    return;
+  }
+  (async function () {
+    try {
+      if (window.showOpenFilePicker) {
+        try {
+          var handles = await window.showOpenFilePicker({
+            multiple: false,
+            types: [{ description: "Markdown", accept: { "text/markdown": [".md"] } }]
+          });
+          var h = handles[0];
+          var file = await h.getFile();
+          var prev = await file.text();
+          var w = await h.createWritable();
+          await w.write(prev.trim().length ? prev.replace(/\s+$/, "\n\n") + txt : txt);
+          await w.close();
+          status.textContent = "已追加保存到所选文件——回对话说一声即可";
+          return;
+        } catch (oe) {
+          if (oe && oe.name === "AbortError") { status.textContent = "已取消选择"; return; }
+        }
+      }
+      if (window.showSaveFilePicker) {
+        var h2 = await window.showSaveFilePicker({ suggestedName: "answer.md" });
+        var w2 = await h2.createWritable();
+        await w2.write(txt);
+        await w2.close();
+        status.textContent = "已保存 answer.md——请确认保存在工作区 docs/ 目录下";
+      }
+    } catch (e) {
+      status.textContent = "保存失败：" + (e && e.message ? e.message : e) + "——改用复制或下载";
+    }
+  })();
 });
 
 document.getElementById("copy").addEventListener("click", function () {
