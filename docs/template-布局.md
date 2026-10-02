@@ -1,7 +1,7 @@
 # template.html 布局分析
 
 > 文件：`skills/learning/assets/template.html`（课程）+ `question-template.html`（配套练习页，见文末）
-> 课程模型：**一门课程 = 一个小节**——每个 HTML 文件承载且仅承载一个小节，编号即小节顺序；考核不在课程内，由配对 `-question.html` 承担
+> 课程模型：**一门课程 = 一个小节**——每个 HTML 文件承载且仅承载一个小节，编号即小节顺序；练习不在课程内，由配对 `-question.html` 承担
 > 设计语言：DESIGN.md（Claude 设计系统）——奶油画布 + 衬线标题 + 珊瑚点睛 + 深墨代码面
 > 依赖：**KaTeX 相对外链（公式课程）**——`assets/katex/` 三件复制到工作区 `lessons/src/katex/` 一份共享，课程经 `src/katex/…` 相对路径引入；TeX 源码保留在 HTML，资产缺失时原样显示；无外部网络资源
 
@@ -105,10 +105,10 @@
 
 ## 六、配套资产
 
-### question-template.html——考核页模板
+### question-template.html——检索练习页模板
 
-与课程配对产出：`000N-<slug>.html`（课程）+ `000N-<slug>-question.html`（考核）。单栏窄居中（720px），复用课程页的设计令牌与顶栏词标。结构：eyebrow + 标题 + 题目卡（单选，选中态墨色徽标）+ 珊瑚提交按钮（CTA）+ 作答报告区。内嵌判分脚本：`META`（配对课程基名）与 `QUIZ`（题面、选项、正确下标、解析）为制作时替换的数据；提交后逐题显示判定（teal ✓ / coral ✗ + 正确答案 + 解析，KaTeX 渲染）并生成报告 markdown（可复制/下载），报告格式与 docs/answer.md 的考核记录一致。答案内嵌于脚本数据，源码可见——自测场景可接受。
+与课程配对产出：`000N-<slug>.html`（课程）+ `000N-<slug>-question.html`（练习页）。单栏窄居中（720px），复用课程页的设计令牌与顶栏词标。结构：eyebrow + 标题 + 题目卡（单选，选中态墨色徽标）+ 珊瑚提交按钮（CTA）+ 作答报告区。内嵌判分脚本：`META`（配对课程基名）与 `QUIZ`（题面、选项、正确下标、解析）为制作时替换的数据；提交后逐题显示判定（teal ✓ / coral ✗ + 正确答案 + 解析，KaTeX 渲染）并生成报告 markdown（可复制/下载），报告格式与 docs/answer.md 的练习记录一致。答案内嵌于脚本数据，源码可见——自测场景可接受。
 
 ### katex/——KaTeX 内嵌资产
 
-`katex.embed.css`（样式 + 20 个 base64 woff2 字体，359KB）、`katex.min.js`（277KB）、`auto-render.min.js`（3.5KB）。课程与考核页共用：仅当本节用到公式时，用 Bash 把三件**复制**到工作区 `lessons/src/katex/`（整个工作区一份；勿将资产读入上下文——640KB 远超单次输出上限），模板保留相对外链与渲染调用（`$…$` / `$$…$$` / `\(…\)` / `\[…\]`）；无公式课程删除外链块，资产缺失时 TeX 源码原样显示。
+`katex.embed.css`（样式 + 20 个 base64 woff2 字体，359KB）、`katex.min.js`（277KB）、`auto-render.min.js`（3.5KB）。课程与练习页共用：仅当本节用到公式时，用 Bash 把三件**复制**到工作区 `lessons/src/katex/`（整个工作区一份；勿将资产读入上下文——640KB 远超单次输出上限），模板保留相对外链与渲染调用（`$…$` / `$$…$$` / `\(…\)` / `\[…\]`）；无公式课程删除外链块，资产缺失时 TeX 源码原样显示。

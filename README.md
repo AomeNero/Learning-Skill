@@ -10,7 +10,8 @@
 - `skills/visualize/` — 当图确实比字更清楚时，为课程添加一张正确、极简的配图
 - `skills/browser-act/` / `skills/diagram-design/` / `skills/obsidian-markdown/` — 协同技能：浏览器操作与页面演示、正式图示绘制、Obsidian Markdown 格式约定
 - `agents/researcher.md` — 网络调研员：教学中的事实核实、课前主题摸底，产出带出处的结构化简报
-- `agents/diagram-maker.md` — 配图制作者：把 brief 变成 Mermaid/SVG 渲染的 PNG，渲染后必亲眼看图并迭代，保证图不说假话
+- `docs/` — 项目文档：[Skill-指南](docs/Skill-指南.md)（系统全景与流程规格）、[template-布局](docs/template-布局.md)（模板布局分析）
+- `agents/diagram-maker.md` — 配图制作者：把 brief 变成 SVG 成品（mermaid 类 CLI 渲染并亲眼看临时 PNG 验证；SVG 类手写并逐项源码审查），课程直接外链引用，不转 PNG
 
 ## 它是怎么教学的
 
@@ -42,7 +43,7 @@
 **会话中：**
 
 - `为什么非得是这样？我自己怎么可能发现这个？` —— 触发发现式讲解：每一步都先给你动机，让知识感觉是被你自己发现的
-- `这部分画张图` —— 触发配图链：派 maker 产出经过渲染验证的 PNG，嵌进本节课程 HTML
+- `这部分画张图` —— 触发配图链：派 maker 产出验证过的 SVG，外链嵌进本节课程 HTML
 - `这里我没懂，换种讲法` —— 当前小节换个讲法重讲；小节末的检索练习会检验是否真的落地
 - `我上次错的那道题再讲讲` —— 定向触发错题重教：从 answer.md 调出对应知识点，重教后出确认题划销
 

@@ -15,7 +15,7 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 4. **教学循环**（以小节为单位）——逐节点连续讲述（动机 → 确立 → 连接）→ 每讲完一小节产出配对文件（课程 HTML + 检索练习页）→ 跑 `check-lesson.py` 自检 → 学习者浏览器作答提交，报告直写 docs/answer.md
 5. **收尾三查**——错题落档 / 悬空自明 / 资源沉淀（见文末红线清单）
 
-**工作区 4 类文件**（一律小写英文，wikilink 互链）：`docs/mission.md`（锚）· `docs/resources.md`（可信资源）· `docs/answer.md`（练习与错题档案）· `lessons/`（`000N-<slug>.html` 课程 + `000N-<slug>-question.html` 练习页 + 配图 `*.png`）。进度自证：课程存在即已讲，answer.md 有记录即已练。
+**工作区 4 类文件**（一律小写英文，wikilink 互链）：`docs/mission.md`（锚）· `docs/resources.md`（可信资源）· `docs/answer.md`（练习与错题档案）· `lessons/`（`000N-<slug>.html` 课程 + `000N-<slug>-question.html` 练习页 + 配图 `*.svg`）。进度自证：课程存在即已讲，answer.md 有记录即已练。
 
 ## 触发分层
 
@@ -49,7 +49,7 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 - `docs/resources.md`：可信资源与社区清单。格式见 [resources-format.md](./references/resources-format.md)。
 - `docs/answer.md`：**练习与错题档案**——每次检索练习一条：`## <课程基名> · <日期> · <对>/<总>`，其下逐条错题（题面 | 我答 | 正确答案 | 缺口说明）；**全对也记**（已练证据）。数据来自练习页生成的作答报告（浏览器直写追加；回退复制贴回由教师落档）；页面已判，教师只核实不重判。未划销错题驱动下次重教——重教通过确认题即划销（保留可见，标已清除）。首次练习落档时创建。
 - `lessons/*.html`：课程与练习**配对产出**——`000N-<slug>.html`（正文与配图，按 [template.html](./assets/template.html)）+ `000N-<slug>-question.html`（题面 + 内嵌答案与判分脚本，按 [question-template.html](./assets/question-template.html)）。
-- `lessons/*.png`：配图与课程同目录（`visualize` 派 maker 产出）；`lessons/src/` 是 maker 中间产物，含共享的 `katex/`。
+- `lessons/*.svg`：配图与课程同目录，课程以外链 `<img>` 引用（`visualize` 派 maker 产出：mermaid 类 CLI 渲染 SVG、SVG 类手写，均不转 PNG）；`lessons/src/` 是 maker 中间产物（源码与临时预览），含共享的 `katex/`。
 
 **会话开始**（语言始终跟随学习者）：
 
