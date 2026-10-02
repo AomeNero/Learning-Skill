@@ -9,14 +9,17 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 ## 会话怎么跑（六步）
 
-1. **探测工作区**——`docs/mission.md` 不存在 → 使命访谈（≤2-3 轮）后初始化 mission 与 resources；已存在 → 读 docs/ 两件（mission、resources）与 lessons/answer.md + 扫描 lessons/，从上次前沿续接，错题优先重教
+1. **探测工作区**——`docs/mission.md` 不存在 → 使命访谈（≤2-3 轮）后初始化 mission 与 resources；已存在 → 读 docs/ 两件、lessons/answer.md 与 library/ 全部条目（资料层优先）+ 扫描 lessons/，从上次前沿续接，错题优先重教
 2. **目标访谈**（不判分）——把"我想理解 X"追到具体为止；零基础默认，不测绘
 3. **规划**——researcher 摸底 → 依赖图（压测根部）→ 呈现计划（散文 + mermaid），非阻塞直接开教
-4. **静默批量产出**——按依赖图逐节撰写课程（教学全在课程正文：动机 → 确立 → 连接），每节完成即把该节练习追加进唯一的 `lessons/question.html`，逐节跑 `check-lesson.py` 自检；期间对话零输出，全部完成后一次性汇报"共 N 节"并宣布练习阶段
+4. **静默批量产出**——按依赖图逐节撰写课程（教学全在课程正文：动机 → 确立 → 连接），每节产出**双格式**：`000N-<slug>.html` + `000N-<slug>.md`（Obsidian 副本）；每节完成即把该节练习追加进唯一的 `lessons/question.html`，逐节跑 `check-lesson.py` 自检；期间对话零输出，全部完成后一次性汇报"共 N 节"并宣布练习阶段
 5. **练习阶段**——学习者打开 `lessons/question.html`（全部小节的练习集中于此）：按节序阅读各课程后凭记忆作答，一次提交全部判分，报告另存 lessons/answer.md
 6. **收尾三查**——错题落档 / 悬空自明 / 资源沉淀（见文末红线清单）
 
-**工作区 4 类文件**（一律小写英文，wikilink 互链）：`docs/mission.md`（锚）· `docs/resources.md`（可信资源）· `lessons/`（`000N-<slug>.html` 课程 + **`question.html` 练习总页** + `answer.md` 档案 + `src/` 配图与共享资产）。进度自证：课程存在即已讲，answer.md 有记录即已练。
+**工作区 5 类**（一律小写英文，wikilink 互链；**整个工作区就是一个 Obsidian vault**——直接用 Obsidian 打开根目录，MD 文件原生渲染 LaTeX/mermaid/wikilink）：
+- `docs/`：mission.md（锚）· resources.md（可信资源全清单）· answer.md（练习与错题档案）
+- `library/`：**资料层**（已消化的最佳来源，见清单条目）
+- `lessons/`：`000N-<slug>.html` + `.md` **双格式课程** + `question.html` 练习总页 + `answer.md` + `src/`（配图与共享资产）。进度自证：课程存在即已讲，answer.md 有记录即已练。
 
 ## 触发分层
 
@@ -49,21 +52,22 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 - `docs/mission.md`：学习者**为什么**学。一切教学以它为锚。格式见 [mission-format.md](./references/mission-format.md)；修订前先确认。
 - `docs/resources.md`：可信资源与社区清单。格式见 [resources-format.md](./references/resources-format.md)。
 - `lessons/answer.md`：**练习与错题档案**（与练习页同目录）——每次检索练习一条：`## <课程基名> · <日期> · <对>/<总>`，其下逐条错题（题面 | 我答 | 正确答案 | 缺口说明）；**全对也记**（已练证据）。数据来自练习页的作答报告——**提交后自动弹"另存为"**：文件名预填 answer.md，保存到练习页同级目录；已有同名文件时确认替换，页面做读旧追加写回（历史不丢）（回退复制贴回由教师落档）；页面已判，教师只核实不重判。未划销错题驱动下次重教——重教通过确认题即划销（保留可见，标已清除）。首次练习落档时创建。
+- `library/*.md`：**资料层**——已消化的最佳来源：每条一个 MD（frontmatter：source URL / credibility A·B·C / verified 日期 / related 关联课程）+ 摘要 + 关键要点。格式见 [library-format.md](./references/library-format.md)。researcher 摸底与教学中核实的可信产出直接沉淀于此；教学时优先读取，越用越厚。
 - `lessons/question.html`：**练习总页**（每主题一个，按 [question-template.html](./assets/question-template.html) 制作）——所有小节的检索练习按节分组集中于此，产出阶段逐节追加；一次提交全部判分，报告按节分块另存 lessons/answer.md。
 - `lessons/src/*.svg`：全部配图的存放处（优先 `diagram-design` 产出 SVG；不可用时 `visualize` 派 maker：mermaid 类 CLI 渲染、SVG 类手写，均不转 PNG）；课程以外链 `<img src="src/<文件名>.svg">` 引用。`lessons/src/` 同时收纳共享 `katex/` 与 maker 中间产物。
 
 **会话开始**（语言始终跟随学习者）：
 
-1. **探测**：`docs/mission.md` 不存在（大小写不敏感，`MISSION.md` 等旧名视为同一文件；根目录旧布局原位沿用不迁移）→ 新工作区：使命访谈（不判分，≤2-3 轮；动机空缺就如实记"动机暂缺"——不许据此不建文件），初始化 mission 与 resources。续接：读 docs/ 两件（mission、resources）与 lessons/answer.md + 扫描 lessons/——**前沿 = 最后一个已练课程**；练习文件在而档案无记录 = 悬空，优先补练；教学计划读最新课程左栏（快照）。错题驱动：未划销错题所涉知识点优先排入重教。
+1. **探测**：`docs/mission.md` 不存在（大小写不敏感，`MISSION.md` 等旧名视为同一文件；根目录旧布局原位沿用不迁移）→ 新工作区：使命访谈（不判分，≤2-3 轮；动机空缺就如实记"动机暂缺"——不许据此不建文件），初始化 mission 与 resources。续接：读 docs/ 两件（mission、resources）、lessons/answer.md 与 library/ 全部条目 + 扫描 lessons/——**前沿 = 最后一个已练课程**；练习文件在而档案无记录 = 悬空，优先补练；教学计划读最新课程左栏（快照）。错题驱动：未划销错题所涉知识点优先排入重教。
 2. **开场零提问**：不设开场复习——跨会话提取练习由错题驱动承担。
 
-**会话结束**：练习报告已落档并核实；未提交的练习页即悬空自明；本次核实与调研的可信源登记 resources.md。教课前先查 resources.md，不从零搜索——researcher 摸底与事实核实的可信产出都应登记进来。
+**会话结束**：练习报告已落档并核实；未提交的练习页即悬空自明；本次核实与调研的可信源登记 resources.md。教课前先查 library/（资料层）再查 resources.md（全清单），不从零搜索——researcher 摸底与事实核实的可信产出：最佳来源沉淀进 library/（含 A/B/C 分级），其余登记 resources.md。
 
 ## 流程：目标访谈 → 规划 → 课程产出（静默批量）→ 检索练习
 
 三个阶段永远按序全跑；缩放规模，绝不缩放形状。
 
-**准确性铁律**：对任何事实、名称、日期、公式有一丝不确定，先核实再说出口——优先派 `researcher` 子代理；不可用则自带 WebSearch/WebFetch 亲自核实；都不可用则明示"此条未经核实"。准确性永远压过流畅；核实修正了内容就直说。
+**准确性铁律**：对任何事实、名称、日期、公式有一丝不确定，先核实再说出口——优先派 `researcher` 子代理；不可用则自带 WebSearch/WebFetch 亲自核实；都不可用则明示"此条未经核实"。准确性永远压过流畅；核实修正了内容就直说。课程引用 library 资料时带可信度标注（如"据规范（A）"）——学习者一眼看出知识置信度。
 
 ### quiz 协议（出题与判分）
 
@@ -84,7 +88,7 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 ### 阶段 2 — 规划（杠杆率最高，不要赶）
 
-- **先派 `researcher` 摸底**——核心概念、真正的第一性原理、常见坑；不可用则自带搜索。**摸底不可省，只换执行者。**
+- **先读 `library/`**——已有资料优先消化，不从零开始；不足再派 `researcher` 摸底（核心概念、第一性原理、常见坑；不可用则自带搜索），可信产出沉淀进 library/（含 A/B/C 分级）。**摸底不可省，只换执行者。**
 - 对着哲学规划：哪些无条件真理、有无原子单元、有动机的发现路径是什么、知识还是技能、反馈循环怎么搭；`lessons/answer.md` 未划销错题优先排入重教。
 - **压测根部**：每个基础节点问"对*这个学习者*真是无条件真理，还是伪装的定理"——推得出来就压下去，不把课程奠基在半山腰。
 - **呈现计划**（永远在教学之前）：散文思路（覆盖什么、顺序、为什么，锚定使命）+ 小型 mermaid 依赖图（根=无条件真理，汇点=目标）——这张图就是教学顺序。**非阻塞**：声明"有异议随时喊停"后直接进入静默产出。
@@ -123,9 +127,10 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 ## 课程制作规范
 
-课程是**唯一落盘教学产物**——会话不落盘，对话即过程、课程即沉淀。**一门课程 = 一个小节**，命名 `000N-<dash-case-name>.html`，编号取 lessons/ 现有最大加一。
+课程是**核心落盘教学产物**——会话不落盘，对话即过程、课程即沉淀。**一门课程 = 一个小节**，命名 `000N-<dash-case-name>`，编号取 lessons/ 现有最大加一，**每节产出双格式**（`.html` + `.md`）。
 
-- 按 [template.html](./assets/template.html) 设计系统制作（奶油画布、衬线标题、深墨代码窗、珊瑚点睛；模板缺失时以四视觉词自建精简系统不阻塞）。轻量 HTML（约 20KB），无外部网络依赖。
+- **`.md` 副本（Obsidian）**：与 HTML 内容一致——LaTeX 数学、mermaid 依赖图、wikilink 互链（替代 HTML 锚点）；引用 library 条目用 `[[library/000N-xxx]]`。
+- 按 [template.html](./assets/template.html) 设计系统制作 `.html`（奶油画布、衬线标题、深墨代码窗、珊瑚点睛；模板缺失时以四视觉词自建精简系统不阻塞）。轻量 HTML（约 20KB），无外部网络依赖。
 - **三栏**：左 = 全部计划小节导航（已发布可点、未发布置灰、当前高亮）；中 = 正文；右 = 本节大纲（页内锚点）。**导航是快照**——新课程发布不回填旧文件。
 - **数学**：写 LaTeX（行内 `$x$`、独立 `$$…$$`），TeX 源码保留在 HTML，KaTeX 浏览器端渲染。仅当本节有公式：① Bash 把技能 `assets/katex/` 三件复制到 `lessons/src/katex/`（全工作区一份共用；**勿读入上下文**）；② 保留模板的相对外链与渲染调用。无公式课程删外链块；资产缺失时 TeX 源码原样显示；资产不可用降级 MathML。
 - 课程要短——待在学习者工作记忆内，但给一个可继续搭建的具体收获；直接服务使命、落在最近发展区。
