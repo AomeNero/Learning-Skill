@@ -3,7 +3,7 @@
 > 文件：`assets/template.html`（课程）+ `assets/question-template.html`（配套考核页，见文末）
 > 课程模型：**一门课程 = 一个小节**——每个 HTML 文件承载且仅承载一个小节，编号即小节顺序；考核不在课程内，由配对 `-question.html` 承担
 > 设计语言：DESIGN.md（Claude 设计系统）——奶油画布 + 衬线标题 + 珊瑚点睛 + 深墨代码面
-> 依赖：**KaTeX 内嵌**——`assets/katex/` 的样式（含全部 base64 字体）与脚本在制作课程时内联进文件；无外部网络资源，离线双击即读
+> 依赖：**KaTeX 相对外链（公式课程）**——`assets/katex/` 三件复制到工作区 `lessons/src/katex/` 一份共享，课程经 `src/katex/…` 相对路径引入；TeX 源码保留在 HTML，资产缺失时原样显示；无外部网络资源
 
 ---
 
@@ -70,7 +70,7 @@
 - `flex:1 + min-width:0`（防长代码行撑破三栏的纪律项）
 - 页头：eyebrow（课程主题 · 第 N 节）+ 衬线 h1 48px + 18px lead 动机段
 - 提示块 `.callout`：奶油卡 + hairline 边框 + pill 标签（本节挂靠 / 一手资源 / 随时问）
-- **展示数学 KaTeX（内嵌）**：正文写 LaTeX（行内 `$x$`、独立 `$$…$$`），文档末尾内嵌的 katex.min.js + auto-render.min.js 在 DOMContentLoaded 时扫描渲染；`katex.embed.css` 含 20 个 base64 woff2 字体（约 360KB），`assets/katex/` 随技能走，制作课程时按模板占位标注两处内联
+- **展示数学 KaTeX（相对外链）**：正文写 LaTeX（行内 `$x$`、独立 `$$…$$`），TeX 源码留在 HTML；head 引 `src/katex/katex.embed.css`、body 末引 `src/katex/katex.min.js` + `auto-render.min.js`（DOMContentLoaded 扫描渲染）。资产由技能 `assets/katex/` 复制到工作区 `lessons/src/katex/` 一份共享（cp 复制，勿读入上下文）；无公式课程删除外链块
 - **代码窗 `.code-window`**（签名组件）：深墨卡 12px 圆角 → 窗口圆点 chrome + mono 文件名 → 内层 `#1f1e1b` 代码块 → `$` 提示符灰 / 参数琥珀 / URL 青
 - 组件库另有：页签 `.tab-strip` · 特性卡 `.feature-grid` · 平台卡 `.card-grid` · 图片占位 `.ph-img` · 珊瑚徽章 `.badge-coral`——样式齐备，课程按需取用
 
@@ -101,7 +101,7 @@
 4. **双 sticky**：侧栏与目录各自 `top: var(--header-h)` + 独立 `overflow-y`
 5. **珊瑚配额**：当前节编号/徽章/链接三种用途封顶，别的地方用奶油色阶
 6. **深墨节奏**：代码窗与页脚两个深色块收尾，与奶油画布形成页面呼吸（DESIGN.md 的 pacing 机制）
-7. **交互极简**：唯一的 JS 是内嵌 KaTeX 的数学渲染；页签压平为静态分节；锚点偏移用 `scroll-margin-top`；移动端直接隐藏次级导航
+7. **交互极简**：唯一的 JS 是 KaTeX 数学渲染（相对外链）；页签压平为静态分节；锚点偏移用 `scroll-margin-top`；移动端直接隐藏次级导航
 
 ## 六、配套资产
 
@@ -111,4 +111,4 @@
 
 ### katex/——KaTeX 内嵌资产
 
-`katex.embed.css`（样式 + 20 个 base64 woff2 字体，359KB）、`katex.min.js`（277KB）、`auto-render.min.js`（3.5KB）。课程与考核页共用：制作时按各自模板的占位标注完成两处内联（CSS 进 `<style>` 末尾，两个 JS 进文档末尾脚本区），渲染调用已写死在模板中（`$…$` / `$$…$$` / `\(…\)` / `\[…\]`）。
+`katex.embed.css`（样式 + 20 个 base64 woff2 字体，359KB）、`katex.min.js`（277KB）、`auto-render.min.js`（3.5KB）。课程与考核页共用：仅当本节用到公式时，用 Bash 把三件**复制**到工作区 `lessons/src/katex/`（整个工作区一份；勿将资产读入上下文——640KB 远超单次输出上限），模板保留相对外链与渲染调用（`$…$` / `$$…$$` / `\(…\)` / `\[…\]`）；无公式课程删除外链块，资产缺失时 TeX 源码原样显示。

@@ -13,7 +13,7 @@
 | `skills/learning/SKILL.md` | 教学系统主体——哲学、流程、quiz 协议、工作区约定 |
 | `skills/learning/assets/template.html` | 课程模板——三栏课程页（左=计划小节导航，中=正文，右=本节大纲） |
 | `skills/learning/assets/question-template.html` | 检索练习页模板——凭记忆单选作答、提交自判分，报告直写 docs/answer.md（回退复制/下载） |
-| `skills/learning/assets/katex/` | KaTeX 内嵌资产——embed.css（20 个 base64 字体）+ 渲染脚本，制作时内联 |
+| `skills/learning/assets/katex/` | KaTeX 资产——embed.css（20 个 base64 字体）+ 渲染脚本；公式课程复制一份到工作区 lessons/src/katex/ 共享，相对路径外链引入 |
 | `skills/learning/assets/template-布局.md` | 模板布局分析——三栏公式、设计令牌、响应式行为 |
 | `skills/learning/references/*-FORMAT.md` | 两份文档格式规范：使命 / 资源 |
 | `skills/visualize/` + `agents/diagram-maker.md` | 配图链：教师出 brief → maker 渲染 PNG 并亲眼验证 |
@@ -148,7 +148,7 @@ flowchart TD
 
 #### lessons/*.html——课程（复习单元）
 
-**一门课程 = 一个小节**，命名 `0001-<dash-case-name>.html`，编号即小节顺序，每讲完一个小节即产出。按 `template.html` 设计系统制作，自包含单文件：系统字体栈 + 内嵌 KaTeX（样式、base64 字体、脚本制作时全部内联），无外部网络依赖，离线双击即读。三栏布局：左栏 = 全部计划小节导航（已发布可点/未发布置灰/当前高亮，快照不回填）；中栏 = 本节正文；右栏 = 本节大纲（页内锚点快速定位）。数学写 LaTeX（行内 `$x$`、独立 `$$…$$`），由内嵌 KaTeX 渲染。每门课程推荐一个首选一手资源，并包含"有问题随时问 agent"的提醒。课程配图（`*.png`）与课程同目录。**考核不在课程内**——配对的 `000N-<slug>-question.html` 检索练习页（按 question-template.html 制作，标题"<课程标题>的检索练习"）：凭记忆单选作答、提交页内自判分并生成作答报告，点"保存到 docs/answer.md"由浏览器直写追加（回退复制/下载）。
+**一门课程 = 一个小节**，命名 `0001-<dash-case-name>.html`，编号即小节顺序，每讲完一个小节即产出。按 `template.html` 设计系统制作：轻量 HTML（约 20KB），无外部网络依赖。三栏布局：左栏 = 全部计划小节导航（已发布可点/未发布置灰/当前高亮，快照不回填）；中栏 = 本节正文；右栏 = 本节大纲（页内锚点快速定位）。数学写 LaTeX（行内 `$x$`、独立 `$$…$$`），**TeX 源码保留在 HTML**，由 KaTeX 浏览器端渲染——公式课程把技能 `assets/katex/` 复制一份到 `lessons/src/katex/` 共享，相对路径外链引入，整个工作区拷走即离线可读。每门课程推荐一个首选一手资源，并包含"有问题随时问 agent"的提醒。课程配图（`*.png`）与课程同目录。**考核不在课程内**——配对的 `000N-<slug>-question.html` 检索练习页（按 question-template.html 制作，标题"<课程标题>的检索练习"）：凭记忆单选作答、提交页内自判分并生成作答报告，点"保存到 docs/answer.md"由浏览器直写追加（回退复制/下载）。
 
 ---
 

@@ -103,7 +103,7 @@ Copy-Item -Recurse Learning-Skill/skills/* .workbuddy/skills/
 ## 依赖（可选）
 
 - 配图渲染：Node.js + `@mermaid-js/mermaid-cli`（Mermaid 图，需本机 Chrome/Edge，puppeteer 找不到浏览器时设 `PUPPETEER_EXECUTABLE_PATH` 指向系统浏览器）、`rsvg-convert` 或 ImageMagick 7（SVG 图，仅类 Unix）。不装也能用：渲染不可用时配图降级为内联 SVG 进课程 HTML（mermaid 源码在课程 HTML 中不渲染，改走 SVG 或省略）
-- 课程是自包含 HTML，双击浏览器即读；`docs/` 下的 Markdown 文件建议用 [Obsidian](https://obsidian.md) 阅读（LaTeX 开箱渲染）
+- 课程是轻量 HTML，双击浏览器即读；公式课程的 KaTeX 资产在工作区 `lessons/src/katex/` 共享一份（相对路径引入，TeX 源码保留在页面里）；`docs/` 下的 Markdown 文件建议用 [Obsidian](https://obsidian.md) 阅读（LaTeX 开箱渲染）
 
 ## 说明
 

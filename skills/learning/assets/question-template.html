@@ -9,7 +9,7 @@
    考核页模板（与课程 000N-<slug>.html 配对：000N-<slug>-question.html）
    设计系统同 template.html——奶油画布 + 衬线标题 + 珊瑚 CTA + teal/coral 判定色
    单栏窄居中；题目单选，提交后页内自判分并生成作答报告
-   自包含：系统字体栈 + 内嵌 KaTeX（制作时按占位内联），离线双击即读
+   系统字体栈；公式课程经相对路径外链 lessons/src/katex/ 渲染（TeX 源码保留在 HTML）
    注意：正确答案内嵌于下方脚本的 QUIZ 数据中，查看源码可见——自测场景可接受
    ============================================================ */
 :root{
@@ -149,9 +149,12 @@ a{ color: inherit; text-decoration: none; }
 /* ---------- KaTeX 微调 ---------- */
 .katex{ font-size: 1.06em; }
 
-/* ====== KaTeX 样式与 base64 内嵌字体 ======
-   制作考核页时：把 assets/katex/katex.embed.css 的完整内容粘贴内联到此处。 */
 </style>
+<!-- KaTeX 样式（公式课程专用）：本节用到 $...$ / $$...$$ 公式时保留此行，
+     并用 Bash 把技能 assets/katex/ 三件复制到工作区 lessons/src/katex/
+     （cp 即可，勿将资产读入上下文；整个工作区只放这一份，所有课程共用）；
+     无公式的课程删除此行 -->
+<link rel="stylesheet" href="src/katex/katex.embed.css">
 </head>
 <body>
 
@@ -375,13 +378,10 @@ document.getElementById("download").addEventListener("click", function () {
 });
 </script>
 
-<!-- ============ KaTeX（内嵌，自包含离线） ============
-     制作考核页时，按序完成两处内联（替换占位注释）：
-     ① 样式：<style> 末尾的标注处，内联 assets/katex/katex.embed.css（含全部 base64 字体）
-     ② 脚本：下面前两个 script 内联 assets/katex/katex.min.js 与 auto-render.min.js；
-        第三个是渲染调用，原样保留（判分结果由判分脚本自行渲染）。 -->
-<script>/* ① 内联 katex.min.js 于此 */</script>
-<script>/* ② 内联 auto-render.min.js 于此 */</script>
+<!-- ============ KaTeX 渲染（相对路径外链，公式课程专用） ============
+     与上方 <link> 配套启用；资产缺失时公式以 TeX 源码原样显示（天然退化可读） -->
+<script src="src/katex/katex.min.js"></script>
+<script src="src/katex/auto-render.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     renderMathInElement(document.body, {

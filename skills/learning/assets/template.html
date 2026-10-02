@@ -10,7 +10,7 @@
    奶油画布 + 衬线大标题 + 珊瑚点睛 + 深墨代码面
    三栏：左 = 全部计划小节导航 · 中 = 本节正文 · 右 = 本节大纲（页内锚点）
    考核不在课程内——由配对的 000N-<slug>-question.html 承担（question-template.html）
-   系统字体栈；数学由内嵌 KaTeX 渲染（CSS + base64 字体 + JS 制作时全部内联，无外部依赖，离线双击即读）
+   系统字体栈；公式课程经相对路径外链 lessons/src/katex/ 渲染（TeX 源码保留在 HTML，资产缺失时原样显示）
    ============================================================ */
 :root{
   /* —— 色彩令牌（DESIGN.md colors）—— */
@@ -169,7 +169,7 @@ article code{
 .text-link{ color: var(--primary); }
 .text-link:hover{ text-decoration: underline; }
 
-/* ---------- 展示数学（KaTeX 内嵌渲染，脚本与内联说明见文档末尾） ---------- */
+/* ---------- 展示数学（KaTeX 外链渲染；TeX 源码保留在正文） ---------- */
 .katex{ font-size: 1.08em; }
 .katex-display{ margin: var(--sp-lg) 0; }
 .katex-display > .katex{ font-size: 1.15em; }
@@ -322,10 +322,12 @@ h2[id], h3[id], h4[id]{ scroll-margin-top: calc(var(--header-h) + 16px); }
   .page-header h1{ font-size: 32px; letter-spacing: -0.5px; }
 }
 
-/* ====== KaTeX 样式与 base64 内嵌字体 ======
-   制作课程时：把 assets/katex/katex.embed.css 的完整内容粘贴内联到此处。
-   正文数学一律写 LaTeX——行内 $x$、独立成行 $$…$$——由文档末尾的内嵌脚本自动渲染。 */
 </style>
+<!-- KaTeX 样式（公式课程专用）：本节用到 $...$ / $$...$$ 公式时保留此行，
+     并用 Bash 把技能 assets/katex/ 三件复制到工作区 lessons/src/katex/
+     （cp 即可，勿将资产读入上下文；整个工作区只放这一份，所有课程共用）；
+     无公式的课程删除此行 -->
+<link rel="stylesheet" href="src/katex/katex.embed.css">
 </head>
 <body>
 
@@ -446,13 +448,10 @@ Reply from 93.184.216.34: bytes=32 time=11ms TTL=56</code></pre>
   © 2026 <a class="footer-link" href="https://github.com/AomeNero" target="_blank" rel="noopener">AomeNero</a>
 </footer>
 
-<!-- ============ KaTeX（内嵌，自包含离线） ============
-     制作课程时，按序完成两处内联（替换占位注释）：
-     ① 样式：<style> 末尾的标注处，内联 assets/katex/katex.embed.css（含全部 base64 字体）
-     ② 脚本：下面前两个 script 标签内，依次内联 assets/katex/katex.min.js 与
-        assets/katex/auto-render.min.js 的内容。第三个 script 是渲染调用，原样保留。 -->
-<script>/* ① 内联 katex.min.js 于此 */</script>
-<script>/* ② 内联 auto-render.min.js 于此 */</script>
+<!-- ============ KaTeX 渲染（相对路径外链，公式课程专用） ============
+     与上方 <link> 配套启用；资产缺失时公式以 TeX 源码原样显示（天然退化可读） -->
+<script src="src/katex/katex.min.js"></script>
+<script src="src/katex/auto-render.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     renderMathInElement(document.body, {
