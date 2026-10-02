@@ -238,7 +238,7 @@ a{ color: inherit; text-decoration: none; }
       <button type="button" id="copy">复制报告</button>
     </div>
     <p id="copy-status"></p>
-    <p class="hint">提交后已自动弹出保存——在对话框中选中练习页同级的 lessons/answer.md 即自动追加本次记录；文件尚不存在则直接另存（文件名已预填 answer.md，保存在练习页同级的 lessons/ 目录）。刚才取消了的话点上方按钮重试。浏览器不支持直写时，用复制报告交给 agent 老师。</p>
+    <p class="hint">提交后已自动弹出"另存为"——文件名已预填 answer.md，保存到练习页同级的 lessons/ 目录即可；目录里已有 answer.md 时选中它并确认替换，本次记录会自动追加在旧内容之后（历史不丢）。刚才取消了的话点上方按钮重试。浏览器不支持直写时，用复制报告交给 agent 老师。</p>
   </section>
 
 </main>
@@ -247,7 +247,7 @@ a{ color: inherit; text-decoration: none; }
 /* ============================================================
    考核数据与判分逻辑（制作考核页时替换 META 与 QUIZ 为真实内容）
    ans 为正确选项下标（0-3）；"不知道"约定为末项；未选按未作答记录
-   报告格式与 lessons/answer.md 的练习记录一致（提交后自动弹保存追加） */
+   报告格式与 lessons/answer.md 的练习记录一致（提交后自动另存追加） */
 var META = {
   course: "0002-packets-the-atom",   /* 配对课程文件基名（不含 .html） */
   title:  "数据包：通信的原子单元"
@@ -310,45 +310,40 @@ document.getElementById("submit").addEventListener("click", function () {
 /* 保存到 lessons/answer.md（练习页同级）——auto=true 为提交后自动触发：
    有该文件则选中追加，没有则另存自动新建（文件名预填 answer.md，落点即同级目录）。
    浏览器安全模型要求保存必须经确认对话框，无法完全静默。 */
+/* 保存 answer.md 到练习页同级目录——auto=true 为提交后自动触发。
+   弹"另存为"对话框（文件名预填 answer.md）：选中同级目录保存即新建；
+   已有同名文件时选中它并确认"替换"——实际做读旧内容 + 追加写回，历史不丢。
+   浏览器安全模型要求保存必须经确认对话框，无法完全静默。 */
 function saveReport(auto) {
   var txt = document.getElementById("report-md").textContent;
   var status = document.getElementById("copy-status");
-  if (!window.showOpenFilePicker && !window.showSaveFilePicker) {
+  if (!window.showSaveFilePicker) {
     status.textContent = "此浏览器不支持直写文件——请点\"复制报告\"交给 agent 老师";
     return;
   }
   (async function () {
     try {
-      if (window.showOpenFilePicker) {
-        try {
-          var handles = await window.showOpenFilePicker({
-            multiple: false,
-            types: [{ description: "Markdown", accept: { "text/markdown": [".md"] } }]
-          });
-          var h = handles[0];
-          var file = await h.getFile();
-          var prev = await file.text();
-          var w = await h.createWritable();
-          await w.write(prev.trim().length ? prev.replace(/\s+$/, "\n\n") + txt : txt);
-          await w.close();
-          status.textContent = "已追加保存到 lessons/answer.md——回对话说一声即可";
-          return;
-        } catch (oe) {
-          if (oe && oe.name === "AbortError") {
-            status.textContent = auto ? "已取消——需要保存时点\"保存到 lessons/answer.md\"" : "已取消选择";
-            return;
-          }
-        }
-      }
-      if (window.showSaveFilePicker) {
-        var h2 = await window.showSaveFilePicker({ suggestedName: "answer.md" });
-        var w2 = await h2.createWritable();
-        await w2.write(txt);
-        await w2.close();
-        status.textContent = "已保存 answer.md——请确认保存在练习页同级的 lessons/ 目录";
-      }
+      var h = await window.showSaveFilePicker({
+        suggestedName: "answer.md",
+        types: [{ description: "Markdown", accept: { "text/markdown": [".md"] } }]
+      });
+      var prev = "";
+      try {
+        var file = await h.getFile();
+        var old = await file.text();
+        if (old.trim().length) prev = old.replace(/\s+$/, "\n\n");
+      } catch (e) { /* 新建文件，无旧内容 */ }
+      var w = await h.createWritable();
+      await w.write(prev + txt);
+      await w.close();
+      status.textContent = prev
+        ? "已追加到 lessons/answer.md——回对话说一声即可"
+        : "已创建 lessons/answer.md（请确认保存在练习页同级目录）——回对话说一声即可";
     } catch (e) {
-      if (e && e.name === "AbortError") { status.textContent = "已取消"; return; }
+      if (e && e.name === "AbortError") {
+        status.textContent = auto ? "已取消——需要保存时点\"保存到 lessons/answer.md\"" : "已取消";
+        return;
+      }
       status.textContent = "保存失败：" + (e && e.message ? e.message : e) + "——可点按钮重试或改用复制";
     }
   })();
