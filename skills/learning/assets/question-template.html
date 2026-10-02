@@ -234,12 +234,11 @@ a{ color: inherit; text-decoration: none; }
     <p id="score"></p>
     <pre id="report-md"></pre>
     <div class="btn-row">
-      <button type="button" id="save" class="primary">保存到 docs/answer.md</button>
+      <button type="button" id="save" class="primary">保存到 lessons/answer.md</button>
       <button type="button" id="copy">复制报告</button>
-      <button type="button" id="download">下载 answer 片段（.md）</button>
     </div>
     <p id="copy-status"></p>
-    <p class="hint">首选"保存到 docs/answer.md"：在弹出的文件选择器中选中工作区的 docs/answer.md，浏览器自动追加本次记录（首次无此文件则另存新建）。完成后回对话说一声即可。浏览器不支持直写时，用复制或下载交给 agent 老师。</p>
+    <p class="hint">提交后已自动弹出保存——在对话框中选中练习页同级的 lessons/answer.md 即自动追加本次记录；文件尚不存在则直接另存（文件名已预填 answer.md，保存在练习页同级的 lessons/ 目录）。刚才取消了的话点上方按钮重试。浏览器不支持直写时，用复制报告交给 agent 老师。</p>
   </section>
 
 </main>
@@ -248,7 +247,7 @@ a{ color: inherit; text-decoration: none; }
 /* ============================================================
    考核数据与判分逻辑（制作考核页时替换 META 与 QUIZ 为真实内容）
    ans 为正确选项下标（0-3）；"不知道"约定为末项；未选按未作答记录
-   报告格式与 docs/answer.md 的考核记录一致，教师收到后直接追加落档 */
+   报告格式与 lessons/answer.md 的练习记录一致（提交后自动弹保存追加） */
 var META = {
   course: "0002-packets-the-atom",   /* 配对课程文件基名（不含 .html） */
   title:  "数据包：通信的原子单元"
@@ -305,16 +304,17 @@ document.getElementById("submit").addEventListener("click", function () {
   document.getElementById("report").hidden = false;
   document.getElementById("submit").disabled = true;
   document.getElementById("report").scrollIntoView({ behavior: "smooth" });
+  saveReport(true);   /* 提交即保存：自动弹窗——追加已有 lessons/answer.md 或另存新建 */
 });
 
-document.getElementById("save").addEventListener("click", function () {
-  /* 首选 File System Access API 直写：选已有 docs/answer.md 自动追加；
-     文件不存在或取消打开则另存新建；API 不可用回退为下载 */
+/* 保存到 lessons/answer.md（练习页同级）——auto=true 为提交后自动触发：
+   有该文件则选中追加，没有则另存自动新建（文件名预填 answer.md，落点即同级目录）。
+   浏览器安全模型要求保存必须经确认对话框，无法完全静默。 */
+function saveReport(auto) {
   var txt = document.getElementById("report-md").textContent;
   var status = document.getElementById("copy-status");
   if (!window.showOpenFilePicker && !window.showSaveFilePicker) {
-    document.getElementById("download").click();
-    status.textContent = "此浏览器不支持直写文件，已转为下载——把文件交给 agent 老师";
+    status.textContent = "此浏览器不支持直写文件——请点\"复制报告\"交给 agent 老师";
     return;
   }
   (async function () {
@@ -331,10 +331,13 @@ document.getElementById("save").addEventListener("click", function () {
           var w = await h.createWritable();
           await w.write(prev.trim().length ? prev.replace(/\s+$/, "\n\n") + txt : txt);
           await w.close();
-          status.textContent = "已追加保存到所选文件——回对话说一声即可";
+          status.textContent = "已追加保存到 lessons/answer.md——回对话说一声即可";
           return;
         } catch (oe) {
-          if (oe && oe.name === "AbortError") { status.textContent = "已取消选择"; return; }
+          if (oe && oe.name === "AbortError") {
+            status.textContent = auto ? "已取消——需要保存时点\"保存到 lessons/answer.md\"" : "已取消选择";
+            return;
+          }
         }
       }
       if (window.showSaveFilePicker) {
@@ -342,13 +345,15 @@ document.getElementById("save").addEventListener("click", function () {
         var w2 = await h2.createWritable();
         await w2.write(txt);
         await w2.close();
-        status.textContent = "已保存 answer.md——请确认保存在工作区 docs/ 目录下";
+        status.textContent = "已保存 answer.md——请确认保存在练习页同级的 lessons/ 目录";
       }
     } catch (e) {
-      status.textContent = "保存失败：" + (e && e.message ? e.message : e) + "——改用复制或下载";
+      if (e && e.name === "AbortError") { status.textContent = "已取消"; return; }
+      status.textContent = "保存失败：" + (e && e.message ? e.message : e) + "——可点按钮重试或改用复制";
     }
   })();
-});
+}
+document.getElementById("save").addEventListener("click", function () { saveReport(false); });
 
 document.getElementById("copy").addEventListener("click", function () {
   var txt = document.getElementById("report-md").textContent;
@@ -368,14 +373,6 @@ document.getElementById("copy").addEventListener("click", function () {
   } else fallback();
 });
 
-document.getElementById("download").addEventListener("click", function () {
-  var blob = new Blob([document.getElementById("report-md").textContent], { type: "text/markdown" });
-  var a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "answer-" + META.course + ".md";
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(a.href);
-});
 </script>
 
 <!-- ============ KaTeX 渲染（相对路径外链，公式课程专用） ============
