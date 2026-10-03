@@ -14,12 +14,13 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 3. **规划**——researcher 摸底 → 依赖图（压测根部）→ 呈现计划（散文 + mermaid），非阻塞直接开教
 4. **静默批量产出**——按依赖图逐节撰写课程（教学全在课程正文：动机 → 确立 → 连接），每节产出**双格式**：`000N-<slug>.html` + `000N-<slug>.md`（Obsidian 副本）；每节完成即把该节练习追加进唯一的 `lessons/question.html`，逐节跑 `check-lesson.py` 自检；期间对话零输出，全部完成后一次性汇报"共 N 节"并宣布练习阶段
 5. **练习阶段**——学习者打开 `lessons/question.html`（全部小节的练习集中于此）：按节序阅读各课程后凭记忆作答，一次提交全部判分，报告另存 lessons/answer.md
-6. **收尾三查**——错题落档 / 悬空自明 / 资源沉淀（见文末红线清单）
+6. **收尾四查**——错题落档 / 悬空自明 / 资源沉淀 / 更新思维导图（见文末红线清单）
 
 **工作区 5 类**（一律小写英文，wikilink 互链；**整个工作区就是一个 Obsidian vault**——直接用 Obsidian 打开根目录，MD 文件原生渲染 LaTeX/mermaid/wikilink）：
 - `docs/`：mission.md（锚）· resources.md（可信资源全清单）· answer.md（练习与错题档案）
 - `library/`：**资料层**（已消化的最佳来源，见清单条目）
-- `lessons/`：`000N-<slug>.html` + `.md` **双格式课程** + `question.html` 练习总页 + `answer.md` + `src/`（配图与共享资产）。进度自证：课程存在即已讲，answer.md 有记录即已练。
+- `mindmap.md`：**知识体系思维导图**（壳 MD）——Obsidian 打开即见知识全景（嵌入 lessons/src/mindmap.svg），各分支 wikilink 跳转课程。会话末更新。
+- `lessons/`：`000N-<slug>.html` + `.md` **双格式课程** + `question.html` 练习总页 + `answer.md` + `src/`（配图、mindmap.svg 与共享资产）。进度自证：课程存在即已讲，answer.md 有记录即已练。
 
 ## 触发分层
 
@@ -52,8 +53,9 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 - `docs/mission.md`：学习者**为什么**学。一切教学以它为锚。格式见 [mission-format.md](./references/mission-format.md)；修订前先确认。
 - `docs/resources.md`：可信资源与社区清单。格式见 [resources-format.md](./references/resources-format.md)。
 - `lessons/answer.md`：**练习与错题档案**（与练习页同目录）——每次检索练习一条：`## <课程基名> · <日期> · <对>/<总>`，其下逐条错题（题面 | 我答 | 正确答案 | 缺口说明）；**全对也记**（已练证据）。数据来自练习页的作答报告——**提交后自动弹"另存为"**：文件名预填 answer.md，保存到练习页同级目录；已有同名文件时确认替换，页面做读旧追加写回（历史不丢）（回退复制贴回由教师落档）；页面已判，教师只核实不重判。未划销错题驱动下次重教——重教通过确认题即划销（保留可见，标已清除）。首次练习落档时创建。
+- `mindmap.md`：**知识体系思维导图**——壳 MD 嵌入 `![[lessons/src/mindmap|mindmap]]` SVG + 各分支 wikilink 跳转课程；会话末由 diagram-maker 重绘更新。
 - `library/*.md`：**资料层**——网络下载的原始资料全文（网页/文章/文档的完整 MD 转存，不做摘要压缩）：每条一个 MD，YAML frontmatter 参照 moban.md 格式（title/source/author/published/created/description/tags）+ credibility A·B·C 分级 + related 关联课程。格式见 [library-format.md](./references/library-format.md)。researcher 摸底与教学中核实的可信产出直接沉淀全文于此；教学时优先读取，越用越厚。
-- `lessons/question.html`：**练习总页**（每主题一个，按 [question-template.html](./assets/question-template.html) 制作）——所有小节的检索练习按节分组集中于此，产出阶段逐节追加；一次提交全部判分，报告按节分块另存 lessons/answer.md。
+- `lessons/question.html`：**练习总页**（每主题一个，按 [question-template.html](./assets/question-template.html) 制作）——所有小节的检索练习按节分组集中于此，产出阶段逐节追加；一次提交全部判分，报告存一个总页 lessons/answer.md。
 - `lessons/src/*.svg`：全部配图的存放处（优先 `diagram-design` 产出 SVG；不可用时 `visualize` 派 maker：mermaid 类 CLI 渲染、SVG 类手写，均不转 PNG）；课程以外链 `<img src="src/<文件名>.svg">` 引用。`lessons/src/` 同时收纳共享 `katex/` 与 maker 中间产物。
 
 **会话开始**（语言始终跟随学习者）：
@@ -134,6 +136,12 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 - **三栏**：左 = 全部计划小节导航（已发布可点、未发布置灰、当前高亮）；中 = 正文；右 = 本节大纲（页内锚点）。**导航是快照**——新课程发布不回填旧文件。
 - **数学**：写 LaTeX（行内 `$x$`、独立 `$$…$$`），TeX 源码保留在 HTML，KaTeX 浏览器端渲染。仅当本节有公式：① Bash 把技能 `assets/katex/` 三件复制到 `lessons/src/katex/`（全工作区一份共用；**勿读入上下文**）；② 保留模板的相对外链与渲染调用。无公式课程删外链块；资产缺失时 TeX 源码原样显示；资产不可用降级 MathML。
 - 课程要短——待在学习者工作记忆内，但给一个可继续搭建的具体收获；直接服务使命、落在最近发展区。
+- **正文风格参照 ASD-STE100（Simplified Technical English）精神**——让讲解对任何水平的读者都清晰易读：
+  1. **短句**——每句 ≤25 字，超过就拆
+  2. **主动语态**——"发送端切分数据包"，不写"数据包被发送端切分"
+  3. **术语一致**——同一概念全文只用同一个词，首次定义后不再换同义词
+  4. **一步一句**——每句只说一件事，复合句拆成多个简单句
+  5. **直说**——不用成语、比喻、俚语，直接说事实
 - 每门课程：推荐一个首选一手资源（resources.md 中最可信的）+ 一条"有问题随时问 agent"提醒；可用 CLI 为学习者打开。
 - docs/ Markdown 的数学一律 LaTeX：行内 `$f(x)$`、展示 `$$` 独立成行围栏——写 $f(x) = x^2$，不写 `f(x) = x^2`。**例外**：练习页选项经 KaTeX 渲染后须单行易读（避免矩阵与多行结构）；确认题选项走弹窗无 KaTeX，用单行记号或文字描述。
 
@@ -156,8 +164,9 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 - 工作区文件一律小写英文；教学语言跟随学习者
 - 准确性永远压过流畅；核实修正了内容就直说，不悄悄糊弄
 
-**收尾三查**（会话结束前过一遍）
+**收尾四查**（会话结束前过一遍）
 
 1. **错题落档**——练习报告已入 lessons/answer.md（全对也记），已核实
 2. **悬空自明**——未提交的练习页留在原处，下次会话优先补练
-3. **资源沉淀**——本次核实与调研的可信源已登记 docs/resources.md
+3. **资源沉淀**——library/ 与 docs/resources.md 已更新
+4. **更新思维导图**——派 diagram-maker 重绘 `lessons/src/mindmap.svg`（全部已产出小节 + 计划未产出置灰），更新 `mindmap.md` 壳 MD（wikilink 与各分支跳转）

@@ -26,6 +26,7 @@
 所有教学状态落在**学习工作区**（一组约定文件，随会话累积，文件名一律小写英文）。状态管理类文件集中收在 `docs/` 子目录，教学产物留在工作区根：
 
 - `docs/` —— 状态管理文件：`mission.md`（锚）、`resources.md`（可信资源全清单）
+- `mindmap.md` —— **知识体系思维导图**：SVG 思维导图 + Obsidian wikilink 跳转各课程，会话末更新
 - `library/` —— **资料层**：网络下载的原始资料全文（moban YAML + A/B/C 可信度分级 + 关联课程），Obsidian 原生搜索——越用越厚，教前优先读取
 - `lessons/` —— 课程**双格式** `000N-*.html`（浏览器阅读）+ `000N-*.md`（Obsidian 副本：LaTeX/mermaid/wikilink 原生渲染）+ **练习总页 `question.html`**（所有小节的检索练习集中于此）+ `answer.md`（练习与错题档案；全对也记，驱动优先重教）+ `src/`（配图 SVG 与 katex 共享资产）——**课程即已讲，answer.md 有练习记录即已练；整个工作区就是一个 Obsidian vault，直接打开根目录即个人知识库**
 

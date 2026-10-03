@@ -205,6 +205,7 @@ flowchart TD
 | `lessons/000N-*.html` + `*.md` + `question.html` | HTML+MD（三栏课程页 + Obsidian 副本 + 练习总页） | **阶段 3a**：每节产出双格式课程并把练习追加进 question.html | **快照不回填**；练习页提交后报告落 answer.md | 复习单元 + 练习载体 |
 | `lessons/answer.md` | Markdown | **阶段 3**：首次练习提交自动弹存时创建（与练习页同级） | 每次检索练习一条记录（全对也记）；重教通过确认题后划销 | 练习与错题档案——已练证据 + 重教驱动 |
 | `library/000N-*.md` | MD | **阶段 2**：摸底可信产出即沉淀（原始全文+A/B/C 分级+关联课程） | 越用越厚，教学优先读取 | **资料层**——知识库的原料 |
+| `mindmap.md` + `lessons/src/mindmap.svg` | MD+SVG | **会话末**：收尾四查第 4 项 | 覆盖重绘 | **知识体系全景**——壳 MD 嵌入 SVG + wikilink 跳转 |
 | `lessons/src/*.svg` | SVG | **阶段 3a**：教学配图需要时（优先 diagram-design，回退 maker；不转 PNG） | — | 全部配图的存放处；课程以 `src/<文件名>.svg` 外链引用（src/ 另含共享 katex/ 与中间产物） |
 
 ### 7.2 工作区目录树（成熟期形态）
@@ -214,6 +215,7 @@ flowchart TD
 ├── docs/                        # 状态管理文件（中间产物，小写英文命名）
 │   ├── mission.md               # 为什么学——锚
 │   └── resources.md             # 可信资源与社区
+├── mindmap.md                     # 知识体系思维导图（壳 MD，嵌入 SVG）
 ├── library/                       # 资料层——已消化的最佳来源（A/B/C 分级）
 │   ├── 0001-tcp-spec-source.md  # 原始资料全文（YAML头+credibility+related）
 │   └── 0002-quic-rfc-summary.md
@@ -224,7 +226,7 @@ flowchart TD
     ├── 0002-packets-the-atom.html
     ├── 0003-ip-best-effort.html
     ├── question.html             # 练习总页——所有小节的检索练习集中于此
-    └── src/                      # 配图 *.svg + katex/ 共享资产 + maker 中间产物
+    └── src/                      # 配图 *.svg + mindmap.svg + katex/ 共享资产
 ```
 
 ### 7.3 各文档详述
