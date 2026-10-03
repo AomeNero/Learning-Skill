@@ -100,7 +100,7 @@ a{ color: inherit; text-decoration: none; }
 
 /* ---------- 左栏：全部计划小节导航（三态） ----------
    已发布 = 可点击相对链接 · 当前小节 = .active 静态高亮
-   未发布 = .planned 置灰占位 · 导航是制作时点的快照，不回填旧文件 */
+   当前小节 = .active 静态高亮 */
 .sidebar .group-title{
   font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
   text-transform: uppercase; color: var(--muted-soft);
@@ -113,7 +113,7 @@ a{ color: inherit; text-decoration: none; }
 }
 .section-nav{ margin: 0; padding: 0; list-style: none; }
 .section-nav li{ margin: 1px 0; }
-.section-nav a, .section-nav .planned{
+.section-nav a{
   display: flex; align-items: baseline; gap: 8px;
   padding: 7px 12px; border-radius: var(--r-md);
   font-size: 14px; font-weight: 500;
@@ -126,7 +126,6 @@ a{ color: inherit; text-decoration: none; }
 .section-nav a:hover{ color: var(--ink); background: var(--surface-soft); }
 .section-nav a.active{ color: var(--ink); background: var(--surface-card); }
 .section-nav a.active .idx{ color: var(--primary); }
-.section-nav .planned{ color: var(--muted-soft); cursor: default; }
 
 /* ---------- 页头：eyebrow + 衬线 display ---------- */
 .page-header{ margin: var(--sp-md) 0 var(--sp-xxl); }
@@ -361,13 +360,13 @@ h2[id], h3[id], h4[id]{ scroll-margin-top: calc(var(--header-h) + 16px); }
         <a class="active" aria-current="page"><span class="idx">0002</span><span class="t">数据包：通信的原子单元</span></a>
       </li>
       <li>
-        <span class="planned"><span class="idx">0003</span><span class="t">尽力而为：IP 的哲学</span></span>
+        <a href="0003-ip-best-effort.html"><span class="idx">0003</span><span class="t">尽力而为：IP 的哲学</span></a>
       </li>
       <li>
-        <span class="planned"><span class="idx">0004</span><span class="t">TCP：在不可靠之上造可靠</span></span>
+        <a href="0004-tcp-reliability.html"><span class="idx">0004</span><span class="t">TCP：在不可靠之上造可靠</span></a>
       </li>
       <li>
-        <span class="planned"><span class="idx">0005</span><span class="t">域名与 DNS：互联网的电话簿</span></span>
+        <a href="0005-dns-phonebook.html"><span class="idx">0005</span><span class="t">域名与 DNS：互联网的电话簿</span></a>
       </li>
     </ol>
   </aside>
