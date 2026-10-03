@@ -12,7 +12,7 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 1. **探测工作区**——`docs/mission.md` 不存在 → 使命访谈（≤2-3 轮）后初始化 mission 与 resources；已存在 → 读 docs/ 两件、lessons/answer.md 与 library/ 全部条目（资料层优先）+ 扫描 lessons/，从上次前沿续接，错题优先重教
 2. **目标访谈**（不判分）——把"我想理解 X"追到具体为止；零基础默认，不测绘
 3. **规划**——researcher 摸底 → 依赖图（压测根部）→ 呈现计划（散文 + mermaid），非阻塞直接开教
-4. **静默批量产出**——按依赖图逐节撰写课程（教学全在课程正文：动机 → 确立 → 连接），每节产出**双格式**：`000N-<slug>.html` + `000N-<slug>.md`（Obsidian 副本）；每节完成即把该节练习追加进唯一的 `lessons/question.html`，逐节跑 `check-lesson.py` 自检；期间对话零输出，全部完成后一次性汇报"共 N 节"并宣布练习阶段
+4. **静默批量产出**——按依赖图逐节撰写课程（教学全在课程正文：动机 → 确立 → 连接），每节产出**双格式**：`lessons/000N-<slug>.html` + `lessons/markdown/000N-<slug>.md`（Obsidian 副本）；每节完成即把该节练习追加进唯一的 `lessons/question.html`，逐节跑 `check-lesson.py` 自检；期间对话零输出，全部完成后一次性汇报"共 N 节"并宣布练习阶段
 5. **练习阶段**——学习者打开 `lessons/question.html`（全部小节的练习集中于此）：按节序阅读各课程后凭记忆作答，一次提交全部判分，报告另存 lessons/answer.md
 6. **收尾四查**——错题落档 / 悬空自明 / 资源沉淀 / 更新思维导图（见文末红线清单）
 
@@ -20,7 +20,7 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 - `docs/`：mission.md（锚）· resources.md（可信资源全清单）· answer.md（练习与错题档案）
 - `library/`：**资料层**（已消化的最佳来源，见清单条目）
 - `mindmap.md`：**知识体系思维导图**（壳 MD）——Obsidian 打开即见知识全景（嵌入 lessons/src/mindmap.svg），各分支 wikilink 跳转课程。会话末更新。
-- `lessons/`：`000N-<slug>.html` + `.md` **双格式课程** + `question.html` 练习总页 + `answer.md` + `src/`（配图、mindmap.svg 与共享资产）。进度自证：课程存在即已讲，answer.md 有记录即已练。
+- `lessons/`：`000N-<slug>.html` 课程 + `markdown/`（MD 副本目录）+ `question.html` 练习总页 + `answer.md` + `src/`（配图、mindmap.svg 与共享资产）。进度自证：课程存在即已讲，answer.md 有记录即已练。
 
 ## 触发分层
 
@@ -90,7 +90,8 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 ### 阶段 2 — 规划（杠杆率最高，不要赶）
 
-- **先读 `library/`**——已有资料优先消化，不从零开始；不足再派 `researcher` 摸底（核心概念、第一性原理、常见坑；不可用则自带搜索），可信产出沉淀进 library/（含 A/B/C 分级）。**摸底不可省，只换执行者。**
+- **先读 `library/`**——已有资料优先消化，不从零开始；不足再派 `researcher` 摸底（核心概念、第一性原理、常见坑；不可用则自带搜索）。**摸底不可省，只换执行者。**
+- **researcher 返回后立即写 library/**（硬性动作，非可选）：把简报中每个可信来源转写为一个 `library/000N-<slug>.md` 文件——先读 [library-format.md](./references/library-format.md) 确认格式，再按其 YAML frontmatter（title/source/credibility A·B·C/created/related）+ 原始内容全文写入。`library/` 目录不存在则首次写入时创建。
 - 对着哲学规划：哪些无条件真理、有无原子单元、有动机的发现路径是什么、知识还是技能、反馈循环怎么搭；`lessons/answer.md` 未划销错题优先排入重教。
 - **压测根部**：每个基础节点问"对*这个学习者*真是无条件真理，还是伪装的定理"——推得出来就压下去，不把课程奠基在半山腰。
 - **呈现计划**（永远在教学之前）：散文思路（覆盖什么、顺序、为什么，锚定使命）+ 小型 mermaid 依赖图（根=无条件真理，汇点=目标）——这张图就是教学顺序。**非阻塞**：声明"有异议随时喊停"后直接进入静默产出。
@@ -131,7 +132,7 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 课程是**核心落盘教学产物**——会话不落盘，对话即过程、课程即沉淀。**一门课程 = 一个小节**，命名 `000N-<dash-case-name>`，编号取 lessons/ 现有最大加一，**每节产出双格式**（`.html` + `.md`）。
 
-- **`.md` 副本（Obsidian）**：与 HTML 内容一致——LaTeX 数学、mermaid 依赖图、wikilink 互链（替代 HTML 锚点）；引用 library 条目用 `[[library/000N-xxx]]`。
+- **`.md` 副本（Obsidian）**：存 `lessons/markdown/000N-<slug>.md`，与 HTML 内容一致——LaTeX 数学、mermaid 依赖图、wikilink 互链（替代 HTML 锚点）；引用 library 条目用 `[[library/000N-xxx]]`。
 - 按 [template.html](./assets/template.html) 设计系统制作 `.html`（奶油画布、衬线标题、深墨代码窗、珊瑚点睛；模板缺失时以四视觉词自建精简系统不阻塞）。轻量 HTML（约 20KB），无外部网络依赖。
 - **三栏**：左 = 全部计划小节导航（从第一课起全部为可点击链接，当前高亮；未产出文件点击暂 404，产出后自然生效，零回填）；中 = 正文；右 = 本节大纲（页内锚点）。
 - **数学**：写 LaTeX（行内 `$x$`、独立 `$$…$$`），TeX 源码保留在 HTML，KaTeX 浏览器端渲染。仅当本节有公式：① Bash 把技能 `assets/katex/` 三件复制到 `lessons/src/katex/`（全工作区一份共用；**勿读入上下文**）；② 保留模板的相对外链与渲染调用。无公式课程删外链块；资产缺失时 TeX 源码原样显示；资产不可用降级 MathML。
@@ -168,5 +169,5 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 1. **错题落档**——练习报告已入 lessons/answer.md（全对也记），已核实
 2. **悬空自明**——未提交的练习页留在原处，下次会话优先补练
-3. **资源沉淀**——library/ 与 docs/resources.md 已更新
+3. **资源沉淀**——library/ 已有本次摸底/核实的来源条目（逐条检查；为空则回补写入）；resources.md 已登记其余来源
 4. **更新思维导图**——派 diagram-maker 重绘 `lessons/src/mindmap.svg`（全部已产出小节 + 计划未产出置灰），更新 `mindmap.md` 壳 MD（wikilink 与各分支跳转）

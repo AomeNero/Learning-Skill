@@ -202,7 +202,7 @@ flowchart TD
 |------|------|--------------|--------------|------|
 | `docs/mission.md` | Markdown | **会话开始**：使命访谈（≤2-3 轮）后初始化 | 使命修订时（先确认；错题模式可作信号）；换目标时在新工作区重建 | 锚——一切教学决策回溯到它 |
 | `docs/resources.md` | Markdown | **会话开始**：与 mission 一起初始化 | 规划摸底、教学中核实的可信产出随时登记；会话末统一沉淀 | 情境知识支撑——越学越"知道去哪找" |
-| `lessons/000N-*.html` + `*.md` + `question.html` | HTML+MD（三栏课程页 + Obsidian 副本 + 练习总页） | **阶段 3a**：每节产出双格式课程并把练习追加进 question.html | **导航全链接**（零回填）；练习页提交后报告落 answer.md | 复习单元 + 练习载体 |
+| `lessons/000N-*.html` + `markdown/*.md` + `question.html` | HTML+MD（三栏课程页 + markdown/ 副本 + 练习总页） | **阶段 3a**：每节产出双格式课程并把练习追加进 question.html | **导航全链接**（零回填）；练习页提交后报告落 answer.md | 复习单元 + 练习载体 |
 | `lessons/answer.md` | Markdown | **阶段 3**：首次练习提交自动弹存时创建（与练习页同级） | 每次检索练习一条记录（全对也记）；重教通过确认题后划销 | 练习与错题档案——已练证据 + 重教驱动 |
 | `library/000N-*.md` | MD | **阶段 2**：摸底可信产出即沉淀（原始全文+A/B/C 分级+关联课程） | 越用越厚，教学优先读取 | **资料层**——知识库的原料 |
 | `mindmap.md` + `lessons/src/mindmap.svg` | MD+SVG | **会话末**：收尾四查第 4 项 | 覆盖重绘 | **知识体系全景**——壳 MD 嵌入 SVG + wikilink 跳转 |
@@ -221,7 +221,8 @@ flowchart TD
 │   └── 0002-quic-rfc-summary.md
 └── lessons/
     ├── 0001-a-journey-of-a-message.html   # 一门课程 = 一个小节
-    ├── 0001-a-journey-of-a-message.md     # Obsidian 副本（LaTeX/mermaid/wikilink）
+    ├── markdown/                  # MD 副本目录
+    │   └── 0001-a-journey-of-a-message.md   # Obsidian 副本（LaTeX/mermaid/wikilink）
     ├── answer.md                # 练习与错题档案——与 question.html 同级
     ├── 0002-packets-the-atom.html
     ├── 0003-ip-best-effort.html
@@ -245,7 +246,7 @@ flowchart TD
 
 | 产物 | 形态 | 角色 |
 |------|------|------|
-| `lessons/*.html` + `*.md` | HTML+MD | **复习 + 过程**——课程双格式 + question.html 练习总页 |
+| `lessons/*.html` + `markdown/*.md` | HTML+MD | **复习 + 过程**——课程双格式 + question.html 练习总页 |
 | `library/*.md` | MD | **资料层**——网络下载的原始资料全文（A/B/C 分级 + moban YAML），Obsidian 原生搜索 |
 
 会话过程不落盘——对话即过程，课程即沉淀；跨会话状态由 `docs/` 三件承载，进度由 `lessons/` 目录自证。
