@@ -44,8 +44,8 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 | `library/*.md` | **资料层**——网络下载的原始资料全文（网页/文章/文档的完整 MD 转存，不做摘要压缩）：每条一个 MD，YAML frontmatter（title/source/author/published/created/description/tags）+ credibility A·B·C 分级 + related 关联课程。格式见 [library-format.md](./references/library-format.md)。researcher 摸底与教学中核实的可信产出直接沉淀全文于此；教学时优先读取，越用越厚。 |
 | `lessons/question.html` | **练习总页**（每主题一个，按 [question-template.html](./assets/question-template.html) 制作）——所有小节的检索练习按节分组集中于此，产出阶段逐节追加；一次提交全部判分，报告存一个总页 lessons/answer.md。 |
 | `lessons/000N-*.html` + `lessons/markdown/000N-*.md` | 课程**双格式**：浏览器阅读版 + Obsidian 副本。制作规范见下文。 |
-| `lessons/src/*.svg` | 全部配图的存放处（优先 `diagram-design` 产出 SVG；不可用时 `visualize` 派 maker：mermaid 类 CLI 渲染、SVG 类手写，均不转 PNG）；课程以外链 `<img src="src/<文件名>.svg">` 引用。同时收纳共享 `katex/` 与 maker 中间产物。 |
-| `mindmap.md` | **知识体系思维导图**（壳 MD）——嵌入 `![[lessons/src/mindmap|mindmap]]` SVG，各分支 wikilink 跳转课程；Obsidian 打开即见知识全景。会话末由 diagram-maker 重绘更新。 |
+| `lessons/src/*.svg` | 全部配图的存放处（优先 `diagram-design` 产出 SVG；不可用时 `visualize` 派 maker：mermaid 类 CLI 渲染、SVG 类手写，均不转 PNG）；课程以外链 `<img src="src/<文件名>.svg">` 引用。同时收纳共享 `katex/`、maker 中间产物与思维导图源 `mindmap.drawio`。 |
+| `mindmap.md` | **知识体系思维导图**（壳 MD）——嵌入 `![[lessons/src/mindmap|mindmap]]` SVG + 指向可编辑源 `[[lessons/src/mindmap.drawio]]` 的 wikilink，各分支 wikilink 跳转课程；Obsidian 打开即见知识全景。会话末更新。 |
 
 **会话开始**（语言始终跟随学习者）：
 1. **探测**：`docs/mission.md` 不存在（大小写不敏感，`MISSION.md` 等旧名视为同一文件；根目录旧布局原位沿用不迁移）→ 新工作区：过选址 🔴，使命访谈（不判分，≤2-3 轮；动机空缺就如实记"动机暂缺"——不许据此不建文件），初始化 mission 与 resources。已存在 → 续接：读 docs/ 两件（mission、resources）、lessons/answer.md 与 library/ 全部条目 + 扫描 lessons/——**前沿 = 最后一个已练课程**；练习文件在而档案无记录 = 悬空，优先补练；教学计划读最新课程左栏（快照）；未划销错题所涉知识点优先排入重教。
@@ -122,6 +122,8 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 规划步的 mermaid 依赖图内联，不另派技能；不用 `illustration`（风格冲突）；目标技能不可用时基础能力内联回退，不阻塞教学。
 
+**思维导图 .drawio 源管线**（不依赖 draw.io desktop）：diagram-maker 直写未压缩 mxGraphModel XML 到 `lessons/src/mindmap.drawio`（勿用 Read 读 .drawio——多为压缩载荷）→ `diagram-design/scripts/drawio_extract.py` 验证 digest → 按 diagram-design 的 import-drawio.md redraw 出 `mindmap.svg`。源文件供学习者手工编辑，重绘以源为底。
+
 ## 智慧与社区
 
 学习者问出需要智慧的问题：先尝试回答，最终交棒社区。主动找高信誉社区登记进 resources.md"智慧"组；学习者拒绝加入则记一行备注，不再反复提议。
@@ -141,6 +143,8 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 **Always**
 
 - 每节产出即跑 `assets/check-lesson.py`，未通过不进下一小节
+- 每节双格式同产出——`lessons/markdown/` 缺同名 `.md` 副本即该节未完成（check-lesson.py 会 FAIL）
+- 摸底与核实的可信来源即时沉淀 `library/`——researcher 返回后立即写；第 1 节自检发现空 library 即回补
 - 开场零提问；产出不回头、答错只记录；悬空自明（练习文件在而档案无记录）
 - 工作区文件一律小写英文；教学语言跟随学习者
 - 准确性永远压过流畅；核实修正了内容就直说，不悄悄糊弄
@@ -150,4 +154,4 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 1. **错题落档**——练习报告已入 lessons/answer.md（全对也记），已核实
 2. **悬空自明**——未提交的练习页留在原处，下次会话优先补练
 3. **资源沉淀**——library/ 已有本次摸底/核实的来源条目（逐条检查；为空则回补写入）；resources.md 已登记其余来源
-4. **更新思维导图**——派 diagram-maker 重绘 `lessons/src/mindmap.svg`（全部已产出小节 + 计划未产出置灰），更新 `mindmap.md` 壳 MD（wikilink 与各分支跳转）
+4. **更新思维导图**——派 diagram-maker 更新 `lessons/src/mindmap.drawio` 源（全部已产出小节；计划未产出加"（计划）"后缀），经 drawio_extract 验证后 redraw 出 `mindmap.svg`；更新 `mindmap.md` 壳 MD（wikilink 与各分支跳转）

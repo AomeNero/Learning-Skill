@@ -11,6 +11,8 @@
   5  练习总页：每节（section.sec）题数 ≤4，每题恰好 4 个选项（radio），
      含"不知道"末项；SECTIONS 数据与 section 数一致
   6  有公式外链时渲染调用（renderMathInElement）在位
+  7  双格式：lessons/markdown/ 存在同名 .md 副本（缺 → 不通过）
+  ⚠  第 1 节自检附带：library/ 为空时打印警告（不阻断退出码）
 
 退出码 0 = 通过；1 = 有问题（逐项打印 ✗ 与原因）。
 """
@@ -43,6 +45,25 @@ def check(course_path, quiz_path):
         return problems
 
     course, quiz = texts[course_path], texts[quiz_path]
+
+    # 7 双格式：Obsidian 副本
+    course_base = os.path.dirname(os.path.abspath(course_path))
+    stem = os.path.splitext(os.path.basename(course_path))[0]
+    md_path = os.path.join(course_base, "markdown", stem + ".md")
+    item(os.path.isfile(md_path) and os.path.getsize(md_path) > 0,
+         "双格式：markdown/ 同名 .md 副本在位",
+         f"缺 lessons/markdown/{stem}.md —— Obsidian 副本与 HTML 同节产出，缺则该节未完成")
+
+    # ⚠ 第 1 节附带：library 沉淀检查（仅警告，不影响退出码）
+    m_num = re.match(r"^(\d+)", stem)
+    if m_num and int(m_num.group(1)) == 1:
+        lib = os.path.join(os.path.dirname(course_base), "library")
+        has_lib_md = os.path.isdir(lib) and any(
+            f.endswith(".md") for f in os.listdir(lib))
+        if not has_lib_md:
+            print("  ⚠ library/ 为空——规划步摸底的可信来源应已沉淀为 "
+                  "library/000N-*.md，立即补写后再继续（完全离线零来源时除外，"
+                  "但须向学习者明示相关内容未经核实）")
 
     # 2 公式外链资产
     for name, html in (("课程", course), ("练习页", quiz)):
