@@ -10,7 +10,7 @@
 - `skills/diagram-design/` — 课程配图**首选**：全类型图示（架构/流程/时序/ER 等）产出 SVG
 - `skills/visualize/` — 备用配图链：diagram-design 不可用时派 maker 产出经验证的 SVG
 - `skills/browser-act/` / `skills/obsidian-markdown/` — 协同技能：浏览器操作与页面演示、Obsidian Markdown 格式约定
-- `agents/researcher.md` — 网络调研员：教学中的事实核实、课前主题摸底，产出带出处的结构化简报
+- `agents/researcher.md` — 网络调研员：教学中的事实核实、课前主题摸底，产出带出处的结构化简报，并把最优质来源全文直写工作区 library/（brief 必含 library/ 绝对路径）
 - `docs/` — 项目文档：[Skill-指南](docs/Skill-指南.md)（系统全景与流程规格）、[template-布局](docs/template-布局.md)（模板布局分析）
 - `agents/diagram-maker.md` — 配图制作者：把 brief 变成 SVG 成品（mermaid 类 CLI 渲染并亲眼看临时 PNG 验证；SVG 类手写并逐项源码审查），课程直接外链引用，不转 PNG
 
@@ -19,7 +19,7 @@
 一次完整的教学会话分四个阶段，永远按序全跑；教学对象默认零基础，不做水平测绘：
 
 1. **目标访谈**——不判分的追问，把"我想理解 X"追到具体为止；同时访谈你为什么学（至多 2-3 轮），落成使命文档。
-2. **规划**——结合你的目标，画出本次课程的依赖图（无条件真理在根部，推导事实挂在上面，你的目标在汇点），展示给你看，声明"有异议随时喊停"后直接开教。计划就是教学顺序。
+2. **规划**——先读 library/ 资料层（不足时派 researcher 摸底，来源全文直接入库），结合你的目标画出本次课程的依赖图（无条件真理在根部，推导事实挂在上面，你的目标在汇点），展示给你看，声明"有异议随时喊停"后直接开教。计划就是教学顺序。
 3. **课程产出（静默批量）**——按依赖图逐节产出：课程 HTML（教学全在课程正文——逐节点给动机、确立、连接，对话不复述），每节把 ≤4 道单选题追加进唯一的 `lessons/question.html`，逐节跑 check-lesson.py 自检（课程 HTML 与 `lessons/markdown/` Obsidian 副本双格式缺一即 FAIL，首节自检同时盯 library 沉淀）；**从产出到一次性汇报绝对零提问零输出**，全部完成后一次性汇报"共 N 节"。
 4. **检索练习**——打开 `lessons/question.html`（全部小节的练习集中于此）：按节序阅读课程后回来**凭记忆**作答，全部答完**一次提交**——页面当场判分（按节分块）并生成作答报告，自动弹出"另存为"（文件名预填 answer.md），保存到练习页同级的 lessons/ 目录；已有同名文件确认替换即自动追加（历史不丢，回退复制）。答错只记录不回头——错题驱动下次学习优先重教（重写对应课程节 + 确认题划销）。
 
@@ -28,7 +28,7 @@
 - `docs/` —— 状态管理文件：`mission.md`（锚）、`resources.md`（可信资源全清单）
 - `lessons/mindmap.html` —— **知识体系思维导图**：单 HTML 全景页（课程同款设计系统），分支点击跳转各课程，会话末以现有文件为底增量更新，手工调整不丢
 - `library/` —— **资料层**：网络下载的原始资料全文（YAML frontmatter + A/B/C 可信度分级 + 关联课程），Obsidian 原生搜索——越用越厚，教前优先读取
-- `lessons/` —— 课程**双格式** `000N-*.html`（浏览器阅读）+ `markdown/000N-*.md`（Obsidian 副本：LaTeX/mermaid/wikilink 原生渲染）+ **练习总页 `question.html`**（所有小节的检索练习集中于此）+ `answer.md`（练习与错题档案；全对也记，驱动优先重教）+ `src/`（配图 SVG 与 katex 共享资产）——**课程即已讲，answer.md 有练习记录即已练；整个工作区就是一个 Obsidian vault，直接打开根目录即个人知识库**
+- `lessons/` —— 课程**双格式** `000N-<中文标题>.html`（浏览器阅读）+ `markdown/000N-<中文标题>.md`（Obsidian 副本：LaTeX/mermaid/wikilink 原生渲染）+ **练习总页 `question.html`**（所有小节的检索练习集中于此）+ `answer.md`（练习与错题档案；全对也记，驱动优先重教）+ `src/`（配图 SVG 与 katex 共享资产）——**课程即已讲，answer.md 有练习记录即已练；整个工作区就是一个 Obsidian vault，直接打开根目录即个人知识库**
 
 下次会话开场零提问，直接从上次的前沿续接；`lessons/answer.md` 里未清的错题所涉知识点会融入教学流优先重教，重教后出一道确认题钉住、答对划销——既是间隔复习，也检验知识是否真的锁住了。
 

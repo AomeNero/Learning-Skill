@@ -6,7 +6,7 @@
 >
 > 交互属性图例：🔴 **判分**（有对错，立即反馈）｜🟡 **对话**（不判分，收集偏好/信息）｜🟢 **无交互**（教师/子代理独立执行）｜📄 **产物**（文件落盘）
 >
-> 当前版本快照：目标访谈 → 规划 → **课程静默批量产出**（双格式 HTML+MD）→ **检索练习**（两遍式）；零基础默认、无测绘、无 Socratic；检索练习集中 question.html（页内自判分、报告直写落档）；KaTeX 相对外链；**工作区即 Obsidian vault**（5 类文件，library/ 资料层 + A/B/C 可信度分级）；SKILL.md 159 行（首尾置重要信息版，含零提问绝对红线）。
+> 当前版本快照：只有一种模式——**教学会话**；目标访谈 → 规划（researcher 直写资料层入库）→ **课程静默批量产出**（双格式 HTML+MD，`000N-<中文标题>` 命名）→ **检索练习**；零基础默认、无测绘、无 Socratic；检索练习集中 question.html（页内自判分、报告直写落档）；KaTeX 相对外链；**工作区即 Obsidian vault**（library/ 资料层 + A/B/C 可信度分级 + 知识全景 mindmap.html）；SKILL.md 154 行（首尾置重要信息版，含零提问绝对红线）。
 
 ---
 
@@ -23,7 +23,7 @@
 | `skills/learning/references/*-format.md` | 三份文档格式规范：使命 / 资源 / library（资料层 + A/B/C 分级） |
 | `skills/diagram-design/` | 课程配图**首选**——全类型图库产出 SVG |
 | `skills/visualize/` + `agents/diagram-maker.md` | 备用配图链：diagram-design 不可用时，教师出 brief → maker 产出 SVG（mermaid 类渲染验证 / SVG 类源码审查） |
-| `agents/researcher.md` | 网络调研员：课前摸底、事实核实，产出带出处的简报 |
+| `agents/researcher.md` | 网络调研员：课前摸底、事实核实，产出带出处的简报，并把最优质来源全文直写工作区 library/（brief 必含 library/ 绝对路径） |
 | `skills/browser-act/` `skills/diagram-design/` `skills/obsidian-markdown/` | 协同技能：浏览器演示、正式图示、Obsidian 格式约定 |
 
 ---
@@ -67,7 +67,7 @@ flowchart TD
     subgraph P2 ["阶段 2 · 规划"]
         H["researcher 摸底<br/>🟢 摸底不可省"] --> I["依赖图设计 + 压测根部<br/>🟢 零基础从无条件真理起图"]
         I --> J["呈现计划（散文+mermaid）<br/>🟡 非阻塞——声明可喊停后直接继续"]
-        J --> K["📄 resources.md 沉淀摸底产出<br/>（计划不落独立文件，只在对话呈现）"]
+        J --> K["📄 researcher 直写 library/ 条目（brief 必含绝对路径）<br/>计划不落独立文件，只在对话呈现"]
     end
 
     K --> L
@@ -83,7 +83,7 @@ flowchart TD
     end
     PB2 -- 否 --> R
 
-    R["会话结束落盘 🟢<br/>📄 resources 增量 · answer.md 落档核实"] --> S([会话结束])
+    R["会话结束收尾四查 🟢<br/>📄 answer.md 核实 · library/ 核实 · resources 增量 · mindmap.html 增量更新"] --> S([会话结束])
 
     E -.->|"错题驱动：answer.md 未清错题<br/>优先排入重教（融入教学流）"| L
 
@@ -119,7 +119,7 @@ flowchart TD
 
 ### 5.3 阶段 2——规划（杠杆率最高的一步）
 
-1. **先读 library/**（🟢）：已有资料优先消化，不从零开始；不足再派 `researcher` 摸底（不可用则自带搜索），可信产出沉淀进 library/ 含 A/B/C 分级。**摸底不可省，只换执行者。**
+1. **先读 library/**（🟢）：已有资料优先消化，不从零开始；不足再派 `researcher` 摸底——**brief 必含 library/ 绝对路径**，researcher 按知识点取精 1-2 条把最优质全文直写 library/、就地 A/B/C 评级；主会话返回后核实缺则兜底（researcher 不可用则自带搜索并自行写入）。**摸底不可省，只换执行者。**
 2. **设计依赖图**（🟢）：无条件真理（有无原子单元）、错题重教需求（answer.md）、有动机的发现路径、知识/技能定性。
 3. **压测根部**（🟢）：每个基础节点问"对*这个学习者*真是无条件真理，还是伪装的定理"——推得出来就压下去，不把课程奠基在半山腰。
 4. **呈现计划**（🟡 非阻塞）：散文思路 + 小型 mermaid 依赖图（根=无条件真理，汇点=目标）——这张图就是教学顺序；声明"有异议随时喊停"后直接开教。
@@ -141,7 +141,7 @@ flowchart TD
   3. 连接   —— 依赖边显式化
 每 2-3 个节点构成一个小节 →
 
-每节产出（📄）：课程双格式 000N-<slug>.html + 000N-<slug>.md（MD 为 Obsidian 副本）+
+每节产出（📄）：课程双格式 000N-<中文标题>.html + 000N-<中文标题>.md（MD 为 Obsidian 副本）+
   并把该节 ≤4 道题追加进 lessons/question.html（答案内嵌 SECTIONS 数据）
   → 产出即自检：assets/check-lesson.py，13 项通过才写下一节
   → 配图（🟢 条件触发）：diagram-design 首选 → visualize/maker 回退 → lessons/src/*.svg
@@ -167,7 +167,8 @@ flowchart TD
 
 | 产物 | 条件 |
 |------|------|
-| 📄 `library/` 增量 | 摸底与核实的最佳来源沉淀（A/B/C 分级） |
+| 📄 `library/` 核实 | researcher 直写；主会话逐条核实缺则兜底（摸底与核实的最佳来源，A/B/C 分级） |
+| 📄 `lessons/mindmap.html` 增量 | 知识体系全景更新：全部已产出小节链接入图（计划未产出的加"（计划）"后缀不链接）；以现有文件为底只增改本次涉及分支 |
 | 📄 `docs/resources.md` 增量 | 其余可信源登记；学习者拒绝社区等偏好备注 |
 | 📄 answer.md | 练习报告已回收核实（全对也记）；未提交的练习页即悬空（自明），下次优先补练 |
 
@@ -198,10 +199,10 @@ flowchart TD
 | 文档 | 形态 | 首次生成时机 | 后续更新节奏 | 角色 |
 |------|------|--------------|--------------|------|
 | `docs/mission.md` | Markdown | **会话开始**：使命访谈（≤2-3 轮）后初始化 | 使命修订时（先确认；错题模式可作信号）；换目标时在新工作区重建 | 锚——一切教学决策回溯到它 |
-| `docs/resources.md` | Markdown | **会话开始**：与 mission 一起初始化 | 规划摸底、教学中核实的可信产出随时登记；会话末统一沉淀 | 情境知识支撑——越学越"知道去哪找" |
+| `docs/resources.md` | Markdown | **会话开始**：与 mission 一起初始化 | 其余可信源随时登记（全文沉淀归 library/）；会话末统一沉淀 | 情境知识支撑——越学越"知道去哪找" |
 | `lessons/000N-*.html` + `markdown/*.md` + `question.html` | HTML+MD（三栏课程页 + markdown/ 副本 + 练习总页） | **阶段 3a**：每节产出双格式课程并把练习追加进 question.html | **导航全链接**（零回填）；练习页提交后报告落 answer.md | 复习单元 + 练习载体 |
 | `lessons/answer.md` | Markdown | **阶段 3**：首次练习提交自动弹存时创建（与练习页同级） | 每次检索练习一条记录（全对也记）；重教通过确认题后划销 | 练习与错题档案——已练证据 + 重教驱动 |
-| `library/000N-*.md` | MD | **阶段 2**：摸底可信产出即沉淀（原始全文+A/B/C 分级+关联课程） | 越用越厚，教学优先读取 | **资料层**——知识库的原料 |
+| `library/000N-<中文标题>.md` | MD | **阶段 2**：researcher 调研时直写（brief 必含绝对路径；原始全文 + A/B/C 就地评级 + related 由老师回填） | 主会话返回后核实缺则兜底；越用越厚，教学优先读取 | **资料层**——知识库的原料 |
 | `lessons/mindmap.html` | HTML | **会话末**：收尾四查第 4 项 | 以现有文件为底增量更新 | **知识体系全景**——分支点击跳转各课程 |
 | `lessons/src/*.svg` | SVG | **阶段 3a**：教学配图需要时（优先 diagram-design，回退 maker；不转 PNG） | — | 全部配图的存放处；课程以 `src/<文件名>.svg` 外链引用（src/ 另含共享 katex/ 与中间产物） |
 
@@ -235,7 +236,7 @@ flowchart TD
 
 **lessons/answer.md——练习与错题档案**（与练习页同目录）：每次检索练习一条记录 `## <课程基名> · <日期> · <对>/<总>`，其下逐条错题（题面 | 我答 | 正确答案 | 缺口说明），全对也记（已练证据）。数据来自练习页的作答报告——提交后自动弹"另存为"：文件名预填 answer.md 存到练习页同级；同名替换即读旧追加写回，历史不丢（回退复制贴回由教师落档）；页面已判，教师只核实不重判。三条生命线：**落档** → **重教**（未划销错题融入教学流优先重教 + 确认题）→ **划销**（答对标记已清除，保留可见）。反复错题模式是使命与方向优化的天然信号。
 
-**lessons/*——课程（双格式）与练习**：一门课程 = 一个小节，`000N-<dash-case-name>`（`.html` + `.md` 双格式），编号取最大加一。MD 副本与 HTML 内容一致（LaTeX/mermaid/wikilink，链接用 wikilink）。HTML 按 template.html 制作：轻量 HTML（约 20KB），三栏（左=全部计划小节导航三态快照、中=正文、右=本节大纲锚点）；数学写 LaTeX、TeX 源码留在 HTML，KaTeX 外链渲染；每门课程带首选一手资源与"有问题随时问 agent"提醒。练习页按 question-template.html 制作（标题"<课程标题>的检索练习"）：单选、提交自判分、作答报告直写/回退。
+**lessons/*——课程（双格式）与练习**：一门课程 = 一个小节，`000N-<中文标题>`（`.html` + `.md` 双格式），编号取最大加一。MD 副本与 HTML 内容一致（LaTeX/mermaid/wikilink，链接用 wikilink）。HTML 按 template.html 制作：轻量 HTML（约 20KB），三栏（左=全部计划小节导航三态快照、中=正文、右=本节大纲锚点）；数学写 LaTeX、TeX 源码留在 HTML，KaTeX 外链渲染；每门课程带首选一手资源与"有问题随时问 agent"提醒。练习页按 question-template.html 制作（标题"<课程标题>的检索练习"）：单选、提交自判分、作答报告直写/回退。
 
 ---
 
@@ -262,7 +263,7 @@ flowchart TD
 
 ## 10. 准确性纪律与智慧社区
 
-**准确性铁律**：对任何事实、名称、日期、公式有一丝不确定，先核实再说出口——优先派 `researcher` 子代理；不可用则自带搜索亲自核实；都不可用则明示"此条未经核实"。准确性永远压过流畅；核实修正了内容就直说。可信产出沉淀进 resources.md。
+**准确性铁律**：对任何事实、名称、日期、公式有一丝不确定，先核实再说出口——优先派 `researcher` 子代理（brief 必含工作区 library/ 绝对路径——researcher 把最优质来源全文直写 library/）；不可用则自带搜索亲自核实并由教师写入；都不可用则明示"此条未经核实"。准确性永远压过流畅；核实修正了内容就直说。其余可信来源登记进 resources.md。
 
 **智慧与社区**：学习者问出需要智慧的问题——先尝试回答，最终交棒社区。主动找高信誉社区登记进 resources.md"智慧"组；拒绝加入则记备注，不再反复提议。
 
@@ -272,7 +273,7 @@ flowchart TD
 
 | 能力 | 执行者 | 时机 |
 |------|--------|------|
-| 领域摸底 / 事实核实 | `agents/researcher.md` | 阶段 2 规划前；教学中存疑时 |
+| 领域摸底 / 事实核实 | `agents/researcher.md`（brief 必含 library/ 绝对路径） | 阶段 2 规划前；教学中存疑时 |
 | 课程配图 | 首选 `diagram-design`，回退 `visualize` → `agents/diagram-maker.md` | 阶段 3a 教学中；**图型按 visualize 六种选型表**（依赖图/思维导图/流程图/时序图/状态机/对比图） |
 | 浏览器操作 / 页面演示 | `browser-act` | 需要演示或交互验证时 |
 | 备用配图 | `visualize` 技能 → `agents/diagram-maker.md` | diagram-design 不可用或不契当前风格时 |
