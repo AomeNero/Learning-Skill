@@ -6,7 +6,7 @@
 >
 > 交互属性图例：🔴 **判分**（有对错，立即反馈）｜🟡 **对话**（不判分，收集偏好/信息）｜🟢 **无交互**（教师/子代理独立执行）｜📄 **产物**（文件落盘）
 >
-> 当前版本快照：只有一种模式——**教学会话**；目标访谈 → 规划（researcher 直写资料层入库）→ **课程静默批量产出**（双格式 HTML+MD，`000N-<中文标题>` 命名）→ **检索练习**；零基础默认、无测绘、无 Socratic；检索练习集中 question.html（页内自判分、报告直写落档）；KaTeX 相对外链；**工作区即 Obsidian vault**（library/ 资料层 + A/B/C 可信度分级 + 知识全景 mindmap.html）；SKILL.md 154 行（首尾置重要信息版，含零提问绝对红线）。
+> 当前版本快照：只有一种模式——**教学会话**；目标访谈 → 规划（researcher 直写资料层入库）→ **课程静默批量产出**（双格式 HTML+MD，`000N-<中文标题>` 命名）→ **检索练习**；零基础默认、无测绘、无 Socratic；检索练习集中 question.html（页内自判分、报告直写落档）；KaTeX 相对外链；**工作区即 Obsidian vault**（library/ 资料层 + A/B/C 可信度分级 + 知识全景 mindmap.html）；SKILL.md 122 行（首尾置重要信息版，含零提问绝对红线；quiz 协议与课程制作规范下沉 references/）。
 
 ---
 
@@ -14,13 +14,13 @@
 
 | 路径 | 角色 |
 |------|------|
-| `skills/learning/SKILL.md` | 教学系统主体——哲学、流程、quiz 协议、工作区约定、红线清单 |
+| `skills/learning/SKILL.md` | 教学系统主体——哲学、流程、工作区约定、红线清单（quiz 与课程制作细节在 references/） |
 | `skills/learning/assets/template.html` | 课程模板——三栏课程页（左=计划小节导航，中=正文，右=本节大纲） |
 | `skills/learning/assets/question-template.html` | 练习总页模板（每主题一个）——所有小节练习按节分组集中；一次提交全部判分，自动弹"另存为"到同级 lessons/answer.md（同名替换即追加；回退复制） |
 | `skills/learning/assets/check-lesson.py` | 产物自检脚本——13 项检查（外链资产、占位残留、锚点一致、题数与选项结构） |
 | `skills/learning/assets/katex/` | KaTeX 资产（0.16.22）——embed.css（20 个 base64 字体）+ 渲染脚本；公式课程复制一份到工作区 lessons/src/katex/ 共享 |
 | `docs/template-布局.md` | 模板布局分析——三栏公式、设计令牌、配套资产说明 |
-| `skills/learning/references/*-format.md` | 三份文档格式规范：使命 / 资源 / library（资料层 + A/B/C 分级） |
+| `skills/learning/references/*-format.md` | 五份格式规范：使命 / 资源 / library（资料层 + A/B/C 分级）/ quiz（出题与判分）/ lesson（课程制作） |
 | `skills/diagram-design/` | 课程配图**首选**——全类型图库产出 SVG |
 | `skills/visualize/` + `agents/diagram-maker.md` | 备用配图链：diagram-design 不可用时，教师出 brief → maker 产出 SVG（mermaid 类渲染验证 / SVG 类源码审查） |
 | `agents/researcher.md` | 网络调研员：课前摸底、事实核实，产出带出处的简报，并把最优质来源全文直写工作区 library/（brief 必含 library/ 绝对路径） |
@@ -305,14 +305,14 @@ flowchart TD
 | 教学起点 | 零基础默认，无测绘 | 阶段 1 | 若恢复测绘可精确定位，但打断感与开局成本回归 |
 | 使命访谈轮数 | ≤2-3 | 会话开始 | 减 → 使命更模糊，教学锚更松 |
 | 小节粒度 | 2-3 节点/小节 | 阶段 3 | 直接决定练习频次与课程产出粒度 |
-| 检索练习题量 | ≤4 题（练习页自判分） | 阶段 3 / quiz 协议 | 改回 AskUserQuestion 弹窗 → 交互更快，但学习者失去"学完再答"的自定节奏 |
+| 检索练习题量 | ≤4 题（练习页自判分） | 阶段 3 / references/quiz-format.md | 改回 AskUserQuestion 弹窗 → 交互更快，但学习者失去"学完再答"的自定节奏 |
 | 课程产出节奏 | 每小节必产出课程并把练习追加进 question.html | 阶段 3a | 若恢复配对式练习文件，question.html 的追加逻辑需回改 |
 | 答错处理 | 只记录不回头，下次重教 | 阶段 3 | 改当场补教 → 纠错更快，但节奏被打断 |
 | 错题记录字段 | 题面\|错答\|正确答案\|小节\|日期 | 工作区清单 | 加字段（如误解类型）→ 分析更强，落盘更重 |
 | 错题划销策略 | 重教 + 确认题答对划销，保留可见 | 阶段 3 | 改物理删除 → 文件干净，丢失错题史信号 |
 | 教学形态 | 课程正文为唯一教学载体（对话零复述） | 原则 ii | 恢复对话内逐节讲述 → 即时性强，但产出与练习耦合、节奏被拆散 |
 | 开场复习 | 无（错题融入教学流） | 会话开始 | 加开场复考 → 结构化更强，开场不再零交互 |
-| 导航策略 | 全链接零回填（计划小节从第一课即链接，文件后到自然生效） | 课程制作规范 | 改回填 → 维护成本随课程数涨 |
+| 导航策略 | 全链接零回填（计划小节从第一课即链接，文件后到自然生效） | references/lesson-format.md | 改回填 → 维护成本随课程数涨 |
 | maker 迭代预算 | ≤5 轮 | agents/diagram-maker.md | 子代理止损线（验证分级：mermaid 渲染亲眼看 / SVG 源码审查） |
 
 ---
@@ -325,9 +325,9 @@ flowchart TD
 | 练习机制（时机/题量/答错处理） | `SKILL.md` 阶段 3 + quiz 协议 + 流利/存储强度节 + 本文 §5.4/§13 |
 | 错题驱动机制 | `SKILL.md` 工作区清单（answer.md 条目）+ 会话开始（续接）+ 阶段 2/3 + 跨主题裁决 + 本文 §12 |
 | 教学形态（讲述式） | `SKILL.md` 原则 ii + 阶段 2/3 + 本文 §13 |
-| 课程形态（一文件一小节/三栏） | `SKILL.md` 课程制作规范 + `assets/template.html` + `docs/template-布局.md` |
+| 课程形态（一文件一小节/三栏） | `references/lesson-format.md` + `assets/template.html` + `docs/template-布局.md` |
 | 练习页形态（题面/判分/报告） | `assets/question-template.html` + `SKILL.md` quiz 协议 + 阶段 3 |
 | KaTeX 资产（版本/引入方式） | `assets/katex/`（含 README）+ 两模板的外链块 + `docs/template-布局.md` §六 |
-| quiz 规则（选项构造） | `SKILL.md` quiz 协议 + 阶段 3 |
+| quiz 规则（选项构造） | `references/quiz-format.md`（SKILL.md 第 4 步引用）+ 阶段 3 |
 | 产物自检 | `assets/check-lesson.py` + `SKILL.md` 阶段 3（产出即自检） |
 | 子代理行为 | `agents/*.md`（独立文件，SKILL.md 只引用） |
