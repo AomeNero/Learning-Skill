@@ -194,7 +194,7 @@ flowchart TD
 
 ## 7. 工作区文档全景
 
-**工作区即 Obsidian vault**——直接用 Obsidian 打开工作区根目录，MD 文件原生渲染 LaTeX/mermaid/wikilink。布局：`docs/`（mission、resources、answer）· `library/`（资料层）· `lessons/`（双格式课程 + question.html + answer.md + src/）。**所有文件一律小写英文命名**，wikilink 互链。
+**工作区即 Obsidian vault**——直接用 Obsidian 打开工作区根目录，MD 文件原生渲染 LaTeX/mermaid/wikilink。布局：`docs/`（mission、resources、answer）· `library/`（资料层）· `lessons/`（双格式课程 + question.html + answer.md + src/）。结构文件小写英文，课程与 library 条目用 `000N-<中文标题>`；wikilink 互链。
 
 ### 7.1 总表——什么阶段生成什么
 
@@ -205,7 +205,7 @@ flowchart TD
 | `lessons/000N-*.html` + `markdown/*.md` + `question.html` | HTML+MD（三栏课程页 + markdown/ 副本 + 练习总页） | **阶段 3a**：每节产出双格式课程并把练习追加进 question.html | **导航全链接**（零回填）；练习页提交后报告落 answer.md | 复习单元 + 练习载体 |
 | `lessons/answer.md` | Markdown | **阶段 3**：首次练习提交自动弹存时创建（与练习页同级） | 每次检索练习一条记录（全对也记）；重教通过确认题后划销 | 练习与错题档案——已练证据 + 重教驱动 |
 | `library/000N-*.md` | MD | **阶段 2**：摸底可信产出即沉淀（原始全文+A/B/C 分级+关联课程） | 越用越厚，教学优先读取 | **资料层**——知识库的原料 |
-| `mindmap.md` + `lessons/src/mindmap.svg` | MD+SVG | **会话末**：收尾四查第 4 项 | 覆盖重绘 | **知识体系全景**——壳 MD 嵌入 SVG + wikilink 跳转 |
+| `lessons/mindmap.html` | HTML | **会话末**：收尾四查第 4 项 | 以现有文件为底增量更新 | **知识体系全景**——分支点击跳转各课程 |
 | `lessons/src/*.svg` | SVG | **阶段 3a**：教学配图需要时（优先 diagram-design，回退 maker；不转 PNG） | — | 全部配图的存放处；课程以 `src/<文件名>.svg` 外链引用（src/ 另含共享 katex/ 与中间产物） |
 
 ### 7.2 工作区目录树（成熟期形态）
@@ -215,19 +215,19 @@ flowchart TD
 ├── docs/                        # 状态管理文件（中间产物，小写英文命名）
 │   ├── mission.md               # 为什么学——锚
 │   └── resources.md             # 可信资源与社区
-├── mindmap.md                     # 知识体系思维导图（壳 MD，嵌入 SVG）
 ├── library/                       # 资料层——已消化的最佳来源（A/B/C 分级）
-│   ├── 0001-tcp-spec-source.md  # 原始资料全文（YAML头+credibility+related）
-│   └── 0002-quic-rfc-summary.md
+│   ├── 0001-TCP握手规范原文.md   # 原始资料全文（YAML头+credibility+related）
+│   └── 0002-QUIC-RFC摘要.md
 └── lessons/
-    ├── 0001-a-journey-of-a-message.html   # 一门课程 = 一个小节
+    ├── 0001-一条消息的旅程.html           # 一门课程 = 一个小节
     ├── markdown/                  # MD 副本目录
-    │   └── 0001-a-journey-of-a-message.md   # Obsidian 副本（LaTeX/mermaid/wikilink）
+    │   └── 0001-一条消息的旅程.md           # Obsidian 副本（LaTeX/mermaid/wikilink）
     ├── answer.md                # 练习与错题档案——与 question.html 同级
-    ├── 0002-packets-the-atom.html
-    ├── 0003-ip-best-effort.html
+    ├── 0002-数据包通信的原子单元.html
+    ├── 0003-IP尽力而为.html
     ├── question.html             # 练习总页——所有小节的检索练习集中于此
-    └── src/                      # 配图 *.svg + mindmap.svg + katex/ 共享资产
+    ├── mindmap.html              # 知识体系思维导图——全景页，分支点击跳转各课程
+    └── src/                      # 配图 *.svg + katex/ 共享资产
 ```
 
 ### 7.3 各文档详述
@@ -247,7 +247,7 @@ flowchart TD
 | 产物 | 形态 | 角色 |
 |------|------|------|
 | `lessons/*.html` + `markdown/*.md` | HTML+MD | **复习 + 过程**——课程双格式 + question.html 练习总页 |
-| `library/*.md` | MD | **资料层**——网络下载的原始资料全文（A/B/C 分级 + moban YAML），Obsidian 原生搜索 |
+| `library/000N-<中文标题>.md` | MD | **资料层**——网络下载的原始资料全文（A/B/C 分级 + YAML frontmatter），Obsidian 原生搜索 |
 
 会话过程不落盘——对话即过程，课程即沉淀；跨会话状态由 `docs/` 三件承载，进度由 `lessons/` 目录自证。
 
