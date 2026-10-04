@@ -34,14 +34,14 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 **选址**：空目录或专用学习目录就地作为工作区。🔴 CHECKPOINT：非空一般目录（尤其代码仓库）先与学习者确认，默认独立目录，不经确认不落文件。
 
-**布局**（一律小写英文，wikilink 互链；**整个工作区就是一个 Obsidian vault**——直接用 Obsidian 打开根目录，MD 文件原生渲染 LaTeX/mermaid/wikilink。进度自证：课程存在即已讲，answer.md 有记录即已练）：
+**布局**（结构文件一律小写英文，课程与 library 条目用 `000N-<中文标题>`；wikilink 互链；**整个工作区就是一个 Obsidian vault**——直接用 Obsidian 打开根目录，MD 文件原生渲染 LaTeX/mermaid/wikilink。进度自证：课程存在即已讲，answer.md 有记录即已练）：
 
 | 路径 | 作用与规格 |
 |------|-----------|
 | `docs/mission.md` | 学习者**为什么**学，一切教学以它为锚。格式见 [mission-format.md](./references/mission-format.md)。🔴 CHECKPOINT：修订前先确认。 |
 | `docs/resources.md` | 可信资源与社区全清单。格式见 [resources-format.md](./references/resources-format.md)。 |
 | `lessons/answer.md` | **练习与错题档案**——每次检索练习一条：`## <课程基名> · <日期> · <对>/<总>`，其下逐条错题（题面 \| 我答 \| 正确答案 \| 缺口说明）；**全对也记**（已练证据）。数据来自练习页的作答报告——**提交后自动弹"另存为"**：文件名预填 answer.md，保存到练习页同级目录；已有同名文件时确认替换，页面做读旧追加写回（历史不丢）（回退复制贴回由教师落档）；页面已判，教师只核实不重判。未划销错题驱动下次重教——重教通过确认题即划销（保留可见，标已清除）。首次练习落档时创建。 |
-| `library/*.md` | **资料层**——网络下载的原始资料全文（网页/文章/文档的完整 MD 转存，不做摘要压缩）：每条一个 MD，YAML frontmatter（title/source/author/published/created/description/tags）+ credibility A·B·C 分级 + related 关联课程。格式见 [library-format.md](./references/library-format.md)。researcher 摸底与教学中核实的可信产出直接沉淀全文于此；教学时优先读取，越用越厚。 |
+| `library/000N-<中文标题>.md` | **资料层**——网络下载的原始资料全文（网页/文章/文档的完整 MD 转存，不做摘要压缩）：每条一个 MD，YAML frontmatter（title/source/created/credibility 等）+ credibility A·B·C 分级（researcher 就地评级）+ related 关联课程（老师回填）。格式见 [library-format.md](./references/library-format.md)。researcher 调研时直写入库（brief 必含 library/ 绝对路径），主会话返回后核实、缺则兜底补写；教学时优先读取，越用越厚。 |
 | `lessons/question.html` | **练习总页**（每主题一个，按 [question-template.html](./assets/question-template.html) 制作）——所有小节的检索练习按节分组集中于此，产出阶段逐节追加；一次提交全部判分，报告存一个总页 lessons/answer.md。 |
 | `lessons/000N-*.html` + `lessons/markdown/000N-*.md` | 课程**双格式**：浏览器阅读版 + Obsidian 副本。制作规范见下文。 |
 | `lessons/src/*.svg` | 全部配图的存放处（优先 `diagram-design` 产出 SVG；不可用时 `visualize` 派 maker：mermaid 类 CLI 渲染、SVG 类手写，均不转 PNG）；课程以外链 `<img src="src/<文件名>.svg">` 引用。同时收纳共享 `katex/`、maker 中间产物与思维导图源 `mindmap.drawio`。 |
@@ -55,7 +55,7 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 ## 教学流水线（六步永远按序全跑；缩放规模，绝不缩放形状）
 
-**准确性铁律**：对任何事实、名称、日期、公式有一丝不确定，先核实再说出口——优先派 `researcher` 子代理；不可用则自带 WebSearch/WebFetch 亲自核实；都不可用则明示"此条未经核实"。准确性永远压过流畅；核实修正了内容就直说。课程引用 library 资料时带可信度标注（如"据规范（A）"）——学习者一眼看出知识置信度。
+**准确性铁律**：对任何事实、名称、日期、公式有一丝不确定，先核实再说出口——优先派 `researcher` 子代理（**brief 必含工作区 library/ 的绝对路径**——researcher 把最优质来源全文直写入库；教师自带搜索核实时由教师写入）；不可用则自带 WebSearch/WebFetch 亲自核实；都不可用则明示"此条未经核实"。准确性永远压过流畅；核实修正了内容就直说。课程引用 library 资料时带可信度标注（如"据规范（A）"）——学习者一眼看出知识置信度。
 
 **1. 探测工作区**——见"学习工作区 · 会话开始"：新工作区走选址 🔴 + 使命访谈；续接读档案、定前沿、错题优先重教；开场零提问。
 
@@ -63,7 +63,7 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 **3. 规划（杠杆率最高，不要赶）**——
 - **先读 `library/`**——已有资料优先消化，不从零开始；不足再派 `researcher` 摸底（核心概念、第一性原理、常见坑；不可用则自带搜索）。**摸底不可省，只换执行者。**
-- **researcher 返回后立即写 library/**（硬性动作，非可选）：把简报中每个可信来源转写为一个 `library/000N-<slug>.md` 文件——先读 [library-format.md](./references/library-format.md) 确认格式，再按其 YAML frontmatter + 原始内容全文写入。`library/` 目录不存在则首次写入时创建。
+- **researcher 返回后核实 library/**（硬性动作，非可选）：researcher 已按 brief 里的路径把最优质来源全文直写入库（按知识点 1–2 条、就地评级，见其简报"入库"节）。主会话逐条核实——条目在位、frontmatter 完整、全文未摘要；缺漏（简报"缺口"节有声明）则兜底补写：重新抓取全文，按 [library-format.md](./references/library-format.md) 写入。
 - 对着哲学规划：哪些无条件真理、有无原子单元、有动机的发现路径是什么、知识还是技能、反馈循环怎么搭；未划销错题优先排入重教。
 - **压测根部**：每个基础节点问"对*这个学习者*真是无条件真理，还是伪装的定理"——推得出来就压下去，不把课程奠基在半山腰。
 - **呈现计划**（永远在教学之前）：散文思路（覆盖什么、顺序、为什么，锚定使命）+ 小型 mermaid 依赖图（根=无条件真理，汇点=目标）——这张图就是教学顺序。**非阻塞**：声明"有异议随时喊停"后直接进入静默产出。
@@ -96,9 +96,9 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 ## 课程制作规范
 
-课程是**核心落盘教学产物**——会话不落盘，对话即过程、课程即沉淀。**一门课程 = 一个小节**，命名 `000N-<dash-case-name>`，编号取 lessons/ 现有最大加一，**每节产出双格式**（`.html` + `.md`）。
+课程是**核心落盘教学产物**——会话不落盘，对话即过程、课程即沉淀。**一门课程 = 一个小节**，命名 `000N-<中文标题>`，编号取 lessons/ 现有最大加一，**每节产出双格式**（`.html` + `.md`）。
 
-- **`.md` 副本（Obsidian）**：存 `lessons/markdown/000N-<slug>.md`，与 HTML 内容一致——LaTeX 数学、mermaid 依赖图、wikilink 互链（替代 HTML 锚点）；引用 library 条目用 `[[library/000N-xxx]]`。
+- **`.md` 副本（Obsidian）**：存 `lessons/markdown/000N-<中文标题>.md`，与 HTML 内容一致——LaTeX 数学、mermaid 依赖图、wikilink 互链（替代 HTML 锚点）；引用 library 条目用 `[[library/000N-xxx]]`。
 - 按 [template.html](./assets/template.html) 设计系统制作 `.html`（奶油画布、衬线标题、深墨代码窗、珊瑚点睛；模板缺失时以四视觉词自建精简系统不阻塞）。轻量 HTML（约 20KB），无外部网络依赖。
 - **三栏**：左 = 全部计划小节导航（从第一课起全部为可点击链接，当前高亮；未产出文件点击暂 404，产出后自然生效，零回填）；中 = 正文；右 = 本节大纲（页内锚点）。
 - **数学**：写 LaTeX（行内 `$x$`、独立 `$$…$$`），TeX 源码保留在 HTML，KaTeX 浏览器端渲染。仅当本节有公式：① Bash 把技能 `assets/katex/` 三件复制到 `lessons/src/katex/`（全工作区一份共用；**勿读入上下文**）；② 保留模板的相对外链与渲染调用。无公式课程删外链块；资产缺失时 TeX 源码原样显示；资产不可用降级 MathML。
@@ -144,14 +144,14 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 - 每节产出即跑 `assets/check-lesson.py`，未通过不进下一小节
 - 每节双格式同产出——`lessons/markdown/` 缺同名 `.md` 副本即该节未完成（check-lesson.py 会 FAIL）
-- 摸底与核实的可信来源即时沉淀 `library/`——researcher 返回后立即写；第 1 节自检发现空 library 即回补
+- 摸底与核实的可信来源即时沉淀 `library/`——researcher 直写、主会话核实缺则兜底补写；第 1 节自检发现空 library 即回补
 - 开场零提问；产出不回头、答错只记录；悬空自明（练习文件在而档案无记录）
-- 工作区文件一律小写英文；教学语言跟随学习者
+- 结构文件一律小写英文（docs/、question.html、answer.md、mindmap.md、src/），课程与 library 条目用 `000N-<中文标题>`；教学语言跟随学习者
 - 准确性永远压过流畅；核实修正了内容就直说，不悄悄糊弄
 
 **收尾四查**（会话结束前过一遍）
 
 1. **错题落档**——练习报告已入 lessons/answer.md（全对也记），已核实
 2. **悬空自明**——未提交的练习页留在原处，下次会话优先补练
-3. **资源沉淀**——library/ 已有本次摸底/核实的来源条目（逐条检查；为空则回补写入）；resources.md 已登记其余来源
+3. **资源沉淀**——library/ 已有本次摸底/核实的来源条目（逐条核实 researcher 已写入；缺则兜底补写）；resources.md 已登记其余来源
 4. **更新思维导图**——派 diagram-maker 更新 `lessons/src/mindmap.drawio` 源（全部已产出小节；计划未产出加"（计划）"后缀），经 drawio_extract 验证后 redraw 出 `mindmap.svg`；更新 `mindmap.md` 壳 MD（wikilink 与各分支跳转）
