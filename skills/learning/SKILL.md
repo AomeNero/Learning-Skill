@@ -44,8 +44,8 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 | `library/000N-<中文标题>.md` | **资料层**——网络下载的原始资料全文（网页/文章/文档的完整 MD 转存，不做摘要压缩）：每条一个 MD，YAML frontmatter（title/source/created/credibility 等）+ credibility A·B·C 分级（researcher 就地评级）+ related 关联课程（老师回填）。格式见 [library-format.md](./references/library-format.md)。researcher 调研时直写入库（brief 必含 library/ 绝对路径），主会话返回后核实、缺则兜底补写；教学时优先读取，越用越厚。 |
 | `lessons/question.html` | **练习总页**（每主题一个，按 [question-template.html](./assets/question-template.html) 制作）——所有小节的检索练习按节分组集中于此，产出阶段逐节追加；一次提交全部判分，报告存一个总页 lessons/answer.md。 |
 | `lessons/000N-*.html` + `lessons/markdown/000N-*.md` | 课程**双格式**：浏览器阅读版 + Obsidian 副本。制作规范见下文。 |
-| `lessons/src/*.svg` | 全部配图的存放处（优先 `diagram-design` 产出 SVG；不可用时 `visualize` 派 maker：mermaid 类 CLI 渲染、SVG 类手写，均不转 PNG）；课程以外链 `<img src="src/<文件名>.svg">` 引用。同时收纳共享 `katex/`、maker 中间产物与思维导图源 `mindmap.drawio`。 |
-| `mindmap.md` | **知识体系思维导图**（壳 MD）——嵌入 `![[lessons/src/mindmap|mindmap]]` SVG + 指向可编辑源 `[[lessons/src/mindmap.drawio]]` 的 wikilink，各分支 wikilink 跳转课程；Obsidian 打开即见知识全景。会话末更新。 |
+| `lessons/src/*.svg` | 全部配图的存放处（优先 `diagram-design` 产出 SVG；不可用时 `visualize` 派 maker：mermaid 类 CLI 渲染、SVG 类手写，均不转 PNG）；课程以外链 `<img src="src/<文件名>.svg">` 引用。同时收纳共享 `katex/` 与 maker 中间产物。 |
+| `lessons/mindmap.html` | **知识体系思维导图**（单 HTML，按课程同款设计系统自包含）——根=主题、分支=知识分区、叶=小节（链接各 `000N-*.html`；计划未产出的加"（计划）"后缀不链接）；浏览器打开即见知识全景。会话末教师直写更新：以现有文件为底只增改本次涉及分支，学习者手工调整不丢。 |
 
 **会话开始**（语言始终跟随学习者）：
 1. **探测**：`docs/mission.md` 不存在（大小写不敏感，`MISSION.md` 等旧名视为同一文件；根目录旧布局原位沿用不迁移）→ 新工作区：过选址 🔴，使命访谈（不判分，≤2-3 轮；动机空缺就如实记"动机暂缺"——不许据此不建文件），初始化 mission 与 resources。已存在 → 续接：读 docs/ 两件（mission、resources）、lessons/answer.md 与 library/ 全部条目 + 扫描 lessons/——**前沿 = 最后一个已练课程**；练习文件在而档案无记录 = 悬空，优先补练；教学计划读最新课程左栏（快照）；未划销错题所涉知识点优先排入重教。
@@ -98,7 +98,7 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 课程是**核心落盘教学产物**——会话不落盘，对话即过程、课程即沉淀。**一门课程 = 一个小节**，命名 `000N-<中文标题>`，编号取 lessons/ 现有最大加一，**每节产出双格式**（`.html` + `.md`）。
 
-- **`.md` 副本（Obsidian）**：存 `lessons/markdown/000N-<中文标题>.md`，与 HTML 内容一致——LaTeX 数学、mermaid 依赖图、wikilink 互链（替代 HTML 锚点）；引用 library 条目用 `[[library/000N-xxx]]`。
+- **`.md` 副本（Obsidian）**：存 `lessons/markdown/000N-<中文标题>.md`，与 HTML 内容一致——LaTeX 数学、mermaid 依赖图、wikilink 互链（替代 HTML 锚点）；引用 library 条目用 `[[library/000N-<中文标题>]]`。
 - 按 [template.html](./assets/template.html) 设计系统制作 `.html`（奶油画布、衬线标题、深墨代码窗、珊瑚点睛；模板缺失时以四视觉词自建精简系统不阻塞）。轻量 HTML（约 20KB），无外部网络依赖。
 - **三栏**：左 = 全部计划小节导航（从第一课起全部为可点击链接，当前高亮；未产出文件点击暂 404，产出后自然生效，零回填）；中 = 正文；右 = 本节大纲（页内锚点）。
 - **数学**：写 LaTeX（行内 `$x$`、独立 `$$…$$`），TeX 源码保留在 HTML，KaTeX 浏览器端渲染。仅当本节有公式：① Bash 把技能 `assets/katex/` 三件复制到 `lessons/src/katex/`（全工作区一份共用；**勿读入上下文**）；② 保留模板的相对外链与渲染调用。无公式课程删外链块；资产缺失时 TeX 源码原样显示；资产不可用降级 MathML。
@@ -122,8 +122,6 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 
 规划步的 mermaid 依赖图内联，不另派技能；不用 `illustration`（风格冲突）；目标技能不可用时基础能力内联回退，不阻塞教学。
 
-**思维导图 .drawio 源管线**（不依赖 draw.io desktop）：diagram-maker 直写未压缩 mxGraphModel XML 到 `lessons/src/mindmap.drawio`（勿用 Read 读 .drawio——多为压缩载荷）→ `diagram-design/scripts/drawio_extract.py` 验证 digest → 按 diagram-design 的 import-drawio.md redraw 出 `mindmap.svg`。源文件供学习者手工编辑，重绘以源为底。
-
 ## 智慧与社区
 
 学习者问出需要智慧的问题：先尝试回答，最终交棒社区。主动找高信誉社区登记进 resources.md"智慧"组；学习者拒绝加入则记一行备注，不再反复提议。
@@ -146,7 +144,7 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 - 每节双格式同产出——`lessons/markdown/` 缺同名 `.md` 副本即该节未完成（check-lesson.py 会 FAIL）
 - 摸底与核实的可信来源即时沉淀 `library/`——researcher 直写、主会话核实缺则兜底补写；第 1 节自检发现空 library 即回补
 - 开场零提问；产出不回头、答错只记录；悬空自明（练习文件在而档案无记录）
-- 结构文件一律小写英文（docs/、question.html、answer.md、mindmap.md、src/），课程与 library 条目用 `000N-<中文标题>`；教学语言跟随学习者
+- 结构文件一律小写英文（docs/、question.html、answer.md、mindmap.html、src/），课程与 library 条目用 `000N-<中文标题>`；教学语言跟随学习者
 - 准确性永远压过流畅；核实修正了内容就直说，不悄悄糊弄
 
 **收尾四查**（会话结束前过一遍）
@@ -154,4 +152,4 @@ description: 系统性教学工作区——把一个主题教到真正被理解�
 1. **错题落档**——练习报告已入 lessons/answer.md（全对也记），已核实
 2. **悬空自明**——未提交的练习页留在原处，下次会话优先补练
 3. **资源沉淀**——library/ 已有本次摸底/核实的来源条目（逐条核实 researcher 已写入；缺则兜底补写）；resources.md 已登记其余来源
-4. **更新思维导图**——派 diagram-maker 更新 `lessons/src/mindmap.drawio` 源（全部已产出小节；计划未产出加"（计划）"后缀），经 drawio_extract 验证后 redraw 出 `mindmap.svg`；更新 `mindmap.md` 壳 MD（wikilink 与各分支跳转）
+4. **更新思维导图**——教师直写更新 `lessons/mindmap.html`：以现有文件为底只增改本次涉及分支（学习者手工调整不丢）；全部已产出小节链接入图，计划未产出的加"（计划）"后缀不链接
