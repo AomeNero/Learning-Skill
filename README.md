@@ -13,6 +13,7 @@
 - `agents/researcher.md` — 网络调研员：教学中的事实核实、课前主题摸底，产出带出处的结构化简报，并把最优质来源全文直写工作区 library/（brief 必含 library/ 绝对路径）
 - `docs/` — 项目文档：[Skill-指南](docs/Skill-指南.md)（系统全景与流程规格）、[template-布局](docs/template-布局.md)（模板布局分析）
 - `agents/diagram-maker.md` — 配图制作者：把 brief 变成 SVG 成品（mermaid 类 CLI 渲染并亲眼看临时 PNG 验证；SVG 类手写并逐项源码审查），课程直接外链引用，不转 PNG
+- `sync-installed.ps1` — 开发后一条命令把本仓库 `skills/` 与 `agents/` 同步到本地 Claude Code（`~/.claude/`）：仓库为唯一事实源，只触碰同名技能/代理，技能目录内镜像清理已删文件
 
 ## 它是怎么教学的
 
