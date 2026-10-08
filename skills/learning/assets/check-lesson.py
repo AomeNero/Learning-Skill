@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 """课程与练习总页产物自检——每节产出后运行：
 
-    python check-lesson.py <课程.html> <lessons/question.html>
+    python check-lesson.py <课程.html> <lessons/0000-<主题名>检索练习.html>
 
 检查项：
   1  两文件存在且非空
   2  公式外链：含 src/katex/ 引用时，所在目录 src/katex/ 三件资产可达
   3  占位残留：无 "{课程主题}" 等未替换占位、无内联占位注释
   4  课程大纲锚点与正文 id 一一对应
-  5  练习总页：每节（section.sec）题数 ≤4，每题恰好 4 个选项（radio），
+  5  右栏 CSS 顺序：.toc 的 display:none 基规则必须在 1280px 媒体查询之前
+     （反序会被同特异性后规则覆盖，右栏在一切屏宽下不显示）
+  6  练习总页：每节（section.sec）题数 ≤4，每题恰好 4 个选项（radio），
      含"不知道"末项；SECTIONS 数据与 section 数一致
-  6  有公式外链时渲染调用（renderMathInElement）在位
-  7  双格式：lessons/markdown/ 存在同名 .md 副本（缺 → 不通过）
+  7  有公式外链时渲染调用（renderMathInElement）在位
+  8  双格式：lessons/markdown/ 存在同名 .md 副本（缺 → 不通过）
   ⚠  第 1 节自检附带：library/ 为空时打印警告（不阻断退出码）
 
 退出码 0 = 通过；1 = 有问题（逐项打印 ✗ 与原因）。
@@ -93,6 +95,18 @@ def check(course_path, quiz_path):
         item(not bad, "课程大纲锚点与正文 id 一致", "失配：" + ", ".join(bad))
     else:
         item(False, "课程含大纲（.toc）", "未找到 .toc 导航——课程应以 template.html 为骨架")
+
+    # 5 右栏 CSS 顺序：隐藏基规则必须在启用媒体查询之前，
+    # 否则同特异性后规则覆盖前者，右栏在一切屏宽下都不显示
+    m_none = re.search(r'\.toc\s*\{[^}]*display:\s*none', course)
+    m_media = re.search(r'@media \(min-width:\s*1280px\)', course)
+    if m_none and m_media:
+        item(m_none.start() < m_media.start(),
+             "右栏 CSS 顺序：.toc 隐藏基规则在 1280px 媒体查询之前",
+             "display:none 写在了媒体查询之后——后者覆盖前者，右栏永不显示；"
+             "把 .toc{ display:none } 移到 @media (min-width:1280px) 之前（template.html 顺序）")
+    else:
+        item(False, "右栏 CSS 顺序可判定", "未找到 .toc 的 display:none 或 1280px 媒体查询——对照 template.html 核对右栏样式")
 
     # 5 练习总页：按节分组校验
     from collections import Counter
